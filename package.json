@@ -1,0 +1,13 @@
+{
+  "name": "hoangbao-cosmetics-frontend",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.4"
+  },
+  "packageManager": "pnpm@12.11.2"
+}
