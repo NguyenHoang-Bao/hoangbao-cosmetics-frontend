@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hoangbao/api-client": "workspace:*",
+    "@hoangbao/types": "workspace:*",
     "@tanstack/react-query": "^5.104.2",
     "clsx": "^2.1.1",
     "lucide-react": "^1.56.0",

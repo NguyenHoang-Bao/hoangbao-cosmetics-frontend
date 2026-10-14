@@ -221,6 +221,12 @@ importers:
 
   apps/web:
     dependencies:
+      '@hoangbao/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
+      '@hoangbao/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@tanstack/react-query':
         specifier: ^5.104.2
         version: 5.104.2(react@19.3.0)
@@ -274,7 +280,14 @@ importers:
         specifier: ^8.3.0
         version: 8.3.4(@types/node@24.19.2)(jiti@2.7.0)
 
-  packages/api-client: {}
+  packages/api-client:
+    dependencies:
+      '@hoangbao/types':
+        specifier: workspace:*
+        version: link:../types
+      axios:
+        specifier: ^1.20.0
+        version: 1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
 
   packages/types: {}
 
