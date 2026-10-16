@@ -4,6 +4,8 @@ import { Search, Heart, ShoppingBag } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Navbar } from "./Navbar";
 import { Button } from "@/components/ui/Button";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { logout } from "@/features/auth/store/authSlice";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -12,6 +14,8 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,21 +59,45 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
 
           {/* Cụm Action Buttons: Auth, Wishlist, Giỏ hàng */}
           <div className="flex items-center gap-3 md:gap-4 shrink-0">
-            {/* Đăng nhập | Đăng ký */}
-            <div className="hidden sm:flex items-center gap-2 text-xs xl:text-sm font-semibold">
-              <Link
-                to="/login"
-                className="text-gray-700 hover:text-rose-600 transition-colors px-1"
-              >
-                ĐĂNG NHẬP
-              </Link>
-              <span className="text-gray-300">|</span>
-              <Link to="/register">
-                <Button variant="primary" size="sm">
-                  ĐĂNG KÝ
-                </Button>
-              </Link>
-            </div>
+            {/* Đăng nhập | Đăng ký hoặc User Profile */}
+            {isAuthenticated && user ? (
+              <div className="hidden sm:flex items-center gap-3 text-xs font-medium">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-1.5 text-neutral-700 hover:text-rose-600 transition-colors"
+                >
+                  <span className="w-7 h-7 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs uppercase">
+                    {user.fullName ? user.fullName.charAt(0) : "U"}
+                  </span>
+                  <span className="max-w-[120px] truncate font-semibold">
+                    {user.fullName || user.username}
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => dispatch(logout())}
+                  className="text-neutral-400 hover:text-rose-500 transition-colors cursor-pointer text-xs"
+                  title="Đăng xuất"
+                >
+                  Đăng xuất
+                </button>
+              </div>
+            ) : (
+              <div className="hidden sm:flex items-center gap-2 text-xs xl:text-sm font-semibold">
+                <Link
+                  to="/login"
+                  className="text-gray-700 hover:text-rose-600 transition-colors px-1"
+                >
+                  ĐĂNG NHẬP
+                </Link>
+                <span className="text-gray-300">|</span>
+                <Link to="/register">
+                  <Button variant="primary" size="sm">
+                    ĐĂNG KÝ
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             {/* Nút Wishlist (Trái tim) */}
             <Link
