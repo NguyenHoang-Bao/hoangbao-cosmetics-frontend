@@ -1,4 +1,4 @@
-import axios, {type AxiosInstance, type AxiosError, type InternalAxiosRequestConfig, AxiosResponse} from "axios";
+import axios, {type AxiosInstance, type AxiosError, type InternalAxiosRequestConfig, type AxiosResponse} from "axios";
 import { tokenManager } from "./tokenManager";
 
 // Lay Base URL tu Vite env, fallback qua IP backend AWS neu sai file .env
