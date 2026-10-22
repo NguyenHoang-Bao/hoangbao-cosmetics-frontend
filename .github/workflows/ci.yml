@@ -1,0 +1,50 @@
+name: Frontend CI
+
+# Kích hoạt khi push vào main/feat hoặc tạo pull request vào main
+on:
+  push:
+    branches:
+      - main
+      - feat/*
+      - feat/**
+  pull_request:
+    branches:
+      - main
+
+# Hủy lượt chạy cũ nếu có commit mới liên tục (tiết kiệm tài nguyên)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-build:
+    name: Lint & Build
+    runs-on: ubuntu-latest # Máy ảo Linux tối ưu tốc độ và chi phí
+
+    steps:
+      # 1. Tải code về máy ảo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Cài pnpm (tự nhận diện đúng phiên bản từ package.json)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      # 3. Cài Node.js 22 và bật cache thư viện để tăng tốc các lần sau
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      # 4. Cài dependencies đúng 100% theo pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. Quét lỗi cú pháp toàn dự án qua Turborepo (Oxlint)
+      - name: Run lint
+        run: pnpm run lint
+
+      # 6. Kiểm tra Type TypeScript và build thử bản production
+      - name: Run build
+        run: pnpm run build

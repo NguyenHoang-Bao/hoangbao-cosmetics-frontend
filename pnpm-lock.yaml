@@ -301,7 +301,7 @@ importers:
         specifier: workspace:*
         version: link:../types
       axios:
-        specifier: ^1.20.0
+        specifier: ^1.7.9
         version: 1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
 
   packages/types: {}
