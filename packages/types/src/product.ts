@@ -2,6 +2,7 @@
 export interface Category {
   idCategory: number;
   name: string;
+  slug?: string;
   description?: string;
   thumbnail?: string;
 }
@@ -11,6 +12,7 @@ export interface Brand {
   idBrand: number;
   name: string;
   logo?: string;
+  logoUrl?: string;
   description?: string;
 }
 
@@ -20,8 +22,10 @@ export interface ProductVariant {
   sku: string;
   price: number;
   salePrice?: number;
+  originalPrice?: number;
   stockQuantity: number;
   volume?: string; // Dung tich ml
+  capacity?: string;
   shade?: string;  // Mau sac
 }
 
