@@ -101,7 +101,6 @@ export const ProductListPage: React.FC = () => {
             minPrice={filters.minPrice}
             maxPrice={filters.maxPrice}
             onPriceChange={(min, max) => updateFilters({ minPrice: min, maxPrice: max })}
-            onResetFilters={resetFilters}
             isOpenMobile={isMobileFilterOpen}
             onCloseMobile={() => setIsMobileFilterOpen(false)}
           />
