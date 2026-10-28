@@ -156,7 +156,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 
       {/* ── KHỐI 1: DANH MỤC SẢN PHẨM ── */}
       <div>
-        <h5 className="font-bold uppercase tracking-wider text-neutral-900 text-xs sm:text-sm mb-3">
+        <h5 className="font-bold uppercase text-neutral-800 text-[13.5px] tracking-normal mb-2.5">
           DANH MỤC
         </h5>
 
@@ -167,17 +167,17 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
             onCategoryChange(undefined);
             onCloseMobile?.();
           }}
-          className={`w-full text-left py-2 text-sm uppercase tracking-wide transition-colors border-b ${
+          className={`w-full text-left py-2 text-[13.5px] uppercase tracking-normal transition-colors border-b ${
             !activeCategoryId
               ? "font-bold text-neutral-900 border-neutral-900"
-              : "font-medium text-neutral-500 border-neutral-100 hover:text-neutral-900"
+              : "font-medium text-neutral-600 border-neutral-100 hover:text-neutral-900"
           }`}
         >
           Tất cả sản phẩm
         </button>
 
         {/* Danh sách các nhóm danh mục Accordion phong cách tối giản cao cấp */}
-        <div className="divide-y divide-neutral-100 pt-1">
+        <div className="divide-y divide-neutral-100 pt-0.5">
           {CATEGORY_GROUP_CONFIGS.map((config) => {
             const items = groupedCategories[config.id] || [];
             if (items.length === 0) return null;
@@ -186,26 +186,26 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
             const hasActiveItem = items.some((item) => item.idCategory === activeCategoryId);
 
             return (
-              <div key={config.id} className="py-2.5">
+              <div key={config.id} className="py-2">
                 {/* Header nhóm */}
                 <button
                   type="button"
                   onClick={() => toggleGroup(config.id)}
-                  className="w-full flex items-center justify-between py-1 text-sm font-semibold text-neutral-900 hover:text-neutral-700 transition-colors"
+                  className="w-full flex items-center justify-between py-1 text-[13.5px] font-semibold text-neutral-800 hover:text-neutral-950 transition-colors"
                 >
                   <span className={hasActiveItem ? "text-rose-600 font-bold" : ""}>
                     {config.title}
                   </span>
                   {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-neutral-400" />
+                    <ChevronUp className="w-3.5 h-3.5 text-neutral-400" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-neutral-400" />
+                    <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />
                   )}
                 </button>
 
                 {/* Danh mục con */}
                 {isOpen && (
-                  <div className="pl-2 pt-1.5 space-y-1">
+                  <div className="pl-2.5 pt-1 space-y-0.5">
                     {items.map((cat) => {
                       const isSelected = activeCategoryId === cat.idCategory;
                       return (
@@ -216,14 +216,14 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                             onCategoryChange(isSelected ? undefined : cat.idCategory);
                             onCloseMobile?.();
                           }}
-                          className={`w-full text-left py-1.5 text-sm transition-colors flex items-center justify-between ${
+                          className={`w-full text-left py-1 text-[13px] leading-5 transition-colors flex items-center justify-between ${
                             isSelected
                               ? "font-semibold text-rose-600"
-                              : "text-neutral-600 hover:text-neutral-900"
+                              : "text-neutral-700 hover:text-neutral-950"
                           }`}
                         >
                           <span className="truncate">{cat.name}</span>
-                          {isSelected && <Check className="w-4 h-4 text-rose-600 shrink-0" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 text-rose-600 shrink-0" />}
                         </button>
                       );
                     })}
@@ -235,22 +235,22 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 
           {/* Nhóm Danh Mục Khác (nếu có từ Admin) */}
           {groupedCategories.others && groupedCategories.others.length > 0 && (
-            <div className="py-2.5">
+            <div className="py-2">
               <button
                 type="button"
                 onClick={() => toggleGroup("others")}
-                className="w-full flex items-center justify-between py-1 text-sm font-semibold text-neutral-900 hover:text-neutral-700 transition-colors"
+                className="w-full flex items-center justify-between py-1 text-[13.5px] font-semibold text-neutral-800 hover:text-neutral-950 transition-colors"
               >
                 <span>Khác</span>
                 {openGroups.others ? (
-                  <ChevronUp className="w-4 h-4 text-neutral-400" />
+                  <ChevronUp className="w-3.5 h-3.5 text-neutral-400" />
                 ) : (
-                  <ChevronDown className="w-4 h-4 text-neutral-400" />
+                  <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />
                 )}
               </button>
 
               {openGroups.others && (
-                <div className="pl-2 pt-1.5 space-y-1">
+                <div className="pl-2.5 pt-1 space-y-0.5">
                   {groupedCategories.others.map((cat) => {
                     const isSelected = activeCategoryId === cat.idCategory;
                     return (
@@ -261,14 +261,14 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                           onCategoryChange(isSelected ? undefined : cat.idCategory);
                           onCloseMobile?.();
                         }}
-                        className={`w-full text-left py-1.5 text-sm transition-colors flex items-center justify-between ${
+                        className={`w-full text-left py-1 text-[13px] leading-5 transition-colors flex items-center justify-between ${
                           isSelected
                             ? "font-semibold text-rose-600"
-                            : "text-neutral-600 hover:text-neutral-900"
+                            : "text-neutral-700 hover:text-neutral-950"
                         }`}
                       >
                         <span className="truncate">{cat.name}</span>
-                        {isSelected && <Check className="w-4 h-4 text-rose-600 shrink-0" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-rose-600 shrink-0" />}
                       </button>
                     );
                   })}
@@ -281,9 +281,9 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
 
       {/* ── KHỐI 2: BỘ LỌC THƯƠNG HIỆU (BRAND) ── */}
       {brands.length > 0 && (
-        <div className="pt-5 border-t border-neutral-200">
-          <div className="flex items-center justify-between mb-3">
-            <h5 className="font-bold uppercase tracking-wider text-neutral-900 text-xs sm:text-sm">
+        <div className="pt-4 border-t border-neutral-200">
+          <div className="flex items-center justify-between mb-2.5">
+            <h5 className="font-bold uppercase text-neutral-800 text-[13.5px] tracking-normal">
               THƯƠNG HIỆU
             </h5>
             <button
@@ -292,31 +292,31 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
               className="text-neutral-400 hover:text-neutral-600 transition-colors"
             >
               {openBrandSection ? (
-                <ChevronUp className="w-4 h-4" />
+                <ChevronUp className="w-3.5 h-3.5" />
               ) : (
-                <ChevronDown className="w-4 h-4" />
+                <ChevronDown className="w-3.5 h-3.5" />
               )}
             </button>
           </div>
 
           {openBrandSection && (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {/* Ô tìm kiếm thương hiệu thanh mảnh */}
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400" />
+                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400" />
                 <input
                   type="text"
                   placeholder="Tìm thương hiệu..."
                   value={brandSearch}
                   onChange={(e) => setBrandSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 text-sm bg-neutral-50/80 border border-neutral-200 rounded-md focus:outline-none focus:border-neutral-500 text-neutral-800 placeholder-neutral-400 transition-colors"
+                  className="w-full pl-8 pr-3 py-1.5 text-[13px] bg-neutral-50/80 border border-neutral-200 rounded-md focus:outline-none focus:border-neutral-500 text-neutral-800 placeholder-neutral-400 transition-colors"
                 />
               </div>
 
-              {/* Danh sách thương hiệu phong cách Checkbox tối giản */}
-              <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+              {/* Danh sách thương hiệu phong cách Checkbox hài hòa */}
+              <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                 {displayedBrands.length === 0 ? (
-                  <p className="text-sm text-neutral-400 text-center py-2">
+                  <p className="text-[13px] text-neutral-400 text-center py-2">
                     Không tìm thấy thương hiệu
                   </p>
                 ) : (
@@ -325,7 +325,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                     return (
                       <label
                         key={b.idBrand}
-                        className="flex items-center gap-2.5 cursor-pointer text-sm text-neutral-700 hover:text-neutral-900 transition-colors group"
+                        className="flex items-center gap-2.5 cursor-pointer text-[13px] leading-5 text-neutral-700 hover:text-neutral-950 transition-colors group py-0.5"
                       >
                         <input
                           type="checkbox"
@@ -334,9 +334,9 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                             onBrandChange?.(isSelected ? undefined : b.idBrand);
                             onCloseMobile?.();
                           }}
-                          className="w-4 h-4 rounded border-neutral-300 text-neutral-900 focus:ring-0 cursor-pointer accent-neutral-900"
+                          className="w-3.5 h-3.5 rounded-sm border-neutral-300 text-neutral-900 focus:ring-0 cursor-pointer accent-neutral-900"
                         />
-                        <span className={`truncate ${isSelected ? "font-bold text-neutral-900" : ""}`}>
+                        <span className={`truncate ${isSelected ? "font-bold text-neutral-950" : ""}`}>
                           {b.name}
                         </span>
                       </label>
@@ -350,7 +350,7 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsExpandedBrands((prev) => !prev)}
-                  className="text-sm text-neutral-600 hover:text-neutral-900 font-medium transition-colors pt-1 block"
+                  className="text-[13px] text-neutral-500 hover:text-neutral-900 font-medium transition-colors pt-0.5 block"
                 >
                   {isExpandedBrands
                     ? "— Thu gọn"
@@ -363,9 +363,9 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
       )}
 
       {/* ── KHỐI 3: LỌC THEO MỨC GIÁ ── */}
-      <div className="pt-5 border-t border-neutral-200">
-        <div className="flex items-center justify-between mb-3">
-          <h5 className="font-bold uppercase tracking-wider text-neutral-900 text-xs sm:text-sm">
+      <div className="pt-4 border-t border-neutral-200">
+        <div className="flex items-center justify-between mb-2.5">
+          <h5 className="font-bold uppercase text-neutral-800 text-[13.5px] tracking-normal">
             MỨC GIÁ
           </h5>
           <button
@@ -374,21 +374,21 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
             className="text-neutral-400 hover:text-neutral-600 transition-colors"
           >
             {openPriceSection ? (
-              <ChevronUp className="w-4 h-4" />
+              <ChevronUp className="w-3.5 h-3.5" />
             ) : (
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className="w-3.5 h-3.5" />
             )}
           </button>
         </div>
 
         {openPriceSection && (
-          <div className="space-y-2.5">
+          <div className="space-y-2">
             {PRICE_RANGES.map((range) => {
               const isChecked = activePriceId === range.id;
               return (
                 <label
                   key={range.id}
-                  className="flex items-center gap-2.5 cursor-pointer text-sm text-neutral-700 hover:text-neutral-900 transition-colors"
+                  className="flex items-center gap-2.5 cursor-pointer text-[13px] leading-5 text-neutral-700 hover:text-neutral-950 transition-colors py-0.5"
                 >
                   <input
                     type="radio"
@@ -398,9 +398,9 @@ export const ProductSidebar: React.FC<ProductSidebarProps> = ({
                       onPriceChange(range.min, range.max);
                       onCloseMobile?.();
                     }}
-                    className="w-4 h-4 text-neutral-900 accent-neutral-900 border-neutral-300 focus:ring-0 cursor-pointer"
+                    className="w-3.5 h-3.5 text-neutral-900 accent-neutral-900 border-neutral-300 focus:ring-0 cursor-pointer"
                   />
-                  <span className={isChecked ? "font-bold text-neutral-900" : ""}>
+                  <span className={isChecked ? "font-bold text-neutral-950" : ""}>
                     {range.label}
                   </span>
                 </label>
