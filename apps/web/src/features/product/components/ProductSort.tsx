@@ -47,55 +47,26 @@ export const ProductSort: React.FC<ProductSortProps> = ({
           )}
         </div>
 
-        {/* Cụm Dropdown chọn Thương hiệu & Sắp xếp */}
-        <div className="flex items-center gap-6 ml-auto">
-          {/* Bộ lọc Thương hiệu */}
-          <div className="flex items-center gap-2">
-            <label
-              htmlFor="brandSelect"
-              className="text-gray-600 font-medium whitespace-nowrap text-xs sm:text-sm"
-            >
-              Thương hiệu:
-            </label>
-            <select
-              id="brandSelect"
-              value={selectedBrandId ? String(selectedBrandId) : "all"}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                const val = e.target.value;
-                onBrandChange(val === "all" ? undefined : Number(val));
-              }}
-              className="border border-gray-300 text-gray-700 text-xs sm:text-sm rounded-md focus:ring-rose-500 focus:border-rose-500 block p-2 cursor-pointer outline-none bg-white min-w-[160px]"
-            >
-              <option value="all">Tất cả thương hiệu</option>
-              {brands.map((brand) => (
-                <option key={brand.idBrand} value={String(brand.idBrand)}>
-                  {brand.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Bộ lọc Sắp xếp */}
-          <div className="flex items-center gap-2">
-            <label
-              htmlFor="sortSelect"
-              className="text-gray-600 font-medium whitespace-nowrap text-xs sm:text-sm"
-            >
-              Sắp xếp:
-            </label>
-            <select
-              id="sortSelect"
-              value={sortBy}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                onSortChange(e.target.value as ProductFilterParams["sortBy"])
-              }
-              className="border border-gray-300 text-gray-700 text-xs sm:text-sm rounded-md focus:ring-rose-500 focus:border-rose-500 block p-2 cursor-pointer outline-none bg-white"
-            >
-              <option value="newest">Mới nhất</option>
-              <option value="price_asc">Giá: Thấp đến Cao</option>
-              <option value="price_desc">Giá: Cao đến Thấp</option>
-            </select>
-          </div>
+        {/* Cụm Sắp xếp Desktop */}
+        <div className="flex items-center gap-2 ml-auto">
+          <label
+            htmlFor="sortSelect"
+            className="text-gray-600 font-medium whitespace-nowrap text-xs sm:text-sm"
+          >
+            Sắp xếp:
+          </label>
+          <select
+            id="sortSelect"
+            value={sortBy}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+              onSortChange(e.target.value as ProductFilterParams["sortBy"])
+            }
+            className="border border-gray-300 text-gray-700 text-xs sm:text-sm rounded-md focus:ring-rose-500 focus:border-rose-500 block p-2 cursor-pointer outline-none bg-white"
+          >
+            <option value="newest">Mới nhất</option>
+            <option value="price_asc">Giá: Thấp đến Cao</option>
+            <option value="price_desc">Giá: Cao đến Thấp</option>
+          </select>
         </div>
       </div>
 
