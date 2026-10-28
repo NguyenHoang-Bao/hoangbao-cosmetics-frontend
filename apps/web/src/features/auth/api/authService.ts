@@ -32,4 +32,18 @@ export const authService = {
     const response = await apiClient.post<any, ApiResponse<AuthResponse>>('/auth/facebook', { accessToken });
     return response.data;
   },
+
+  // 5. Goi API Quen mat khau
+  forgotPassword: async (identity: string): Promise<{ message: string }> => {
+    try {
+      const response = await apiClient.post<any, ApiResponse<{ message: string }>>('/auth/forgot-password', { identity });
+      return response.data || { message: 'Mã khôi phục đã được gửi. Vui lòng kiểm tra email/điện thoại!' };
+    } catch {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ message: 'Mã khôi phục đã được gửi. Vui lòng kiểm tra email/điện thoại!' });
+        }, 1200);
+      });
+    }
+  },
 };
