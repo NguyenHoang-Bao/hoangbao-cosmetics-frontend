@@ -8,6 +8,7 @@ import { queryClient } from "@/lib/queryClient";
 import { MainLayout } from "@/layouts/MainLayout";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
+import ProductListPage from "@/features/product/pages/ProductListPage";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
@@ -33,6 +34,8 @@ export const App: React.FC = () => {
                   </div>
                 }
               />
+              {/* Trang danh mục sản phẩm (Product Catalog UI) */}
+              <Route path="/products" element={<ProductListPage />} />
 
               {/* Các route yêu cầu phải đăng nhập */}
               <Route element={<ProtectedRoute />}>
