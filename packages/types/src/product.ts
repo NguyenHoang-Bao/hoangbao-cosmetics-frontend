@@ -47,6 +47,7 @@ export interface Product {
 // Loc va phan trang
 export interface ProductFilterParams {
   category?: string;
+  categoryId?: number;
   brandId?: number;
   minPrice?: number;
   maxPrice?: number;
