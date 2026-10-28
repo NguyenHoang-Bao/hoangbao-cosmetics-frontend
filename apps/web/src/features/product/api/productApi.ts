@@ -39,7 +39,7 @@ export const productApi = {
 
         const queryString = query.toString() ? `?${query.toString()}`: '';
         const response = await apiClient.get<any, ApiResponse<PageResponse<Product>>>(
-            `/product${queryString}`
+            `/products${queryString}`
         );
         return response.data;
     },
