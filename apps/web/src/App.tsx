@@ -13,6 +13,7 @@ import ProductListPage from "@/features/product/pages/ProductListPage";
 import ProductDetailPage from "@/features/product/pages/ProductDetailPage";
 import CheckoutPage from "@/features/checkout/pages/CheckoutPage";
 import OrderSuccessPage from "@/features/checkout/pages/OrderSuccessPage";
+import AboutPage from "@/features/about/pages/AboutPage";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
@@ -47,6 +48,8 @@ export const App: React.FC = () => {
               {/* Trang thanh toán & Hoàn tất đơn hàng */}
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-success/:orderCode" element={<OrderSuccessPage />} />
+              {/* Trang giới thiệu (About Page) */}
+              <Route path="/about" element={<AboutPage />} />
 
               {/* Các route yêu cầu phải đăng nhập */}
               <Route element={<ProtectedRoute />}>
