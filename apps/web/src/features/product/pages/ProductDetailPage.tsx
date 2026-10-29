@@ -50,13 +50,13 @@ export const ProductDetailPage: React.FC = () => {
 
   // Breadcrumbs dieu huong
   const breadcrumbItems = [
-    { label: "Trang chủ", href: "/" },
-    { label: "Sản phẩm", href: "/products" },
+    { label: "Trang chủ", link: "/" },
+    { label: "Sản phẩm", link: "/products" },
     ...(product?.category
       ? [
           {
             label: product.category.name,
-            href: `/products?categoryId=${product.category.idCategory}`,
+            link: `/products?categoryId=${product.category.idCategory}`,
           },
         ]
       : []),

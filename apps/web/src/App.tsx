@@ -11,6 +11,8 @@ import RegisterPage from "@/features/auth/pages/RegisterPage";
 import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";
 import ProductListPage from "@/features/product/pages/ProductListPage";
 import ProductDetailPage from "@/features/product/pages/ProductDetailPage";
+import CheckoutPage from "@/features/checkout/pages/CheckoutPage";
+import OrderSuccessPage from "@/features/checkout/pages/OrderSuccessPage";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
@@ -42,15 +44,9 @@ export const App: React.FC = () => {
               {/* Trang chi tiết sản phẩm */}
               <Route path="/products/:id" element={<ProductDetailPage />} />
               <Route path="/product/:id" element={<ProductDetailPage />} />
-              {/* Trang thanh toán */}
-              <Route
-                path="/checkout"
-                element={
-                  <div className="py-20 text-center text-neutral-700 text-sm font-medium">
-                    Trang Thanh Toán Đơn Hàng (Sẵn sàng cho Module Checkout)
-                  </div>
-                }
-              />
+              {/* Trang thanh toán & Hoàn tất đơn hàng */}
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order-success/:orderCode" element={<OrderSuccessPage />} />
 
               {/* Các route yêu cầu phải đăng nhập */}
               <Route element={<ProtectedRoute />}>
