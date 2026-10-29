@@ -9,7 +9,7 @@ export default function About() {
   }, []);
 
   return (
-    <main className="bg-appBg text-gray-900 min-h-screen">
+    <main className="bg-white text-neutral-900 min-h-screen">
       <AboutHero />
       <AboutStory />
       <AboutCoreValues />
