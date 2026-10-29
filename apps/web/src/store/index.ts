@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '@/features/auth/store/authSlice';
+import cartReducer from '@/features/cart/store/cartSlice';
 
 // Cau hinh root store cho toan bo ung dung
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    // Sau nay co cart, order thi bo sung tiep vao day
+    cart: cartReducer,
   },
   devTools: import.meta.env.DEV,
 });

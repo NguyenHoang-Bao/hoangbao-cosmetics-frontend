@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CartDrawer } from "@/features/cart/components/CartDrawer";
 
 export const MainLayout: React.FC = () => {
   return (
@@ -16,6 +17,9 @@ export const MainLayout: React.FC = () => {
 
       {/* ── FOOTER HỒNG 5 CỘT ── */}
       <Footer />
+
+      {/* ── GLOBAL CART DRAWER ── */}
+      <CartDrawer />
     </div>
   );
 };

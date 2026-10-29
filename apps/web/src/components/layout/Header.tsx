@@ -17,13 +17,14 @@ import { Navbar } from "./Navbar";
 import { Button } from "@/components/ui/Button";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/features/auth/store/authSlice";
+import { openCart } from "@/features/cart/store/cartSlice";
 import { NAVIGATION_ITEMS } from "@/config/navigation";
 
 interface HeaderProps {
   cartItemCount?: number;
 }
 
-export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
+export const Header: React.FC<HeaderProps> = ({ cartItemCount }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -33,6 +34,11 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const totalCartCount =
+    cartItemCount !== undefined
+      ? cartItemCount
+      : cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -155,19 +161,21 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
               <Heart className="w-5 h-5" />
             </Link>
 
-            {/* Nút Giỏ Hàng */}
-            <Link
-              to="/cart"
-              className="relative text-rose-400 hover:text-rose-600 transition-colors p-1.5"
+            {/* Nút Giỏ Hàng - Mở CartDrawer */}
+            <button
+              type="button"
+              onClick={() => dispatch(openCart())}
+              className="relative text-rose-400 hover:text-rose-600 transition-colors p-1.5 cursor-pointer"
               title="Giỏ hàng"
+              aria-label="Mở giỏ hàng"
             >
               <ShoppingBag className="w-5 h-5" />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-rose-400 text-white text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center shadow-sm">
-                  {cartItemCount > 99 ? "99+" : cartItemCount}
+              {totalCartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center shadow-sm">
+                  {totalCartCount > 99 ? "99+" : totalCartCount}
                 </span>
               )}
-            </Link>
+            </button>
           </div>
         </div>
 
