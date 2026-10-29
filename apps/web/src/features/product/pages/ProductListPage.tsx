@@ -7,8 +7,11 @@ import { ProductSkeleton } from "../components/ProductSkeleton";
 import { ProductPagination } from "../components/ProductPagination";
 import { useProducts, useBrands, useCategories } from "../hooks/useProduct";
 import { useProductFilters } from "../hooks/useProductFilters";
+import { useAppDispatch } from "@/store/hooks";
+import { addToCart } from "@/features/cart/store/cartSlice";
 
 export const ProductListPage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { filters, updateFilters, resetFilters } = useProductFilters();
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
@@ -139,7 +142,11 @@ export const ProductListPage: React.FC = () => {
               /* LƯỚI SẢN PHẨM: 2 cột (Mobile) -> 3 cột (Tablet/Laptop) -> 4 cột (Desktop lớn) */
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
                 {products.map((product) => (
-                  <ProductCard key={product.idProduct} product={product} />
+                  <ProductCard
+                    key={product.idProduct}
+                    product={product}
+                    onAddToCart={(p) => dispatch(addToCart({ product: p, quantity: 1 }))}
+                  />
                 ))}
               </div>
             )}

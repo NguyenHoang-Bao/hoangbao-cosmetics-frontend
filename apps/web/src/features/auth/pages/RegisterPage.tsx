@@ -47,12 +47,12 @@ export default function RegisterPage() {
   ];
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white">
+    <div className="flex min-h-screen w-full bg-white">
       {/* Nửa Trái: Banner ảnh mỹ phẩm gốc */}
       <AuthBanner />
 
       {/* Nửa Phải: Form Đăng Ký Grid 2 Cột */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center relative py-6 px-6 sm:px-10 overflow-hidden h-full">
+      <div className="w-full lg:w-1/2 flex items-center justify-center relative py-10 px-6 sm:px-10 min-h-screen overflow-y-auto">
         <Link
           to="/"
           className="absolute top-6 right-6 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"

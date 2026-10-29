@@ -8,7 +8,9 @@ import { queryClient } from "@/lib/queryClient";
 import { MainLayout } from "@/layouts/MainLayout";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
+import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";
 import ProductListPage from "@/features/product/pages/ProductListPage";
+import ProductDetailPage from "@/features/product/pages/ProductDetailPage";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
@@ -22,6 +24,7 @@ export const App: React.FC = () => {
             <Route element={<GuestRoute />}>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             </Route>
 
             {/* Các route chính có Header & Footer */}
@@ -36,6 +39,18 @@ export const App: React.FC = () => {
               />
               {/* Trang danh mục sản phẩm (Product Catalog UI) */}
               <Route path="/products" element={<ProductListPage />} />
+              {/* Trang chi tiết sản phẩm */}
+              <Route path="/products/:id" element={<ProductDetailPage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
+              {/* Trang thanh toán */}
+              <Route
+                path="/checkout"
+                element={
+                  <div className="py-20 text-center text-neutral-700 text-sm font-medium">
+                    Trang Thanh Toán Đơn Hàng (Sẵn sàng cho Module Checkout)
+                  </div>
+                }
+              />
 
               {/* Các route yêu cầu phải đăng nhập */}
               <Route element={<ProtectedRoute />}>

@@ -44,3 +44,18 @@ export const registerSchema = yup.object({
 });
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
+
+// Schema validate form Quen Mat Khau
+export const forgotPasswordSchema = yup.object({
+  identity: yup
+    .string()
+    .required('Vui lòng nhập số điện thoại hoặc email')
+    .test('is-email-or-phone', 'Vui lòng nhập email hợp lệ hoặc số điện thoại 10 số', (value) => {
+      if (!value) return false;
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      const isPhone = /^(0|\+84)[0-9]{9}$/.test(value.replace(/\s+/g, ''));
+      return isEmail || isPhone;
+    }),
+});
+
+export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
