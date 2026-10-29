@@ -3,36 +3,36 @@ import { ArrowRight } from "lucide-react";
 
 export default function AboutCoreValues() {
   return (
-    <section className="bg-neutral-50/60 py-24 md:py-36 border-b border-neutral-100">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Dấu ngoặc kép nghệ thuật */}
-        <span className="text-4xl sm:text-5xl text-neutral-300 font-serif leading-none block mb-6 select-none">
+    <section className="bg-white py-24 md:py-36 border-t border-stone-200/80">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
+        {/* Dấu ngoặc kép thanh nhã */}
+        <span className="text-5xl sm:text-6xl text-stone-300 font-serif leading-none block select-none">
           &ldquo;
         </span>
 
-        {/* Tuyên ngôn thương hiệu thanh lịch */}
-        <blockquote className="text-xl sm:text-2xl md:text-3xl text-neutral-800 leading-relaxed font-art italic max-w-3xl mx-auto mb-10">
-          Tại Hoàng Bảo Cosmetics, mỗi sản phẩm trao đi là một cam kết về sức khỏe của làn da. Chúng tôi không theo đuổi trào lưu ngắn hạn, mà cùng bạn xây dựng thói quen chăm sóc da an toàn và bền vững.
+        {/* Tuyên ngôn thương hiệu phong cách Aesop */}
+        <blockquote className="text-xl sm:text-2xl md:text-3xl text-stone-800 leading-relaxed font-art italic max-w-3xl mx-auto">
+          Tại Hoàng Bảo Cosmetics, mỗi sản phẩm trao đi là một lời hứa danh dự về sự an tâm của bạn. Chúng tôi không theo đuổi những phép màu cấp tốc, mà cùng bạn nuôi dưỡng làn da khỏe mạnh, tự do và bản lĩnh qua từng tháng năm.
         </blockquote>
 
-        {/* Ký tên tinh tế */}
-        <div className="flex flex-col items-center mb-16">
-          <span className="w-8 h-px bg-neutral-300 mb-4" />
-          <span className="text-xs font-semibold text-neutral-900 tracking-[3px] uppercase">
-            Đội Ngũ Hoàng Bảo Cosmetics
+        {/* Chữ ký & Tem xuất xứ Atelier */}
+        <div className="flex flex-col items-center space-y-2 pt-4">
+          <span className="w-8 h-px bg-stone-300 mb-4" />
+          <span className="text-xs font-mono uppercase tracking-[3px] text-stone-900 font-medium">
+            Đội Ngũ Sáng Lập Hoàng Bảo Cosmetics
           </span>
-          <span className="text-xs text-neutral-500 font-light mt-1">
-            Dược Mỹ Phẩm Chính Hãng Chuẩn Y Khoa
+          <span className="text-xs text-stone-500 font-mono tracking-wider">
+            Sài Gòn &bull; Est. 2026 &bull; Dược Mỹ Phẩm Chính Hãng
           </span>
         </div>
 
-        {/* Link điều hướng tối giản sang sản phẩm */}
-        <div>
+        {/* Nút bấm tối giản Atelier */}
+        <div className="pt-6">
           <Link
             to="/products"
-            className="inline-flex items-center gap-2 text-xs font-semibold tracking-[2px] uppercase text-neutral-900 hover:text-rose-600 border-b border-neutral-900 hover:border-rose-600 pb-1.5 transition-colors duration-200"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-stone-900 hover:bg-stone-800 text-stone-100 rounded-full text-xs font-mono uppercase tracking-[2px] transition-all duration-300 shadow-xs hover:shadow-md"
           >
-            <span>Khám phá các dòng sản phẩm chính hãng</span>
+            <span>Khám phá bộ sưu tập dược mỹ phẩm</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

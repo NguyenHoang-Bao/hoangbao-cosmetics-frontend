@@ -2,13 +2,13 @@ import videoNhanSac from "@/assets/video/video_nhansac.mp4";
 
 export default function AboutStory() {
   return (
-    <section className="py-20 md:py-32 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Khối 1: Video Trái - Nội dung Phải (Triết lý thương hiệu) */}
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mb-24 md:mb-32">
-          {/* Video Khung viền kiến trúc tối giản */}
-          <div className="lg:w-1/2 w-full">
-            <div className="relative overflow-hidden rounded-2xl bg-neutral-950 aspect-[4/3] sm:aspect-[16/11] shadow-xs border border-neutral-100">
+    <section className="bg-[#F6F4F0] py-20 md:py-32">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 md:space-y-36">
+        {/* Khối 1: Video Tĩnh Lặng Trái - Tiểu luận Nghệ thuật Phải */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          {/* Video Khung viền ấm áp */}
+          <div className="lg:col-span-6">
+            <div className="relative rounded-3xl overflow-hidden bg-stone-200 aspect-[4/5] shadow-sm border border-stone-300/60">
               <video
                 autoPlay
                 loop
@@ -19,68 +19,75 @@ export default function AboutStory() {
               >
                 <source src={videoNhanSac} type="video/mp4" />
               </video>
-              <div className="absolute top-4 right-4 bg-neutral-900/80 backdrop-blur-sm text-white text-[10px] font-medium px-3 py-1.5 rounded-full uppercase tracking-[2px]">
-                Clean &amp; Clinical
+              <div className="absolute bottom-6 left-6 bg-stone-900/80 backdrop-blur-sm text-stone-100 text-[11px] font-mono px-4 py-2 rounded-full uppercase tracking-wider">
+                Atelier Skincare &bull; Slow Beauty
               </div>
             </div>
           </div>
 
-          {/* Nội dung câu chuyện súc tích, thực tế, không từ ngữ sáo rỗng */}
-          <div className="lg:w-1/2 w-full">
-            <span className="text-[11px] tracking-[3px] uppercase font-semibold text-neutral-400 block mb-4">
-              Khởi Nguồn Thương Hiệu
+          {/* Lời tự sự sâu lắng */}
+          <div className="lg:col-span-6 space-y-8">
+            <span className="text-xs font-mono uppercase tracking-[3px] text-stone-400 block">
+              [ 01 &bull; KHỞI NGUỒN ]
             </span>
 
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-neutral-900 mb-6 leading-snug tracking-tight">
-              Khoa học làn da bắt đầu từ sự lành tính.
+            <h2 className="text-2xl sm:text-4xl font-light font-art text-stone-900 leading-snug">
+              Chọn lọc từng giọt tinh túy từ thiên nhiên &amp; khoa học.
             </h2>
 
-            <p className="text-neutral-600 leading-relaxed mb-5 text-base font-light">
-              Hoàng Bảo Cosmetics ra đời từ mong muốn đơn giản: mang đến người dùng Việt những sản phẩm chăm sóc da có nguồn gốc minh bạch và công thức kiểm chứng khoa học.
+            <p className="text-stone-600 leading-relaxed font-light text-base sm:text-lg">
+              Mỗi dòng sản phẩm xuất hiện tại Hoàng Bảo Cosmetics đều trải qua quá trình thử nghiệm khắt khe trên nhiều nền da châu Á. Chúng tôi chú trọng cảm giác mịn mượt khi chạm vào da, khả năng thẩm thấu sâu và bảng thành phần lành tính không hương liệu hóa chất.
             </p>
 
-            <p className="text-neutral-600 leading-relaxed mb-6 text-base font-light">
-              Chúng tôi tập trung vào dòng dược mỹ phẩm (cosmeceuticals) kết hợp hoạt chất nồng độ an toàn cùng chiết xuất thực vật tự nhiên &mdash; tôn trọng hàng rào sinh học tự nhiên của làn da thay vì theo đuổi những hiệu quả cấp tốc bào mòn.
+            <p className="text-stone-600 leading-relaxed font-light text-base sm:text-lg">
+              Chúng tôi không chạy theo những trào lưu lột tẩy nhanh khiến lớp màng lipid bị thương tổn. Thay vào đó, mỗi công thức được tuyển chọn đều nhằm củng cố và nuôi dưỡng tế bào da khỏe mạnh từ gốc rễ.
             </p>
 
-            <div className="border-l border-neutral-900 pl-6 py-1 my-6">
-              <p className="italic text-neutral-800 text-sm sm:text-base leading-relaxed font-art">
-                &ldquo;Đẹp bền vững là khi làn da được bảo vệ khỏe mạnh từ sâu bên trong mỗi ngày.&rdquo;
+            {/* Thẻ cam kết Atelier nền giấy trắng ấm áp */}
+            <div className="p-8 bg-white rounded-2xl border border-stone-200/80 shadow-xs space-y-3">
+              <span className="text-xs font-mono uppercase tracking-[2px] text-stone-400 block">
+                Cam Kết Cốt Lõi
+              </span>
+              <p className="text-sm sm:text-base text-stone-800 font-light leading-relaxed">
+                Chỉ phân phối những sản phẩm mà chính đội ngũ sáng lập tự tin sử dụng hàng ngày cho bản thân và gia đình.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Khối 2: 3 Tiêu chuẩn vận hành cốt lõi - Layout tối giản phân chia bằng đường kẻ hairline */}
-        <div className="border-t border-b border-neutral-200 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-            <div>
-              <span className="text-xs font-mono text-neutral-400 block mb-3">01</span>
-              <h3 className="text-base font-medium text-neutral-900 mb-2 tracking-wide uppercase">
-                Minh Bạch Nguồn Gốc
-              </h3>
-              <p className="text-sm text-neutral-500 leading-relaxed font-light">
-                100% sản phẩm có tem chống giả, tem phụ hướng dẫn tiếng Việt và hóa đơn nhập khẩu rõ ràng từ các nhãn hàng ủy quyền.
+        {/* Khối 2: Ba Khoảng Lặng Chăm Sóc Da (Three Mindful Principles) */}
+        <div className="pt-16 border-t border-stone-300/80">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-xs font-mono uppercase tracking-[3px] text-stone-400 block mb-3">
+              [ 02 &bull; NGUYÊN TẮC ]
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-light font-art text-stone-900">
+              Ba giá trị bất biến trong từng phác đồ
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl border border-stone-200/80 space-y-4">
+              <span className="text-xs font-mono text-stone-400 block">01 / NGUỒN GỐC</span>
+              <h4 className="text-lg font-medium text-stone-900">Minh Bạch Tuyệt Đối</h4>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+                100% sản phẩm có tem chống giả, tem phụ hướng dẫn và mã vạch truy xuất nguồn gốc từ các tập đoàn dược mỹ phẩm quốc tế.
               </p>
             </div>
 
-            <div>
-              <span className="text-xs font-mono text-neutral-400 block mb-3">02</span>
-              <h3 className="text-base font-medium text-neutral-900 mb-2 tracking-wide uppercase">
-                An Toàn &amp; Lành Tính
-              </h3>
-              <p className="text-sm text-neutral-500 leading-relaxed font-light">
-                Tuyển chọn các công thức không cồn khô kích ứng, không paraben độc hại và tương thích sinh học với nền da nhạy cảm.
+            <div className="bg-white p-8 rounded-2xl border border-stone-200/80 space-y-4">
+              <span className="text-xs font-mono text-stone-400 block">02 / CÔNG THỨC</span>
+              <h4 className="text-lg font-medium text-stone-900">Tương Thích Tự Nhiên</h4>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+                Nói không với cồn khô, paraben và các hoạt chất bào mòn. Tôn trọng sinh lý tự nhiên của từng tế bào biểu bì.
               </p>
             </div>
 
-            <div>
-              <span className="text-xs font-mono text-neutral-400 block mb-3">03</span>
-              <h3 className="text-base font-medium text-neutral-900 mb-2 tracking-wide uppercase">
-                Tư Vấn Cá Nhân Hóa
-              </h3>
-              <p className="text-sm text-neutral-500 leading-relaxed font-light">
-                Đội ngũ tư vấn nắm vững kiến thức da liễu, hỗ trợ soi da và đồng hành xây dựng routine phù hợp với từng tình trạng da.
+            <div className="bg-white p-8 rounded-2xl border border-stone-200/80 space-y-4">
+              <span className="text-xs font-mono text-stone-400 block">03 / ĐỒNG HÀNH</span>
+              <h4 className="text-lg font-medium text-stone-900">Lắng Nghe &amp; Thấu Hiểu</h4>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-light">
+                Đội ngũ chuyên viên tư vấn luôn đồng hành lắng nghe tình trạng da thực tế để xây dựng liệu trình phù hợp nhất cho bạn.
               </p>
             </div>
           </div>
