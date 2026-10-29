@@ -1,39 +1,24 @@
-import Breadcrumb, { type BreadcrumbItem } from "@/components/ui/Breadcrumb";
+import aboutHeroImg from "@/assets/img/about-hero.jpg";
 
 export default function AboutHero() {
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "Trang chủ", link: "/" },
-    { label: "Về chúng tôi" },
-  ];
-
   return (
-    <section className="bg-[#F6F4F0] pt-12 md:pt-16 pb-20 md:pb-28 border-b border-stone-200/70">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Breadcrumb điều hướng phong cách tối giản */}
-        <div className="mb-8">
-          <Breadcrumb
-            items={breadcrumbItems}
-            className="justify-center text-stone-500 text-xs font-mono uppercase tracking-[2px] [&_a]:text-stone-500 [&_a:hover]:text-stone-900 [&_span]:text-stone-900"
-          />
-        </div>
+    <section className="relative flex items-center justify-center text-center w-full min-h-[300px] h-[40vh] overflow-hidden">
+      {/* Ảnh nền */}
+      <div
+        className="absolute inset-0 bg-center bg-cover bg-no-repeat"
+        style={{ backgroundImage: `url(${aboutHeroImg})` }}
+      />
+      {/* Lớp phủ đen 60% chuẩn web cũ */}
+      <div className="absolute inset-0 bg-black/60 z-1" />
 
-        {/* Archival Label - Không gian Atelier */}
-        <span className="text-xs font-mono uppercase tracking-[3px] text-stone-500 block mb-6">
-          [ Hoàng Bảo Cosmetics &bull; Triết Lý Về Làn Da Tĩnh Lặng ]
-        </span>
-
-        {/* Tiêu đề chính đậm chất thơ & nghệ thuật */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-light font-art italic text-stone-900 leading-[1.18] tracking-tight mb-8">
-          Sự lắng nghe tận tâm dành cho từng cấu trúc da.
+      {/* Nội dung chính */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase mb-4 text-white tracking-[2px]">
+          Về Chúng Tôi
         </h1>
-
-        {/* Đoạn mở đầu thư thả, súc tích */}
-        <p className="text-base sm:text-lg text-stone-600 font-light leading-relaxed max-w-2xl mx-auto">
-          Chúng tôi tin rằng việc chăm sóc da không phải là một chuỗi hành động gấp gáp, mà là một khoảng lặng chữa lành sau những ồn ào của nhịp sống hiện đại.
+        <p className="text-lg md:text-xl text-gray-200 tracking-[1px] opacity-90 font-light">
+          Định hình vẻ đẹp thuần khiết &mdash; Chăm sóc da chuẩn y khoa
         </p>
-
-        {/* Đường gạch ngang tối giản ngăn cách */}
-        <div className="w-12 h-px bg-stone-300 mx-auto mt-12" />
       </div>
     </section>
   );

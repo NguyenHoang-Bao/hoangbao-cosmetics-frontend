@@ -1,40 +1,35 @@
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-
 export default function AboutCoreValues() {
   return (
-    <section className="bg-white py-24 md:py-36 border-t border-stone-200/80">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
-        {/* Dấu ngoặc kép thanh nhã */}
-        <span className="text-5xl sm:text-6xl text-stone-300 font-serif leading-none block select-none">
-          &ldquo;
-        </span>
-
-        {/* Tuyên ngôn thương hiệu phong cách Aesop */}
-        <blockquote className="text-xl sm:text-2xl md:text-3xl text-stone-800 leading-relaxed font-art italic max-w-3xl mx-auto">
-          Tại Hoàng Bảo Cosmetics, mỗi sản phẩm trao đi là một lời hứa danh dự về sự an tâm của bạn. Chúng tôi không theo đuổi những phép màu cấp tốc, mà cùng bạn nuôi dưỡng làn da khỏe mạnh, tự do và bản lĩnh qua từng tháng năm.
-        </blockquote>
-
-        {/* Chữ ký & Tem xuất xứ Atelier */}
-        <div className="flex flex-col items-center space-y-2 pt-4">
-          <span className="w-8 h-px bg-stone-300 mb-4" />
-          <span className="text-xs font-mono uppercase tracking-[3px] text-stone-900 font-medium">
-            Đội Ngũ Sáng Lập Hoàng Bảo Cosmetics
-          </span>
-          <span className="text-xs text-stone-500 font-mono tracking-wider">
-            Sài Gòn &bull; Est. 2026 &bull; Dược Mỹ Phẩm Chính Hãng
-          </span>
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 uppercase tracking-wider">
+            Giá Trị Cốt Lõi
+          </h2>
+          <div className="mx-auto bg-gray-900 mt-6 w-20 h-1"></div>
         </div>
-
-        {/* Nút bấm tối giản Atelier */}
-        <div className="pt-6">
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-stone-900 hover:bg-stone-800 text-stone-100 rounded-full text-xs font-mono uppercase tracking-[2px] transition-all duration-300 shadow-xs hover:shadow-md"
-          >
-            <span>Khám phá bộ sưu tập dược mỹ phẩm</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+        <div className="max-w-3xl mx-auto text-center relative px-8">
+          <span className="absolute top-0 start-0 text-7xl md:text-8xl text-gray-200 opacity-75 transform -translate-x-4 -translate-y-6 select-none font-serif leading-none">
+            &ldquo;
+          </span>
+          <p className="relative text-xl md:text-2xl text-gray-600 leading-relaxed italic">
+            Tại HOÀNG BẢO COSMETICS, mỗi sản phẩm không chỉ là một giải pháp chăm sóc da, mà là một tuyên ngôn. Chúng tôi dệt nên những câu chuyện từ{" "}
+            <span className="font-semibold text-gray-800 mx-1.5 not-italic">
+              Chất Lượng
+            </span>{" "}
+            thượng hạng, thôi thúc bởi ngọn lửa{" "}
+            <span className="font-semibold text-gray-800 mx-1.5 not-italic">
+              Đột Phá
+            </span>{" "}
+            không ngừng, và bước đi với cam kết về sự{" "}
+            <span className="font-semibold text-gray-800 mx-1.5 not-italic">
+              Bền Vững
+            </span>{" "}
+            &mdash; để mỗi lựa chọn của bạn không chỉ đẹp, mà còn là một giá trị gửi gắm cho tương lai.
+          </p>
+          <span className="absolute bottom-0 end-0 text-7xl md:text-8xl text-gray-200 opacity-75 transform translate-x-4 translate-y-6 select-none font-serif leading-none">
+            &rdquo;
+          </span>
         </div>
       </div>
     </section>
