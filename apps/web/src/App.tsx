@@ -11,6 +11,7 @@ import RegisterPage from "@/features/auth/pages/RegisterPage";
 import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";
 import ProductListPage from "@/features/product/pages/ProductListPage";
 import ProductDetailPage from "@/features/product/pages/ProductDetailPage";
+import ContactPage from "@/features/contact/pages/ContactPage";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
@@ -51,6 +52,9 @@ export const App: React.FC = () => {
                   </div>
                 }
               />
+
+              {/* Trang liên hệ (Contact Page) */}
+              <Route path="/contact" element={<ContactPage />} />
 
               {/* Các route yêu cầu phải đăng nhập */}
               <Route element={<ProtectedRoute />}>
