@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import {
   ShieldCheck,
@@ -7,11 +6,11 @@ import {
   Leaf,
   Award,
   Users,
-  Smile,
   ArrowRight,
+  Smile,
 } from "lucide-react";
 
-export const AboutCoreValues: React.FC = () => {
+export default function AboutCoreValues() {
   const coreValues = [
     {
       icon: ShieldCheck,
@@ -70,11 +69,11 @@ export const AboutCoreValues: React.FC = () => {
           <span className="text-xs sm:text-sm font-bold tracking-[3px] text-rose-500 uppercase block mb-3">
             TIÊU CHUẨN HOÀNG BẢO
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
             Giá Trị Cốt Lõi Tạo Nên Sự Khác Biệt
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-rose-500 to-pink-400 mx-auto mt-4 rounded-full" />
-          <p className="mt-4 text-neutral-600 text-sm sm:text-base leading-relaxed">
+          <p className="mt-4 text-gray-600 text-sm sm:text-base leading-relaxed">
             Mỗi bước đi của Hoàng Bảo Cosmetics đều dựa trên sự chính trực, tôn trọng làn da và khát khao nâng tầm vẻ đẹp Việt.
           </p>
         </div>
@@ -86,67 +85,108 @@ export const AboutCoreValues: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="bg-white rounded-2xl p-7 border border-rose-100/80 shadow-xs hover:shadow-xl hover:border-rose-300 transition-all duration-300 group flex flex-col justify-between"
+                className="bg-white rounded-2xl p-7 border border-rose-100/80 shadow-sm hover:shadow-xl hover:border-rose-300 transition-all duration-300 group flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-14 h-14 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all duration-300 shadow-xs">
+                  <div className="w-14 h-14 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all duration-300 shadow-sm">
                     <Icon className="w-7 h-7" />
                   </div>
                   <span className="text-[11px] font-bold text-rose-500 tracking-wider uppercase block mb-2">
                     {item.badge}
                   </span>
-                  <h3 className="text-lg font-bold text-neutral-900 mb-3 group-hover:text-rose-600 transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-rose-600 transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
+                  <p className="text-sm text-gray-600 leading-relaxed">
                     {item.desc}
                   </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-gray-100 flex items-center text-xs font-semibold text-rose-500 group-hover:text-rose-600">
+                  <span>Tiêu chuẩn chất lượng</span>
+                  <Sparkles className="w-3.5 h-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Khối Cột mốc số liệu thống kê */}
-        <div className="bg-neutral-900 text-white rounded-3xl p-8 sm:p-12 mb-16 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y lg:divide-y-0 lg:divide-x divide-neutral-800">
-            {milestones.map((milestone, idx) => {
-              const MIcon = milestone.icon;
+        {/* Trích dẫn nghệ thuật (Brand Mission Statement) */}
+        <div className="max-w-4xl mx-auto mb-20">
+          <div className="relative bg-white rounded-3xl p-8 sm:p-12 border border-rose-200/80 shadow-lg text-center overflow-hidden">
+            {/* Họa tiết góc */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-rose-100/50 rounded-bl-full pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-100/50 rounded-tr-full pointer-events-none" />
+
+            <span className="text-6xl sm:text-7xl text-rose-300 font-serif leading-none block mb-2 select-none">
+              “
+            </span>
+            <blockquote className="relative z-10 text-lg sm:text-xl md:text-2xl text-gray-700 leading-relaxed font-art italic max-w-3xl mx-auto">
+              Tại <span className="text-rose-600 font-bold not-italic">Hoàng Bảo Cosmetics</span>, mỗi sản phẩm trao đi không đơn thuần là một lọ dưỡng ẩm hay một cây son, mà là một lời hứa trân quý về sức khỏe, sự nâng niu và niềm tự tin của bạn mỗi sớm mai thức giấc.
+            </blockquote>
+            <div className="mt-6 flex flex-col items-center">
+              <span className="w-12 h-0.5 bg-rose-400 rounded-full mb-3" />
+              <span className="text-sm font-bold text-gray-900 tracking-wider uppercase font-sans">
+                Đội Ngũ Sáng Lập Hoàng Bảo Cosmetics
+              </span>
+              <span className="text-xs text-rose-500 mt-0.5">
+                Chuyên Gia Da Liễu & Nghiên Cứu Mỹ Phẩm
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Dải thống kê con số ấn tượng */}
+        <div className="bg-gradient-to-r from-rose-500 to-pink-500 rounded-3xl p-8 sm:p-10 text-white shadow-xl mb-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y sm:divide-y-0 sm:divide-x divide-white/20">
+            {milestones.map((ms, idx) => {
+              const Icon = ms.icon;
               return (
-                <div key={idx} className="pt-6 lg:pt-0 lg:px-4">
-                  <MIcon className="w-8 h-8 text-rose-400 mx-auto mb-3" />
-                  <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">
-                    {milestone.value}
+                <div key={idx} className="flex flex-col items-center pt-6 sm:pt-0 px-2">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-3">
+                    <Icon className="w-5 h-5 text-white" />
                   </div>
-                  <p className="text-neutral-400 text-xs sm:text-sm font-medium">
-                    {milestone.label}
-                  </p>
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-1">
+                    {ms.value}
+                  </span>
+                  <span className="text-xs sm:text-sm text-rose-100 font-medium max-w-[180px] leading-snug">
+                    {ms.label}
+                  </span>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Khối Kêu gọi hành động (CTA) */}
-        <div className="text-center max-w-xl mx-auto space-y-4">
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-neutral-900">
-            Sẵn Sàng Cho Làn Da Tỏa Sáng?
+        {/* Khối Banner Call to Action (CTA) */}
+        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-rose-100 shadow-sm text-center max-w-3xl mx-auto">
+          <span className="text-xs font-bold text-rose-500 uppercase tracking-widest block mb-2">
+            ĐỒNG HÀNH CÙNG LÀN DA BẠN
+          </span>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+            Sẵn Sàng Bắt Đầu Routine Chuẩn Y Khoa Cùng Hoàng Bảo?
           </h3>
-          <p className="text-sm text-neutral-600">
-            Khám phá ngay các dòng sản phẩm chính hãng phù hợp với tình trạng da của bạn tại Hoàng Bảo Cosmetics.
+          <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-8 max-w-xl mx-auto">
+            Khám phá hàng ngàn sản phẩm dưỡng da và trang điểm chính hãng hoặc kết nối ngay với dược sĩ của chúng tôi để được tư vấn miễn phí.
           </p>
-          <div className="pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-sm font-bold uppercase tracking-wider shadow-md shadow-rose-200 transition-all hover:gap-3"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
             >
-              <span>Khám Phá Sản Phẩm Ngay</span>
+              <span>Xem Tất Cả Sản Phẩm</span>
               <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/contact"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-xl border border-rose-200 transition-all duration-200"
+            >
+              <span>Tư Vấn Soi Da Miễn Phí</span>
             </Link>
           </div>
         </div>
       </div>
     </section>
   );
-};
+}
+
+export { AboutCoreValues };
