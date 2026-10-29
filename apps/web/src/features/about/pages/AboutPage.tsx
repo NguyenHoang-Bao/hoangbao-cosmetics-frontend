@@ -3,13 +3,13 @@ import AboutHero from "../components/AboutHero";
 import AboutStory from "../components/AboutStory";
 import AboutCoreValues from "../components/AboutCoreValues";
 
-export const AboutPage: React.FC = () => {
+export const AboutPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <main className="bg-[#fafafa] text-gray-900 min-h-screen">
+    <main className="bg-gray-50 text-gray-900 min-h-screen">
       <AboutHero />
       <AboutStory />
       <AboutCoreValues />
