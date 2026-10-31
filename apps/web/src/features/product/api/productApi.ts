@@ -8,6 +8,7 @@ import type {
   Category,
   Brand,
   ProductFilterParams,
+  ProductReviewSummary,
 } from '@hoangbao/types';
 
 export const productApi = {
@@ -79,5 +80,17 @@ export const productApi = {
     getBrands: async (): Promise<Brand[]> => {
         const reponse = await apiClient.get<any, ApiResponse<Brand[]>>('/brands');
         return reponse.data;
+    },
+
+    // Lay danh sach danh gia va tong quan danh gia cua san pham
+    getProductReviews: async (
+        productId: number,
+        page = 0,
+        size = 10,
+    ): Promise<ProductReviewSummary> => {
+        const response = await apiClient.get<any, ApiResponse<ProductReviewSummary>>(
+            `/reviews/products/${productId}?page=${page}&size=${size}`
+        );
+        return response.data;
     },
 };

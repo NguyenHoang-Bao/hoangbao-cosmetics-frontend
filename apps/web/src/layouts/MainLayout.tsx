@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/features/cart/components/CartDrawer";
+import { CartNotificationToast } from "@/features/cart/components/CartNotificationToast";
 
 export const MainLayout: React.FC = () => {
   return (
@@ -18,7 +19,10 @@ export const MainLayout: React.FC = () => {
       {/* ── FOOTER HỒNG 5 CỘT ── */}
       <Footer />
 
-      {/* ── GLOBAL CART DRAWER ── */}
+      {/* ── THÔNG BÁO NỔI KHI THÊM VÀO GIỎ HÀNG ── */}
+      <CartNotificationToast />
+
+      {/* ── GLOBAL CART DRAWER (BÊN PHẢI) ── */}
       <CartDrawer />
     </div>
   );

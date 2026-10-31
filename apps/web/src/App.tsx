@@ -15,6 +15,7 @@ import CheckoutPage from "@/features/checkout/pages/CheckoutPage";
 import OrderSuccessPage from "@/features/checkout/pages/OrderSuccessPage";
 import AboutPage from "@/features/about/pages/AboutPage";
 import ContactPage from "@/features/contact/pages/ContactPage";
+import WishlistPage from "@/features/product/pages/WishlistPage";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
@@ -54,6 +55,9 @@ export const App: React.FC = () => {
 
               {/* Trang liên hệ (Contact Page) */}
               <Route path="/contact" element={<ContactPage />} />
+
+              {/* Trang danh sách yêu thích (Wishlist) */}
+              <Route path="/wishlist" element={<WishlistPage />} />
 
               {/* Các route yêu cầu phải đăng nhập */}
               <Route element={<ProtectedRoute />}>

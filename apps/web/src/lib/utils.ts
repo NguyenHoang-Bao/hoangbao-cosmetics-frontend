@@ -2,7 +2,6 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 // Cau hinh class name, xu ly boolean/mang/object va tailwind-mergeConfigs(xung dot class tailwin)
-
 export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
 }
@@ -46,4 +45,31 @@ export const formatCurrency = (amount: number): string => {
         style: "currency",
         currency: "VND",
     }).format(amount);
+};
+
+// Tach du lieu mang tu DB (JSON string hoac chuoi phan cach xuong dong/dau gach)
+export const parseProductArrayData = (raw?: string | null): string[] => {
+    if (!raw || typeof raw !== "string") return [];
+    const trimmed = raw.trim();
+    if (!trimmed) return [];
+
+    // Neu bat dau bang '[' va ket thuc bang ']' -> parse JSON array
+    if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+        try {
+            const parsed = JSON.parse(trimmed);
+            if (Array.isArray(parsed)) {
+                return parsed
+                    .map((item) => (typeof item === "string" ? item.trim() : String(item)))
+                    .filter(Boolean);
+            }
+        } catch {
+            // Fallback neu loi JSON
+        }
+    }
+
+    // Fallback: tach theo xuong dong hoac dau cham/gach dau dong
+    return trimmed
+        .split(/\r?\n/)
+        .map((line) => line.replace(/^[•\-*✦\d\.]\s*/, "").trim())
+        .filter(Boolean);
 };

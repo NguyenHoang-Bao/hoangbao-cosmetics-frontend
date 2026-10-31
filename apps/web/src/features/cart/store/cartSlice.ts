@@ -11,11 +11,19 @@ export interface CartItem {
   variantId?: number;
   capacity?: string;
   quantity: number;
+  stockQuantity?: number;
+}
+
+export interface CartNotification {
+  item: CartItem;
+  quantityAdded: number;
+  timestamp: number;
 }
 
 export interface CartState {
   items: CartItem[];
   isOpen: boolean;
+  notification: CartNotification | null;
 }
 
 const STORAGE_KEY = "hoangbao_cart";
@@ -43,6 +51,7 @@ const saveCartToStorage = (items: CartItem[]) => {
 const initialState: CartState = {
   items: loadCartFromStorage(),
   isOpen: false,
+  notification: null,
 };
 
 export const cartSlice = createSlice({
@@ -55,9 +64,10 @@ export const cartSlice = createSlice({
         product: Product;
         quantity?: number;
         variant?: ProductVariant;
+        openDrawer?: boolean;
       }>,
     ) => {
-      const { product, quantity = 1, variant } = action.payload;
+      const { product, quantity = 1, variant, openDrawer = false } = action.payload;
       const targetVariant = variant || product.variants?.[0];
       const price = targetVariant?.price ?? 0;
       const originalPrice = targetVariant?.originalPrice;
@@ -72,24 +82,47 @@ export const cartSlice = createSlice({
           item.idProduct === product.idProduct && item.variantId === variantId,
       );
 
+      const stockQuantity = targetVariant?.stockQuantity;
+      const maxStock = stockQuantity !== undefined ? stockQuantity : 99;
+
+      const addedItem: CartItem = {
+        idProduct: product.idProduct,
+        name: product.name,
+        price,
+        originalPrice,
+        image,
+        brandName,
+        variantId,
+        capacity,
+        quantity,
+        stockQuantity,
+      };
+
       if (existingIndex > -1) {
-        state.items[existingIndex].quantity += quantity;
+        const currentQty = state.items[existingIndex].quantity;
+        const newQty = Math.min(maxStock, currentQty + quantity);
+        state.items[existingIndex].quantity = newQty;
+        if (stockQuantity !== undefined) {
+          state.items[existingIndex].stockQuantity = stockQuantity;
+        }
       } else {
-        state.items.push({
-          idProduct: product.idProduct,
-          name: product.name,
-          price,
-          originalPrice,
-          image,
-          brandName,
-          variantId,
-          capacity,
-          quantity,
-        });
+        addedItem.quantity = Math.min(maxStock, quantity);
+        state.items.push(addedItem);
       }
 
       saveCartToStorage(state.items);
-      state.isOpen = true; // Tu dong mo Drawer gio hang khi them thanh cong
+      // Giữ nguyên trạng thái Drawer (không tự động bung ra trừ khi openDrawer=true)
+      state.isOpen = openDrawer;
+      // Kích hoạt notification thông báo nổi và animation icon
+      state.notification = {
+        item: addedItem,
+        quantityAdded: quantity,
+        timestamp: Date.now(),
+      };
+    },
+
+    dismissNotification: (state) => {
+      state.notification = null;
     },
 
     removeFromCart: (
@@ -125,7 +158,8 @@ export const cartSlice = createSlice({
           (i) => i.idProduct === idProduct && i.variantId === variantId,
         );
         if (item) {
-          item.quantity = Math.min(99, quantity);
+          const maxStock = item.stockQuantity !== undefined ? item.stockQuantity : 99;
+          item.quantity = Math.min(maxStock, quantity);
         }
       }
       saveCartToStorage(state.items);
@@ -152,6 +186,7 @@ export const cartSlice = createSlice({
 
 export const {
   addToCart,
+  dismissNotification,
   removeFromCart,
   updateQuantity,
   clearCart,

@@ -45,33 +45,11 @@ export interface OrderResponse {
 export const orderApi = {
   // Tạo đơn hàng mới
   createOrder: async (payload: CreateOrderPayload): Promise<OrderResponse> => {
-    try {
-      const response = await apiClient.post<any, ApiResponse<OrderResponse>>(
-        "/orders",
-        payload,
-      );
-      return response.data;
-    } catch (err) {
-      console.warn("Backend API /orders gặp sự cố hoặc chưa có variant, sử dụng fallback client:", err);
-      // Fallback mô phỏng đơn hàng thành công khi backend chưa cấu hình đầy đủ variant DB
-      const mockOrderCode = "HB" + Math.floor(100000 + Math.random() * 900000);
-      const subtotal = payload.items.reduce((sum, item) => sum + item.quantity * 250000, 0);
-      const shippingFee = subtotal >= 299000 ? 0 : 30000;
-      return {
-        idOrder: Math.floor(1000 + Math.random() * 9000),
-        orderCode: mockOrderCode,
-        customerName: payload.customerName,
-        phoneNumber: payload.phoneNumber,
-        deliveryAddress: payload.deliveryAddress,
-        totalProductPrice: subtotal,
-        shippingFee: shippingFee,
-        totalAmount: subtotal + shippingFee,
-        paymentMethod: payload.paymentMethod,
-        status: "PENDING",
-        note: payload.note,
-        createdAt: new Date().toISOString(),
-      };
-    }
+    const response = await apiClient.post<any, ApiResponse<OrderResponse>>(
+      "/orders",
+      payload,
+    );
+    return response.data;
   },
 
   // Tra cứu đơn hàng theo mã đơn

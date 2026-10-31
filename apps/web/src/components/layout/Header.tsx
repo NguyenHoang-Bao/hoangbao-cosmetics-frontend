@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Search,
@@ -35,6 +35,16 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount }) => {
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const cartItems = useAppSelector((state) => state.cart.items);
+  const cartNotification = useAppSelector((state) => state.cart.notification);
+  const [isCartBouncing, setIsCartBouncing] = useState(false);
+
+  useEffect(() => {
+    if (cartNotification) {
+      setIsCartBouncing(true);
+      const timer = setTimeout(() => setIsCartBouncing(false), 900);
+      return () => clearTimeout(timer);
+    }
+  }, [cartNotification?.timestamp]);
   const totalCartCount =
     cartItemCount !== undefined
       ? cartItemCount
@@ -154,7 +164,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount }) => {
 
             {/* Nút Wishlist (Trái tim) */}
             <Link
-              to="/products"
+              to="/wishlist"
               className="text-rose-300 hover:text-rose-500 transition-colors p-1.5"
               title="Danh sách yêu thích"
             >
@@ -165,13 +175,23 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount }) => {
             <button
               type="button"
               onClick={() => dispatch(openCart())}
-              className="relative text-rose-400 hover:text-rose-600 transition-colors p-1.5 cursor-pointer"
+              className={`relative text-rose-400 hover:text-rose-600 transition-all duration-300 p-1.5 cursor-pointer ${
+                isCartBouncing ? "scale-115 text-rose-600" : ""
+              }`}
               title="Giỏ hàng"
               aria-label="Mở giỏ hàng"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag
+                className={`w-5 h-5 transition-transform duration-300 ${
+                  isCartBouncing ? "rotate-[-12deg]" : ""
+                }`}
+              />
               {totalCartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center shadow-sm">
+                <span
+                  className={`absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center shadow-sm transition-transform duration-300 ${
+                    isCartBouncing ? "scale-125 bg-rose-600 animate-bounce" : ""
+                  }`}
+                >
                   {totalCartCount > 99 ? "99+" : totalCartCount}
                 </span>
               )}
@@ -339,7 +359,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount }) => {
                       {isExpanded && (
                         <div className="pl-4 pr-1 py-1 space-y-1 bg-neutral-50/80 rounded-lg mt-1">
                           <Link
-                            to="/products"
+                            to="/wishlist"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="block py-1.5 text-xs font-bold text-rose-600 hover:underline"
                           >
