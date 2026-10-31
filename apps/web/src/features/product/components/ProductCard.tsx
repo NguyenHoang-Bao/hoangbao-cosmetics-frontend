@@ -1,7 +1,9 @@
 import type { Product } from "@hoangbao/types";
 import { Heart, ShoppingBag } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/store/hooks";
+import { useCheckFavorite, useToggleFavorite } from "../hooks/useFavorite";
 import { DEFAULT_PRODUCT_IMAGE, formatCurrency, getProductImageUrl } from "@/lib/utils";
 
 export interface ProductCardProps {
@@ -13,10 +15,37 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     product,
     onAddToCart,
 }) => {
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAppSelector((state) => state.auth);
+    const toggleFavoriteMutation = useToggleFavorite();
     const [isLiked, setIsLiked] = useState(false);
 
-    // 1. Dong bo neu khong phai idProduct thi lay id fallback
+    // 1. Dong bo ID san pham va kiem tra trang thai yeu thich tu server
     const productId = product.idProduct ?? (product as unknown as { id?: string | number }).id;
+    const numProductId = typeof productId === "number" ? productId : Number(productId);
+
+    const { data: serverIsLiked } = useCheckFavorite(numProductId, isAuthenticated);
+
+    useEffect(() => {
+        if (typeof serverIsLiked === "boolean") {
+            setIsLiked(serverIsLiked);
+        }
+    }, [serverIsLiked]);
+
+    const handleToggleFavorite = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!isAuthenticated) {
+            navigate("/login");
+            return;
+        }
+        setIsLiked((prev) => !prev);
+        if (typeof numProductId === "number" && !isNaN(numProductId)) {
+            toggleFavoriteMutation.mutate(numProductId, {
+                onError: () => setIsLiked((prev) => !prev),
+            });
+        }
+    };
 
     // 2. Trich xuat gia tu bien the dau tien (hoac fallback neu backend tra truc tiep)
     const firstVariant = product.variants?.[0];
@@ -35,10 +64,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             ? Math.round(((originalPrice - price) / originalPrice) * 100)
             : 0;
 
-    // Kiem tra con hang hay khong
+    // Kiem tra con hang hay khong (het hang khi tat ca bien the deu co stockQuantity === 0)
     const isOutOfStock =
-        firstVariant?.stockQuantity === 0 ||
-        (product as unknown as { inStock?: boolean }).inStock === false;
+        product.variants && product.variants.length > 0
+            ? product.variants.every((v) => v.stockQuantity === 0)
+            : firstVariant?.stockQuantity === 0 ||
+              (product as unknown as { inStock?: boolean }).inStock === false;
 
     // 3. Xu ly anh: anh chinh (primary) va anh thu 2 (secondary) khi hover
     const primarySrc = product.thumbnail || product.images?.[0];
@@ -120,7 +151,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 {/* Nut Yeu Thich (Trai tim) o goc tren phai */}
                 <button
                     type="button"
-                    onClick={() => setIsLiked((prev) => !prev)}
+                    onClick={handleToggleFavorite}
                     aria-label={isLiked ? "Bỏ yêu thích" : "Thêm vào yêu thích"}
                     aria-pressed={isLiked}
                     className="absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-neutral-600 hover:text-rose-500 shadow-sm flex items-center justify-center transition-transform active:scale-90"

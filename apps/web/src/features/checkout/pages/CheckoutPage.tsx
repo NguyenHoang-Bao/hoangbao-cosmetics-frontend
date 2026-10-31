@@ -117,6 +117,13 @@ export const CheckoutPage: React.FC = () => {
       setIsSubmitting(true);
       const fullDeliveryAddress = `${specificAddress.trim()}${district ? `, ${district}` : ""}, ${province}`;
 
+      const invalidItem = items.find((item) => !item.variantId);
+      if (invalidItem) {
+        setFormError(`Sản phẩm "${invalidItem.name}" chưa chọn phân loại hợp lệ. Vui lòng kiểm tra lại giỏ hàng!`);
+        setIsSubmitting(false);
+        return;
+      }
+
       const payload: CreateOrderPayload = {
         customerName: customerName.trim(),
         phoneNumber: cleanPhone,
@@ -125,7 +132,7 @@ export const CheckoutPage: React.FC = () => {
         paymentMethod: paymentMethod,
         note: note.trim() || undefined,
         items: items.map((item) => ({
-          idVariant: item.variantId || item.idProduct || 1,
+          idVariant: item.variantId!,
           quantity: item.quantity,
         })),
       };

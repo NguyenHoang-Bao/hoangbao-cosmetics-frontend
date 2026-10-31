@@ -140,61 +140,74 @@ export const CartDrawer: React.FC = () => {
                         </div>
 
                         {/* Nút tăng giảm số lượng & Nút Xóa */}
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center border border-neutral-300 rounded-md bg-white">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                dispatch(
-                                  updateQuantity({
-                                    idProduct: item.idProduct,
-                                    variantId: item.variantId,
-                                    quantity: item.quantity - 1,
-                                  }),
-                                )
-                              }
-                              className="w-6 h-6 flex items-center justify-center text-xs font-bold text-neutral-600 hover:bg-neutral-100 transition-colors"
-                              aria-label="Giảm số lượng"
-                            >
-                              -
-                            </button>
-                            <span className="w-8 text-center text-xs font-semibold text-neutral-900">
-                              {item.quantity}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                dispatch(
-                                  updateQuantity({
-                                    idProduct: item.idProduct,
-                                    variantId: item.variantId,
-                                    quantity: item.quantity + 1,
-                                  }),
-                                )
-                              }
-                              className="w-6 h-6 flex items-center justify-center text-xs font-bold text-neutral-600 hover:bg-neutral-100 transition-colors"
-                              aria-label="Tăng số lượng"
-                            >
-                              +
-                            </button>
-                          </div>
+                        {(() => {
+                          const isAtMaxStock =
+                            item.stockQuantity !== undefined &&
+                            item.quantity >= item.stockQuantity;
+                          return (
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center border border-neutral-300 rounded-md bg-white">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    dispatch(
+                                      updateQuantity({
+                                        idProduct: item.idProduct,
+                                        variantId: item.variantId,
+                                        quantity: item.quantity - 1,
+                                      }),
+                                    )
+                                  }
+                                  className="w-6 h-6 flex items-center justify-center text-xs font-bold text-neutral-600 hover:bg-neutral-100 transition-colors cursor-pointer"
+                                  aria-label="Giảm số lượng"
+                                >
+                                  -
+                                </button>
+                                <span className="w-8 text-center text-xs font-semibold text-neutral-900">
+                                  {item.quantity}
+                                </span>
+                                <button
+                                  type="button"
+                                  disabled={isAtMaxStock}
+                                  onClick={() =>
+                                    dispatch(
+                                      updateQuantity({
+                                        idProduct: item.idProduct,
+                                        variantId: item.variantId,
+                                        quantity: item.quantity + 1,
+                                      }),
+                                    )
+                                  }
+                                  className="w-6 h-6 flex items-center justify-center text-xs font-bold text-neutral-600 hover:bg-neutral-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                                  aria-label="Tăng số lượng"
+                                  title={
+                                    isAtMaxStock
+                                      ? `Đã đạt giới hạn tồn kho (${item.stockQuantity})`
+                                      : "Tăng số lượng"
+                                  }
+                                >
+                                  +
+                                </button>
+                              </div>
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              dispatch(
-                                removeFromCart({
-                                  idProduct: item.idProduct,
-                                  variantId: item.variantId,
-                                }),
-                              )
-                            }
-                            className="p-1 text-neutral-400 hover:text-red-500 transition-colors"
-                            title="Xóa sản phẩm"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  dispatch(
+                                    removeFromCart({
+                                      idProduct: item.idProduct,
+                                      variantId: item.variantId,
+                                    }),
+                                  )
+                                }
+                                className="p-1 text-neutral-400 hover:text-red-500 transition-colors cursor-pointer"
+                                title="Xóa sản phẩm"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          );
+                        })()}
                       </div>
                     </div>
                   </div>
