@@ -24,7 +24,7 @@ export const FAQ: React.FC = () => {
               </span>
             </summary>
             <div className="mt-4 text-neutral-600 leading-relaxed text-xs sm:text-sm border-t border-neutral-100 pt-4">
-              Bạn có thể tự kiểm tra bằng cách rửa mặt sạch, không bôi bất kỳ sản phẩm nào và đợi 30 phút. Nếu da đổ bóng toàn mặt là da dầu, căng rát là da khô, đổ dầu vùng chữ T là da hỗn hợp. Hoặc tham gia ngay bài trắc nghiệm chẩn đoán da K-Beauty 60 giây trên website để nhận phác đồ routine hoàn toàn miễn phí!
+              Bạn có thể tự kiểm tra bằng cách rửa mặt sạch, không bôi bất kỳ sản phẩm nào và đợi 30 phút. Nếu da đổ bóng toàn mặt là da dầu, căng rát là da khô, đổ dầu vùng chữ T là da hỗn hợp. Hoặc bạn có thể nhắn tin trực tiếp cho trợ lý tư vấn ở góc màn hình để được hướng dẫn chọn sản phẩm phù hợp hoàn toàn miễn phí!
             </div>
           </details>
 

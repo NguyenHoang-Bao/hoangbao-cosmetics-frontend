@@ -60,10 +60,6 @@ export const NAVIGATION_ITEMS: readonly NavItem[] = [
     ],
   },
   {
-    label: "CHẨN ĐOÁN DA",
-    path: "/skin-quiz",
-  },
-  {
     label: "TRA CỨU ĐƠN HÀNG",
     path: "/order-tracking",
   },

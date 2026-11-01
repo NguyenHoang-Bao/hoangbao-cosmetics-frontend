@@ -4,7 +4,7 @@ export const N8N_CHAT_WEBHOOK_URL = import.meta.env.VITE_N8N_CHAT_WEBHOOK_URL ||
 
 export const INITIAL_ASSISTANT_MESSAGE = 
   'Xin chào bạn! Tôi là chuyên viên AI tại **Hoàng Bảo Cosmetics**.\n\n' +
-  'Tôi sẵn sàng hỗ trợ bạn chẩn đoán tình trạng da (mụn, nhạy cảm, phục hồi), xây dựng chu trình chăm sóc chuẩn y khoa và **gợi ý các sản phẩm chính hãng sẵn có tại cửa hàng** phù hợp nhất.';
+  'Tôi sẵn sàng hỗ trợ bạn tư vấn tình trạng da (mụn, nhạy cảm, phục hồi), xây dựng chu trình chăm sóc chuẩn y khoa và **gợi ý các sản phẩm chính hãng sẵn có tại cửa hàng** phù hợp nhất.';
 
 export const DEFAULT_QUICK_PROMPTS: QuickPrompt[] = [
   {
