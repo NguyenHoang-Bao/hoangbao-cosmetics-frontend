@@ -13,6 +13,7 @@ import ProductListPage from "@/features/product/pages/ProductListPage";
 import ProductDetailPage from "@/features/product/pages/ProductDetailPage";
 import CheckoutPage from "@/features/checkout/pages/CheckoutPage";
 import OrderSuccessPage from "@/features/checkout/pages/OrderSuccessPage";
+import OrderTrackingPage from "@/features/order/pages/OrderTrackingPage";
 import AboutPage from "@/features/about/pages/AboutPage";
 import ContactPage from "@/features/contact/pages/ContactPage";
 import WishlistPage from "@/features/product/pages/WishlistPage";
@@ -46,6 +47,8 @@ export const App: React.FC = () => {
               {/* Trang thanh toán & Hoàn tất đơn hàng */}
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-success/:orderCode" element={<OrderSuccessPage />} />
+              {/* Trang tra cứu tiến độ đơn hàng */}
+              <Route path="/order-tracking" element={<OrderTrackingPage />} />
               {/* Trang giới thiệu (About Page) */}
               <Route path="/about" element={<AboutPage />} />
 

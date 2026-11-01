@@ -17,13 +17,20 @@ export interface CreateOrderPayload {
 }
 
 export interface OrderItemDetail {
+  idOrderDetail?: number;
   idVariant: number;
   productName: string;
+  sku?: string;
+  capacity?: string;
   quantity: number;
   price: number;
-  totalPrice: number;
+  subTotal?: number;
+  totalPrice?: number;
   image?: string;
+  isReviewed?: boolean;
 }
+
+export type OrderStatus = "PENDING" | "PROCESSING" | "SHIPPING" | "DELIVERED" | "CANCELLED";
 
 export interface OrderResponse {
   idOrder: number;
@@ -32,11 +39,14 @@ export interface OrderResponse {
   customerName: string;
   phoneNumber: string;
   deliveryAddress: string;
+  orderType?: "ONLINE" | "POS";
   totalProductPrice: number;
   shippingFee: number;
   totalAmount: number;
   paymentMethod: string;
-  status: string;
+  transactionId?: string;
+  webhookStatus?: string;
+  status: OrderStatus | string;
   note?: string;
   createdAt: string;
   items?: OrderItemDetail[];
@@ -52,28 +62,15 @@ export const orderApi = {
     return response.data;
   },
 
-  // Tra cứu đơn hàng theo mã đơn
+  // Tra cứu đơn hàng theo mã đơn (kèm SĐT xác thực với khách vãng lai)
   getOrderByCode: async (orderCode: string, phoneNumber?: string): Promise<OrderResponse> => {
-    try {
-      const query = phoneNumber ? `?phoneNumber=${encodeURIComponent(phoneNumber)}` : "";
-      const response = await apiClient.get<any, ApiResponse<OrderResponse>>(
-        `/orders/${orderCode}${query}`,
-      );
-      return response.data;
-    } catch {
-      return {
-        idOrder: 1,
-        orderCode: orderCode,
-        customerName: "Khách hàng Hoàng Bảo",
-        phoneNumber: phoneNumber || "0359490221",
-        deliveryAddress: "Việt Nam",
-        totalProductPrice: 350000,
-        shippingFee: 0,
-        totalAmount: 350000,
-        paymentMethod: "COD",
-        status: "CONFIRMED",
-        createdAt: new Date().toISOString(),
-      };
-    }
+    const query =
+      phoneNumber && phoneNumber.trim()
+        ? `?phoneNumber=${encodeURIComponent(phoneNumber.trim())}`
+        : "";
+    const response = await apiClient.get<any, ApiResponse<OrderResponse>>(
+      `/orders/${encodeURIComponent(orderCode.trim())}${query}`,
+    );
+    return response.data;
   },
 };

@@ -79,6 +79,7 @@ export const OrderSuccessPage: React.FC = () => {
                   src={vietQrUrl}
                   alt="Mã VietQR Thanh Toán"
                   className="w-full max-w-[240px] aspect-square object-contain"
+                  loading="lazy"
                 />
                 <p className="text-[11px] text-neutral-500 mt-2 text-center">
                   Quét mã qua mọi App Ngân hàng hoặc Ví điện tử
@@ -190,7 +191,7 @@ export const OrderSuccessPage: React.FC = () => {
             <span>Tiếp Tục Mua Sắm</span>
           </Link>
           <Link
-            to="/my-orders"
+            to={`/order-tracking?orderCode=${encodeURIComponent(orderCode || "")}&phone=${encodeURIComponent(phoneNumber || "")}`}
             className="w-full sm:w-auto px-6 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
           >
             <span>Tra Cứu Đơn Hàng</span>
