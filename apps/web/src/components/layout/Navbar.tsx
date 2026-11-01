@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
           );
         }
 
-        // TRƯỜNG HỢP 2: Link đơn (Trang chủ, Sale, Quiz, Đơn hàng, Liên hệ)
+        // TRƯỜNG HỢP 2: Link đơn (Trang chủ, Sale, Đơn hàng, Liên hệ)
         return (
           <NavLink
             key={item.path}

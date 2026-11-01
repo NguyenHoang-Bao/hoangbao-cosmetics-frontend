@@ -149,18 +149,15 @@ export const ShopBySkinType: React.FC = () => {
           ))}
         </div>
 
-        {/* ── NÚT TÌM HIỂU VỀ DA CỦA BẠN (LINK TRANG CHẨN ĐOÁN DA NAV BAR) ── */}
+        {/* ── NÚT KHÁM PHÁ TOÀN BỘ SẢN PHẨM THEO DA ── */}
         <div className="mt-12 sm:mt-14 text-center">
           <Link
-            to="/skin-quiz"
-            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-neutral-900 hover:bg-rose-600 text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg active:scale-98 group"
+            to="/products"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-neutral-900 hover:bg-[#0F1E36] text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg active:scale-98 group"
           >
-            <span>Tìm hiểu về da của bạn</span>
+            <span>Khám phá toàn bộ giải pháp cho da</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-          <p className="text-[11px] text-neutral-400 mt-2 font-medium">
-            Làm bài trắc nghiệm phân tích làn da chuẩn chuyên gia da liễu trong 2 phút
-          </p>
         </div>
       </div>
     </section>

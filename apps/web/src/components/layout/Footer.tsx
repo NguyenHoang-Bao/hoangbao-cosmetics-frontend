@@ -179,11 +179,6 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/skin-quiz" className="hover:text-pink-600 transition-colors">
-                  Trắc nghiệm da & Routine
-                </Link>
-              </li>
-              <li>
                 <Link to="/about" className="hover:text-pink-600 transition-colors">
                   Tuyển dụng
                 </Link>
