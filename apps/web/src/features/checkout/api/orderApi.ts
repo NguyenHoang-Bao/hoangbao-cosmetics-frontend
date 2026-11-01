@@ -11,7 +11,7 @@ export interface CreateOrderPayload {
   email?: string;
   phoneNumber: string;
   deliveryAddress: string;
-  paymentMethod: "COD" | "BANK_TRANSFER" | "MOMO" | "VNPAY";
+  paymentMethod: "COD" | "BANK_TRANSFER" | "MOMO" | "VNPAY" | "VIETQR";
   note?: string;
   items: CreateOrderItem[];
 }
@@ -52,6 +52,26 @@ export interface OrderResponse {
   items?: OrderItemDetail[];
 }
 
+export interface PaymentQrResponse {
+  orderCode: string;
+  totalAmount: number;
+  qrCodeUrl: string;
+  bankId: string;
+  accountNumber: string;
+  accountName: string;
+  content: string;
+  paymentMethod: string;
+}
+
+export interface PaymentStatusResponse {
+  orderCode: string;
+  isPaid: boolean;
+  status: OrderStatus | string;
+  totalAmount: number;
+  transactionId?: string | null;
+  paymentMethod: string;
+}
+
 export const orderApi = {
   // Tạo đơn hàng mới
   createOrder: async (payload: CreateOrderPayload): Promise<OrderResponse> => {
@@ -70,6 +90,22 @@ export const orderApi = {
         : "";
     const response = await apiClient.get<any, ApiResponse<OrderResponse>>(
       `/orders/${encodeURIComponent(orderCode.trim())}${query}`,
+    );
+    return response.data;
+  },
+
+  // Lấy thông tin mã VietQR động từ backend
+  getVietQr: async (orderCode: string): Promise<PaymentQrResponse> => {
+    const response = await apiClient.get<any, ApiResponse<PaymentQrResponse>>(
+      `/payment/vietqr/${encodeURIComponent(orderCode.trim())}`,
+    );
+    return response.data;
+  },
+
+  // Kiểm tra trạng thái thanh toán đơn hàng (polling SePay / ngân hàng)
+  checkPaymentStatus: async (orderCode: string): Promise<PaymentStatusResponse> => {
+    const response = await apiClient.get<any, ApiResponse<PaymentStatusResponse>>(
+      `/payment/check-status/${encodeURIComponent(orderCode.trim())}`,
     );
     return response.data;
   },

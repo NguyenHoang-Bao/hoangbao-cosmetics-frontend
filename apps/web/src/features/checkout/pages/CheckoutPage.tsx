@@ -55,6 +55,27 @@ export const CheckoutPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
 
+  // Tự động điền thông tin tài khoản nếu đã đăng nhập hoặc có trong bộ nhớ máy
+  React.useEffect(() => {
+    if (user) {
+      if (user.fullName && !customerName) setCustomerName(user.fullName);
+      if (user.phone && !phoneNumber) setPhoneNumber(user.phone);
+      if (user.email && !email) setEmail(user.email);
+    }
+    try {
+      const stored = localStorage.getItem("currentUser") || localStorage.getItem("hb_user");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.fullName && !customerName) setCustomerName(parsed.fullName);
+        if (parsed.phone && !phoneNumber) setPhoneNumber(parsed.phone);
+        if (parsed.email && !email) setEmail(parsed.email);
+        if (parsed.address && !specificAddress) setSpecificAddress(parsed.address);
+      }
+    } catch {
+      // ignore
+    }
+  }, [user]);
+
   // Tính toán số tiền
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const rawShippingFee = subtotal >= 299000 ? 0 : 30000;
