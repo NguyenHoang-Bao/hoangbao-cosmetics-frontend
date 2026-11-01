@@ -64,6 +64,10 @@ export const NAVIGATION_ITEMS: readonly NavItem[] = [
     path: "/order-tracking",
   },
   {
+    label: "GIỚI THIỆU",
+    path: "/about",
+  },
+  {
     label: "LIÊN HỆ",
     path: "/contact",
   },
