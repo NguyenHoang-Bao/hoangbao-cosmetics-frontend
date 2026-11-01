@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/features/cart/components/CartDrawer";
 import { CartNotificationToast } from "@/features/cart/components/CartNotificationToast";
+import { AiAssistantWidget } from "@/features/chat";
 
 export const MainLayout: React.FC = () => {
   return (
@@ -24,6 +25,9 @@ export const MainLayout: React.FC = () => {
 
       {/* ── GLOBAL CART DRAWER (BÊN PHẢI) ── */}
       <CartDrawer />
+
+      {/* ── AI SKINCARE & SHOP ASSISTANT (N8N READY) ── */}
+      <AiAssistantWidget />
     </div>
   );
 };

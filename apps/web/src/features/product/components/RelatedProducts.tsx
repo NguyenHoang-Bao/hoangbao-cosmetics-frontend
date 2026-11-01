@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Sparkles } from "lucide-react";
 import type { Product } from "@hoangbao/types";
 import { productApi } from "../api/productApi";
 import { ProductCard } from "./ProductCard";
@@ -36,8 +35,7 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
     <div className="mt-16 pt-10 border-t border-neutral-200">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-rose-600 flex items-center gap-1.5 mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
+          <span className="text-xs font-bold uppercase tracking-wider text-rose-600 block mb-1">
             Gợi ý cho bạn
           </span>
           <h3 className="text-xl sm:text-2xl font-bold text-neutral-900 tracking-tight">
