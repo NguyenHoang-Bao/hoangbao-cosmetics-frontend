@@ -9,32 +9,62 @@ export function cn(...inputs: ClassValue[]): string {
 // URL Cloudinary mac dinh
 const CLOUDINARY_BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL || "https://res.cloudinary.com/hb22fnuq/image/upload";
 
-// Anh mac dinh dang SVG Data URI the hien ro trang thai loi anh (khong phu thuoc server ngoai)
+// Anh mac dinh dang SVG Data URI sang trong, tinh te theo chuan luxury cosmetics (thay the chu canh bao do gay mat tham my)
 export const DEFAULT_PRODUCT_IMAGE =
     "data:image/svg+xml;charset=utf-8," +
     encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="400" viewBox="0 0 300 400" fill="none">
-  <rect width="300" height="400" fill="#F3F4F6"/>
-  <g transform="translate(110, 140)">
-    <rect x="0" y="0" width="80" height="65" rx="8" stroke="#9CA3AF" stroke-width="2.5" fill="#E5E7EB"/>
-    <circle cx="25" cy="22" r="6" fill="#9CA3AF"/>
-    <path d="M8 55 L32 32 L52 48 L62 40 L72 55" stroke="#9CA3AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="68" cy="12" r="12" fill="#EF4444"/>
-    <path d="M68 6 V13 M68 16 V18" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCFAF8"/>
+      <stop offset="100%" stop-color="#F4ECE6"/>
+    </linearGradient>
+    <linearGradient id="bottleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E8DBD5"/>
+      <stop offset="50%" stop-color="#F2EAE6"/>
+      <stop offset="100%" stop-color="#DFCEC7"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#bgGrad)"/>
+  
+  <!-- Hoa tiet chai serum my pham toi gian thanh lich -->
+  <g transform="translate(150, 165)" text-anchor="middle">
+    <!-- Nap bop cao su cua ong hut serum -->
+    <path d="M-10 -72 C-10 -78 10 -78 10 -72 L10 -58 L-10 -58 Z" fill="#D4A396"/>
+    <!-- Vong kim loai ma vang hong -->
+    <rect x="-13" y="-58" width="26" height="8" rx="2" fill="#BA8274"/>
+    <!-- Co chai thuy tinh -->
+    <rect x="-10" y="-50" width="20" height="12" fill="#E8DBD5"/>
+    <!-- Than chai serum thuy tinh -->
+    <path d="M-28 -38 C-28 -38 -15 -38 -10 -38 L10 -38 C15 -38 28 -38 28 -38 C32 -38 35 -35 35 -30 L35 38 C35 44 31 48 25 48 L-25 48 C-31 48 -35 44 -35 38 L-35 -30 C-35 -35 -32 -38 -28 -38 Z" fill="url(#bottleGrad)" stroke="#D6C4BD" stroke-width="1.5"/>
+    <!-- Ong hut thuy tinh ben trong -->
+    <line x1="0" y1="-38" x2="0" y2="30" stroke="#CBB7AF" stroke-width="2" stroke-linecap="round"/>
+    <!-- Muc dung dich tinh chat nhe nhang -->
+    <path d="M-30 8 C-15 12 15 4 30 8 L30 38 C30 42 27 45 23 45 L-23 45 C-27 45 -30 42 -30 38 Z" fill="#E4CAC1" fill-opacity="0.5"/>
+    <!-- Ngoi sao lap lanh tinh chat -->
+    <path d="M38 -45 Q38 -37 46 -37 Q38 -37 38 -29 Q38 -37 30 -37 Q38 -37 38 -45 Z" fill="#E2A898"/>
   </g>
-  <text x="150" y="240" text-anchor="middle" fill="#EF4444" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="0.5">
-    ẢNH BỊ LỖI
+
+  <!-- Typography nhan dien thuong hieu Hoang Bao Cosmetics -->
+  <text x="150" y="260" text-anchor="middle" fill="#8C7A70" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" letter-spacing="1.5">
+    HOÀNG BẢO COSMETICS
   </text>
-  <text x="150" y="262" text-anchor="middle" fill="#6B7280" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500">
-    (Không tải được ảnh)
+  <text x="150" y="278" text-anchor="middle" fill="#B5A59E" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="400" letter-spacing="0.5">
+    Hình ảnh đang cập nhật
   </text>
 </svg>
 `);
 
 // Chuan hoa URL hinh anh tu Cloudinary hoac URL tuyet doi
 export const getProductImageUrl = (path?: string): string => {
-    if (!path) return DEFAULT_PRODUCT_IMAGE;
-    if (path.startsWith("http://") || path.startsWith("https://")) return path;
+    if (!path || path.trim() === "") return DEFAULT_PRODUCT_IMAGE;
+
+    // Tu dong khac phuc URL Unsplash bi loi photo id trong cache/localStorage
+    if (path.includes("photo-1608248597359-5484831f50c6")) {
+        return "https://images.unsplash.com/photo-1617897903246-719242758050?w=400&auto=format&fit=crop&q=80";
+    }
+
+    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) return path;
     const cleanPath = path.startsWith("/") ? path.slice(1) : path;
     return `${CLOUDINARY_BASE_URL}/${cleanPath}`;
 };

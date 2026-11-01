@@ -36,7 +36,7 @@ export const MOCK_SHOP_PRODUCTS: Record<string, ProductRecommendation[]> = {
       name: 'Kem Dưỡng Phục Hồi Cicaplast Baume B5+ 40ml',
       brandName: 'La Roche-Posay',
       price: 385000,
-      thumbnail: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&auto=format&fit=crop&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&auto=format&fit=crop&q=80',
       inStock: true
     }
   ],
@@ -46,7 +46,7 @@ export const MOCK_SHOP_PRODUCTS: Record<string, ProductRecommendation[]> = {
       name: 'Serum Kiểm Soát Dầu Niacinamide 10% + TXA 4%',
       brandName: 'Anua',
       price: 420000,
-      thumbnail: 'https://images.unsplash.com/photo-1608248597359-5484831f50c6?w=200&auto=format&fit=crop&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=400&auto=format&fit=crop&q=80',
       inStock: true
     }
   ],
@@ -56,7 +56,7 @@ export const MOCK_SHOP_PRODUCTS: Record<string, ProductRecommendation[]> = {
       name: 'Kem Chống Nắng Rau Má Madagascar Centella SPF50+',
       brandName: 'Skin1004',
       price: 345000,
-      thumbnail: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&auto=format&fit=crop&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&auto=format&fit=crop&q=80',
       inStock: true
     }
   ]
