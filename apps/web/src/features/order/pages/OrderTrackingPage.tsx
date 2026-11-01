@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { orderApi, type OrderResponse, type OrderStatus } from "@/features/checkout/api/orderApi";
 import { formatCurrency } from "@/lib/utils";
+import { useAppSelector } from "@/store/hooks";
 
 // Các bước tiến trình giao hàng chuẩn
 interface StepItem {
@@ -106,6 +107,7 @@ const getPaymentMethodLabel = (method?: string): string => {
 
 export const OrderTrackingPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAppSelector((state) => state.auth);
 
   const [orderCode, setOrderCode] = useState<string>(searchParams.get("orderCode") || "");
   const [phone, setPhone] = useState<string>(searchParams.get("phone") || "");
@@ -133,7 +135,7 @@ export const OrderTrackingPage: React.FC = () => {
       if (err instanceof Error) {
         setErrorMessage(err.message);
       } else {
-        setErrorMessage("Không thể tra cứu thông tin đơn hàng. Vui lòng kiểm tra lại mã đơn hoặc số điện thoại!");
+        setErrorMessage("Không thể tra cứu thông tin đơn hàng. Vui lòng kiểm tra lại mã đơn!");
       }
     } finally {
       setIsLoading(false);
@@ -188,21 +190,27 @@ export const OrderTrackingPage: React.FC = () => {
         <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-600 mb-3 border border-rose-100">
             <Truck className="w-3.5 h-3.5" />
-            Hệ Thống Vận Hành & Giao Vận
+            Dành Cho Thành Viên Hoàng Bảo
           </span>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-neutral-900">
             Tra Cứu Đơn Hàng
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500 mt-2 leading-relaxed">
-            Nhập mã đơn hàng và số điện thoại đặt hàng để theo dõi chi tiết hành trình vận chuyển kiện hàng của bạn theo thời gian thực.
+            {user?.fullName ? (
+              <>
+                Xin chào <strong className="text-neutral-800">{user.fullName}</strong>! Nhập mã đơn hàng của bạn để theo dõi chi tiết hành trình vận chuyển theo thời gian thực.
+              </>
+            ) : (
+              "Nhập mã đơn hàng để theo dõi chi tiết hành trình vận chuyển kiện hàng của bạn theo thời gian thực."
+            )}
           </p>
         </div>
 
         {/* ── KHUNG FORM TRA CỨU ── */}
         <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-xs mb-8">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+            <div className="flex flex-col sm:flex-row items-end gap-3">
+              <div className="flex-1 w-full">
                 <label
                   htmlFor="orderCode"
                   className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5"
@@ -216,47 +224,17 @@ export const OrderTrackingPage: React.FC = () => {
                     value={orderCode}
                     onChange={(e) => setOrderCode(e.target.value)}
                     placeholder="VD: HB2026110112345"
-                    className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-mono font-medium uppercase tracking-wide transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-mono font-bold uppercase tracking-wide transition-all"
                     required
                   />
                   <Search className="w-4 h-4 text-neutral-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5"
-                >
-                  Số điện thoại đặt hàng <span className="text-rose-500">*</span>
-                </label>
-                <div className="relative">
-                  <input
-                    id="phone"
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="VD: 0359490221"
-                    className="w-full px-4 py-3 rounded-xl border border-neutral-300 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-medium transition-all"
-                  />
-                  <Phone className="w-4 h-4 text-neutral-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
-                <span className="text-[11px] text-neutral-400 mt-1 block">
-                  Bảo mật thông tin: Khách vãng lai cần nhập đúng SĐT để tra cứu.
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-              <span className="text-xs text-neutral-400 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                Thông tin được mã hóa và bảo mật theo chuẩn da liễu Hoàng Bảo
-              </span>
-
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full sm:w-auto px-7 py-3 rounded-xl bg-neutral-900 hover:bg-[#0F1E36] disabled:bg-neutral-400 text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 shadow-sm hover:shadow active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-7 py-3 rounded-xl bg-neutral-900 hover:bg-[#0F1E36] disabled:bg-neutral-400 text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 shadow-sm hover:shadow active:scale-98 flex items-center justify-center gap-2 cursor-pointer shrink-0 h-[46px]"
               >
                 {isLoading ? (
                   <>
@@ -270,6 +248,13 @@ export const OrderTrackingPage: React.FC = () => {
                   </>
                 )}
               </button>
+            </div>
+
+            <div className="pt-2 flex items-center justify-between text-xs text-neutral-400">
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                Tài khoản đã xác thực - Tự động liên kết các đơn hàng của bạn
+              </span>
             </div>
           </form>
 

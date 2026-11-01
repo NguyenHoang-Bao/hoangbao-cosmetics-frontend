@@ -47,8 +47,6 @@ export const App: React.FC = () => {
               {/* Trang thanh toán & Hoàn tất đơn hàng */}
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-success/:orderCode" element={<OrderSuccessPage />} />
-              {/* Trang tra cứu tiến độ đơn hàng */}
-              <Route path="/order-tracking" element={<OrderTrackingPage />} />
               {/* Trang giới thiệu (About Page) */}
               <Route path="/about" element={<AboutPage />} />
 
@@ -58,8 +56,10 @@ export const App: React.FC = () => {
               {/* Trang danh sách yêu thích (Wishlist) */}
               <Route path="/wishlist" element={<WishlistPage />} />
 
-              {/* Các route yêu cầu phải đăng nhập */}
+              {/* Các route yêu cầu BẮT BUỘC PHẢI ĐĂNG NHẬP */}
               <Route element={<ProtectedRoute />}>
+                {/* Trang tra cứu tiến độ đơn hàng (Chỉ cho phép thành viên đã đăng nhập) */}
+                <Route path="/order-tracking" element={<OrderTrackingPage />} />
                 <Route
                   path="/profile"
                   element={

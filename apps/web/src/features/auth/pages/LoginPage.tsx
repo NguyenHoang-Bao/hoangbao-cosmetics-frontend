@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
 import AuthBanner from '../components/AuthBanner';
 import { loginSchema, type LoginFormData } from '../schemas/authSchema';
@@ -11,6 +11,7 @@ import { loginStart, setCredentials, loginFailure } from '../store/authSlice';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const [error, setError] = useState<string>('');
 
@@ -48,7 +49,13 @@ export default function LoginPage() {
         })
       );
 
-      navigate('/');
+      // Chuyển hướng về trang trước đó (nếu bị ProtectedRoute chặn) hoặc trang chủ
+      const fromLocation = (location.state as { from?: { pathname?: string; search?: string } })?.from;
+      const redirectPath = fromLocation?.pathname
+        ? `${fromLocation.pathname}${fromLocation.search || ''}`
+        : '/';
+
+      navigate(redirectPath, { replace: true });
     } catch (err: any) {
       const msg = err.message || 'Đăng nhập thất bại. Vui lòng thử lại!';
       setError(msg);
