@@ -5,3 +5,4 @@ export * from "./order";
 export * from "./feedback";
 export * from "./review";
 export * from "./favorite";
+export * from "./flashsale";

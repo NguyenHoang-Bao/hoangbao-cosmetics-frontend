@@ -16,14 +16,17 @@ import OrderSuccessPage from "@/features/checkout/pages/OrderSuccessPage";
 import AboutPage from "@/features/about/pages/AboutPage";
 import ContactPage from "@/features/contact/pages/ContactPage";
 import WishlistPage from "@/features/product/pages/WishlistPage";
+import HomePage from "@/features/home/pages/HomePage";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
+import { ScrollToTop } from "@/components/common/ScrollToTop";
 
 export const App: React.FC = () => {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             {/* Các route Auth toàn màn hình độc lập (chuẩn giao diện cũ) */}
             <Route element={<GuestRoute />}>
@@ -34,14 +37,7 @@ export const App: React.FC = () => {
 
             {/* Các route chính có Header & Footer */}
             <Route element={<MainLayout />}>
-              <Route
-                index
-                element={
-                  <div className="py-20 text-center text-neutral-400 text-sm">
-                    Trang chủ Hoàng Bảo Cosmetics
-                  </div>
-                }
-              />
+              <Route index element={<HomePage />} />
               {/* Trang danh mục sản phẩm (Product Catalog UI) */}
               <Route path="/products" element={<ProductListPage />} />
               {/* Trang chi tiết sản phẩm */}
