@@ -11,6 +11,7 @@ export const addressService = {
 
   // Đọc danh sách địa chỉ của user từ localStorage
   getAddresses: (user: any): UserAddress[] => {
+    if (!user) return [];
     const key = `${STORAGE_PREFIX}${addressService.getUserKey(user)}`;
     try {
       const data = localStorage.getItem(key);
@@ -25,6 +26,7 @@ export const addressService = {
 
   // Lưu danh sách địa chỉ
   saveAddresses: (user: any, addresses: UserAddress[]): void => {
+    if (!user) return;
     const key = `${STORAGE_PREFIX}${addressService.getUserKey(user)}`;
     try {
       localStorage.setItem(key, JSON.stringify(addresses));
@@ -33,42 +35,12 @@ export const addressService = {
     }
   },
 
-  // Khởi tạo địa chỉ mẫu nếu chưa có
-  initSampleAddressesIfEmpty: (user: any): UserAddress[] => {
-    if (!user) return [];
-    const currentList = addressService.getAddresses(user);
-    if (currentList.length > 0) return currentList;
-
-    const fullName = user.fullName || user.username || 'Khách hàng Hoàng Bảo';
-    const phone = user.phoneNumber || user.phone || '0359490221';
-
-    const defaultAddresses: UserAddress[] = [
-      {
-        id: `addr-${Date.now()}-1`,
-        fullName,
-        phone,
-        province: 'TP. Hồ Chí Minh',
-        district: 'Quận Tân Phú',
-        ward: 'Phường Tây Thạnh',
-        address: '140 Lê Trọng Tấn',
-        label: 'Nhà riêng',
-        isDefault: true,
-      },
-      {
-        id: `addr-${Date.now()}-2`,
-        fullName,
-        phone,
-        province: 'TP. Hồ Chí Minh',
-        district: 'Quận 1',
-        ward: 'Phường Bến Nghé',
-        address: 'Số 123 Lê Lợi, Tòa nhà Bitexco',
-        label: 'Văn phòng',
-        isDefault: false,
-      },
-    ];
-
-    addressService.saveAddresses(user, defaultAddresses);
-    return defaultAddresses;
+  // Lấy địa chỉ mặc định của user
+  getDefaultAddress: (user: any): UserAddress | null => {
+    if (!user) return null;
+    const list = addressService.getAddresses(user);
+    const def = list.find((a) => a.isDefault);
+    return def || (list.length > 0 ? list[0] : null);
   },
 
   // Thêm địa chỉ mới

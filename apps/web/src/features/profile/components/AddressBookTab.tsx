@@ -28,7 +28,7 @@ export const AddressBookTab: React.FC<AddressBookTabProps> = ({ profile }) => {
 
   useEffect(() => {
     if (profile) {
-      const list = addressService.initSampleAddressesIfEmpty(profile);
+      const list = addressService.getAddresses(profile);
       setAddresses(list);
     }
   }, [profile]);

@@ -18,6 +18,7 @@ import { clearCart } from "@/features/cart/store/cartSlice";
 import { formatCurrency, getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { orderApi, type CreateOrderPayload } from "../api/orderApi";
+import { addressService } from "@/features/profile";
 
 const AVAILABLE_VOUCHERS = [
   { code: "MEGA30K", discount: 30000, minOrder: 299000, desc: "Giảm 30K cho đơn từ 299K" },
@@ -40,6 +41,8 @@ export const CheckoutPage: React.FC = () => {
   const [specificAddress, setSpecificAddress] = useState("");
   const [note, setNote] = useState("");
 
+  const savedAddresses = user ? addressService.getAddresses(user) : [];
+
   // Payment Method
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "BANK_TRANSFER" | "MOMO">("COD");
 
@@ -61,6 +64,17 @@ export const CheckoutPage: React.FC = () => {
       if (user.fullName && !customerName) setCustomerName(user.fullName);
       if (user.phone && !phoneNumber) setPhoneNumber(user.phone);
       if (user.email && !email) setEmail(user.email);
+
+      // Ưu tiên đọc địa chỉ mặc định từ Sổ địa chỉ người dùng
+      const defaultAddr = addressService.getDefaultAddress(user);
+      if (defaultAddr) {
+        if (defaultAddr.fullName) setCustomerName(defaultAddr.fullName);
+        if (defaultAddr.phone) setPhoneNumber(defaultAddr.phone);
+        if (defaultAddr.province) setProvince(defaultAddr.province);
+        if (defaultAddr.district) setDistrict(defaultAddr.district);
+        const street = defaultAddr.ward ? `${defaultAddr.address}, ${defaultAddr.ward}` : defaultAddr.address;
+        if (street) setSpecificAddress(street);
+      }
     }
     try {
       const stored = localStorage.getItem("currentUser") || localStorage.getItem("hb_user");
@@ -241,6 +255,30 @@ export const CheckoutPage: React.FC = () => {
               </h3>
 
               <div className="space-y-4">
+                {savedAddresses.length > 0 && (
+                  <div className="p-3 bg-rose-50/50 border border-rose-100 rounded-xl space-y-1.5">
+                    <p className="text-xs font-bold text-neutral-700">Chọn nhanh từ sổ địa chỉ của bạn:</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {savedAddresses.map((addr) => (
+                        <button
+                          key={addr.id}
+                          type="button"
+                          onClick={() => {
+                            if (addr.fullName) setCustomerName(addr.fullName);
+                            if (addr.phone) setPhoneNumber(addr.phone);
+                            if (addr.province) setProvince(addr.province);
+                            if (addr.district) setDistrict(addr.district);
+                            const street = addr.ward ? `${addr.address}, ${addr.ward}` : addr.address;
+                            if (street) setSpecificAddress(street);
+                          }}
+                          className="text-[11px] font-medium px-2.5 py-1 rounded-lg border border-neutral-200 bg-white hover:border-rose-400 hover:text-rose-600 shadow-2xs transition-colors cursor-pointer"
+                        >
+                          {addr.label ? `[${addr.label}] ` : ''}{addr.address} {addr.isDefault ? '(Mặc định)' : ''}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Họ và tên */}
                   <div>
@@ -325,7 +363,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={specificAddress}
                     onChange={(e) => setSpecificAddress(e.target.value)}
-                    placeholder="140 Lê Trọng Tấn, Tây Thạnh"
+                    placeholder="Số nhà, tên đường, phường/xã..."
                     className="w-full px-3.5 py-2 text-sm bg-neutral-50/80 border border-neutral-200 rounded-lg focus:outline-none focus:border-rose-500 text-neutral-900"
                   />
                 </div>
