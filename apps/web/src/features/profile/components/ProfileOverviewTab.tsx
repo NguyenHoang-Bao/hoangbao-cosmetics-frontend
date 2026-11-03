@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { Camera, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import type { UserProfile } from '@hoangbao/types';
 import { profileApi } from '../api/profileApi';
 import { updateUser } from '../../auth/store/authSlice';
@@ -87,7 +87,7 @@ export const ProfileOverviewTab: React.FC<ProfileOverviewTabProps> = ({
       );
 
       onProfileUpdated(updated);
-      setSuccessMessage('Hồ sơ của bạn đã được cập nhật thành công.');
+      setSuccessMessage('Hồ sơ của bạn đã được cập nhật thành công!');
     } catch (err: any) {
       setErrorMessage(err.message || 'Cập nhật hồ sơ thất bại. Vui lòng thử lại sau.');
     } finally {
@@ -95,175 +95,158 @@ export const ProfileOverviewTab: React.FC<ProfileOverviewTabProps> = ({
     }
   };
 
-  // Tính cấp bậc thành viên theo điểm
+  // Cấp bậc thành viên
   const points = profile.loyaltyPoints || 0;
   const memberRank =
-    points >= 1500
-      ? 'HẠNG KIM CƯƠNG'
-      : points >= 500
-      ? 'HẠNG VÀNG'
-      : 'HẠNG BẠC';
+    points >= 1500 ? 'Thành Viên Kim Cương' : points >= 500 ? 'Thành Viên Vàng' : 'Thành Viên Bạc';
 
   return (
-    <div className="space-y-8">
-      {/* Header tóm tắt thông tin thành viên (Chuẩn Minimalist Editorial) */}
-      <div className="border border-neutral-200 bg-neutral-50/70 p-5 sm:p-6 rounded-sm">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
-          <div>
-            <span className="text-[11px] uppercase tracking-widest text-neutral-400 font-bold block mb-1">
-              Thành viên Hoàng Bảo
-            </span>
-            <p className="text-base font-bold text-neutral-900 tracking-tight">
-              {profile.fullName || profile.username}
-            </p>
-            <p className="text-xs text-neutral-500 font-mono mt-0.5">{profile.email || `@${profile.username}`}</p>
-          </div>
-
-          <div className="pt-4 sm:pt-0 sm:pl-6">
-            <span className="text-[11px] uppercase tracking-widest text-neutral-400 font-bold block mb-1">
-              Điểm thưởng tích lũy
-            </span>
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-xl font-bold font-mono text-neutral-900">
-                {points.toLocaleString('vi-VN')}
-              </span>
-              <span className="text-xs text-neutral-500">điểm</span>
-            </div>
-            <p className="text-[11px] font-bold tracking-wider text-rose-600 uppercase mt-1">
-              {memberRank}
-            </p>
-          </div>
-
-          <div className="pt-4 sm:pt-0 sm:pl-6">
-            <span className="text-[11px] uppercase tracking-widest text-neutral-400 font-bold block mb-1">
-              Phương thức xác thực
-            </span>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-              <span className="text-xs font-bold uppercase tracking-wider text-neutral-800">
-                {profile.authProvider || 'LOCAL'}
-              </span>
-            </div>
-            <p className="text-[11px] text-neutral-400 mt-1">
-              {profile.authProvider === 'LOCAL' ? 'Mật khẩu hệ thống' : `Liên kết ${profile.authProvider}`}
-            </p>
-          </div>
-        </div>
+    <div>
+      {/* Tiêu đề mục Hồ sơ chuẩn Shopee */}
+      <div className="pb-4 mb-6 border-b border-neutral-100">
+        <h2 className="text-lg font-bold text-neutral-800">Hồ Sơ Của Tôi</h2>
+        <p className="text-xs text-neutral-500 mt-1">
+          Quản lý thông tin hồ sơ để bảo mật tài khoản và giao hàng chính xác
+        </p>
       </div>
 
       {/* Thông báo kết quả */}
       {successMessage && (
-        <div className="p-3.5 bg-neutral-50 border-l-2 border-emerald-600 text-neutral-800 text-xs flex items-center gap-2.5">
-          <Check size={16} className="text-emerald-600 shrink-0" />
+        <div className="mb-6 p-3.5 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs flex items-center gap-2">
+          <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
           <span>{successMessage}</span>
         </div>
       )}
 
       {errorMessage && (
-        <div className="p-3.5 bg-neutral-50 border-l-2 border-rose-600 text-neutral-800 text-xs flex items-center gap-2.5">
+        <div className="mb-6 p-3.5 bg-rose-50 border border-rose-200 rounded-lg text-rose-800 text-xs flex items-center gap-2">
           <AlertCircle size={16} className="text-rose-600 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
 
-      {/* Form cập nhật thông tin */}
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* Cột trái: Form thông tin cá nhân */}
-        <div className="md:col-span-2 space-y-5">
-          <div>
-            <label className="block text-[11px] uppercase font-bold tracking-wider text-neutral-500 mb-1.5">
-              Tên tài khoản
+      {/* Bố cục 2 cột chuẩn Shopee: Trái Form - Phải Avatar */}
+      <form onSubmit={handleSubmit} className="flex flex-col-reverse md:flex-row gap-8 lg:gap-12">
+        {/* Cột trái: Các trường thông tin */}
+        <div className="flex-1 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+            <label className="sm:w-32 text-xs font-medium text-neutral-600 sm:text-right shrink-0">
+              Tên đăng nhập
             </label>
-            <input
-              type="text"
-              disabled
-              value={profile.username}
-              className="w-full px-3.5 py-2.5 text-xs bg-neutral-100 border border-neutral-200 rounded-sm text-neutral-400 font-mono cursor-not-allowed"
-            />
-            <p className="text-[10px] text-neutral-400 mt-1">Tên tài khoản đăng ký cố định.</p>
+            <div className="flex-1">
+              <span className="text-sm font-semibold text-neutral-800 font-mono">
+                {profile.username}
+              </span>
+              <p className="text-[11px] text-neutral-400 mt-0.5">Tên đăng nhập không thể thay đổi</p>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-[11px] uppercase font-bold tracking-wider text-neutral-700 mb-1.5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+            <label className="sm:w-32 text-xs font-medium text-neutral-600 sm:text-right shrink-0">
               Họ và tên <span className="text-rose-600">*</span>
             </label>
-            <input
-              type="text"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Nguyễn Văn A"
-              className="w-full px-3.5 py-2.5 text-xs bg-white border border-neutral-300 rounded-sm focus:border-neutral-900 focus:outline-none transition-colors text-neutral-900 placeholder:text-neutral-300"
-            />
+            <div className="flex-1">
+              <input
+                type="text"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Nhập họ và tên của bạn"
+                className="w-full max-w-md px-3.5 py-2 text-xs bg-white border border-neutral-300 rounded-lg focus:outline-none focus:border-rose-500 text-neutral-800"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-[11px] uppercase font-bold tracking-wider text-neutral-700 mb-1.5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+            <label className="sm:w-32 text-xs font-medium text-neutral-600 sm:text-right shrink-0">
               Số điện thoại
             </label>
-            <input
-              type="tel"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="0359490221"
-              className="w-full px-3.5 py-2.5 text-xs bg-white border border-neutral-300 rounded-sm focus:border-neutral-900 focus:outline-none transition-colors text-neutral-900 placeholder:text-neutral-300 font-mono"
-            />
-            <p className="text-[10px] text-neutral-400 mt-1">Dùng để giao nhận hàng và tra cứu bảo hành.</p>
+            <div className="flex-1">
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Ví dụ: 0359490221"
+                className="w-full max-w-md px-3.5 py-2 text-xs bg-white border border-neutral-300 rounded-lg focus:outline-none focus:border-rose-500 text-neutral-800 font-mono"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-[11px] uppercase font-bold tracking-wider text-neutral-700 mb-1.5">
-              Địa chỉ Email
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+            <label className="sm:w-32 text-xs font-medium text-neutral-600 sm:text-right shrink-0">
+              Email
             </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@example.com"
-              className="w-full px-3.5 py-2.5 text-xs bg-white border border-neutral-300 rounded-sm focus:border-neutral-900 focus:outline-none transition-colors text-neutral-900 placeholder:text-neutral-300"
-            />
+            <div className="flex-1">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="example@gmail.com"
+                className="w-full max-w-md px-3.5 py-2 text-xs bg-white border border-neutral-300 rounded-lg focus:outline-none focus:border-rose-500 text-neutral-800"
+              />
+            </div>
           </div>
 
-          <div className="pt-3">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="px-7 py-3 bg-neutral-900 hover:bg-neutral-800 disabled:bg-neutral-400 text-white text-xs uppercase font-bold tracking-widest rounded-sm transition-colors flex items-center gap-2 cursor-pointer"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 size={14} className="animate-spin" />
-                  <span>Đang lưu...</span>
-                </>
-              ) : (
-                <span>Lưu thay đổi</span>
-              )}
-            </button>
+          {/* Điểm thưởng & Cấp bậc Shopee Mall Member */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 pt-2">
+            <label className="sm:w-32 text-xs font-medium text-neutral-600 sm:text-right shrink-0">
+              Cấp bậc thành viên
+            </label>
+            <div className="flex-1 flex items-center gap-3">
+              <span className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full">
+                {memberRank}
+              </span>
+              <span className="text-xs text-neutral-500">
+                (Điểm tích lũy: <strong className="text-neutral-800">{points} điểm</strong>)
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+            <label className="sm:w-32 text-xs font-medium text-neutral-600 sm:text-right shrink-0">
+              Xác thực
+            </label>
+            <div className="flex-1 text-xs text-neutral-700">
+              Tài khoản {profile.authProvider === 'LOCAL' ? 'mật khẩu nội bộ' : `liên kết ${profile.authProvider}`}
+            </div>
+          </div>
+
+          {/* Nút Lưu Shopee Style */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 pt-4">
+            <div className="sm:w-32 hidden sm:block shrink-0" />
+            <div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-8 py-2.5 bg-rose-600 hover:bg-rose-700 disabled:bg-neutral-300 text-white text-xs font-bold rounded-lg shadow-xs transition-colors flex items-center gap-2 cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Đang lưu...</span>
+                  </>
+                ) : (
+                  <span>Lưu thay đổi</span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Cột phải: Khung ảnh đại diện tối giản */}
-        <div className="flex flex-col items-center justify-start border-t md:border-t-0 md:border-l border-neutral-200 pt-8 md:pt-0 md:pl-8 text-center">
-          <label className="block text-[11px] uppercase font-bold tracking-wider text-neutral-500 mb-3">
-            Ảnh đại diện
-          </label>
-
+        {/* Cột phải: Khung ảnh đại diện Shopee */}
+        <div className="w-full md:w-60 flex flex-col items-center justify-center border-b md:border-b-0 md:border-l border-neutral-100 pb-6 md:pb-0 md:pl-6 text-center shrink-0">
           <div
-            className="w-32 h-32 rounded-sm overflow-hidden bg-neutral-100 border border-neutral-200 relative group cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
+            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity shadow-xs"
+            title="Bấm để chọn ảnh mới"
           >
             {avatar ? (
               <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-neutral-400 font-serif text-3xl font-bold bg-neutral-100">
+              <div className="w-full h-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-3xl">
                 {fullName ? fullName.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
               </div>
             )}
-
-            <div className="absolute inset-0 bg-neutral-900/50 flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-              <Camera size={20} />
-              <span className="text-[10px] uppercase tracking-wider font-bold mt-1">Thay đổi</span>
-            </div>
           </div>
 
           <input
@@ -277,18 +260,18 @@ export const ProfileOverviewTab: React.FC<ProfileOverviewTabProps> = ({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="mt-3 text-xs font-semibold text-neutral-700 hover:text-neutral-900 underline underline-offset-4 cursor-pointer"
+            className="mt-4 px-4 py-1.5 text-xs font-medium text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 rounded-lg shadow-2xs transition-colors cursor-pointer"
           >
-            Chọn ảnh mới
+            Chọn Ảnh
           </button>
 
-          <div className="text-[10px] text-neutral-400 mt-2 space-y-0.5">
-            <p>Định dạng: JPG, PNG, WEBP</p>
-            <p>Dung lượng tối đa: 2 MB</p>
+          <div className="text-[11px] text-neutral-400 mt-2 space-y-0.5">
+            <p>Dung lượng file tối đa 2 MB</p>
+            <p>Định dạng: JPEG, PNG, WEBP</p>
           </div>
 
           {avatarError && (
-            <p className="mt-2 text-[11px] text-rose-600 font-medium">
+            <p className="mt-2 text-xs text-rose-600 font-medium">
               {avatarError}
             </p>
           )}
