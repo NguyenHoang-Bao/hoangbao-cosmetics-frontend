@@ -90,10 +90,24 @@ export const authSlice = createSlice({
     clearAuthError: (state) => {
       state.error = null;
     },
+
+    // 6. Cap nhat thong tin user khi sua ho so hoac avatar
+    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(state.user));
+      }
+    },
   },
 });
 
-export const { loginStart, setCredentials, loginFailure, logout, clearAuthError } =
-  authSlice.actions;
+export const {
+  loginStart,
+  setCredentials,
+  loginFailure,
+  logout,
+  clearAuthError,
+  updateUser,
+} = authSlice.actions;
 
 export default authSlice.reducer;

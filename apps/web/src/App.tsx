@@ -18,6 +18,7 @@ import AboutPage from "@/features/about/pages/AboutPage";
 import ContactPage from "@/features/contact/pages/ContactPage";
 import WishlistPage from "@/features/product/pages/WishlistPage";
 import HomePage from "@/features/home/pages/HomePage";
+import { ProfilePage } from "@/features/profile";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
@@ -60,14 +61,8 @@ export const App: React.FC = () => {
               <Route element={<ProtectedRoute />}>
                 {/* Trang tra cứu tiến độ đơn hàng (Chỉ cho phép thành viên đã đăng nhập) */}
                 <Route path="/order-tracking" element={<OrderTrackingPage />} />
-                <Route
-                  path="/profile"
-                  element={
-                    <div className="py-20 text-center text-neutral-700 text-sm font-medium">
-                      Trang Thông Tin Cá Nhân
-                    </div>
-                  }
-                />
+                {/* Trang thông tin tài khoản cá nhân & Sổ địa chỉ & Bảo mật */}
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route
                   path="/my-orders"
                   element={
