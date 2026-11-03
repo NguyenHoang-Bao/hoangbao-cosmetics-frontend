@@ -2,18 +2,9 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  ShoppingBag,
   ChevronRight,
   RefreshCw,
-  QrCode,
-  Truck,
-  RotateCcw,
-  Clock,
-  CheckCircle2,
   AlertCircle,
-  PackageCheck,
-  CreditCard,
-  MapPin,
   Search,
 } from 'lucide-react';
 import type { PageResponse } from '@hoangbao/types';
@@ -26,7 +17,7 @@ const TABS: { key: FilterTab; label: string }[] = [
   { key: 'ALL', label: 'Tất cả' },
   { key: 'PENDING', label: 'Chờ xác nhận' },
   { key: 'PROCESSING', label: 'Đang chuẩn bị' },
-  { key: 'SHIPPING', label: 'Đang giao hàng' },
+  { key: 'SHIPPING', label: 'Đang giao' },
   { key: 'DELIVERED', label: 'Hoàn thành' },
   { key: 'CANCELLED', label: 'Đã hủy' },
 ];
@@ -61,89 +52,87 @@ export const MyOrdersPage: React.FC = () => {
           (order) => order.status?.toUpperCase() === activeTab.toUpperCase()
         );
 
-  // Helper format badge trạng thái đơn hàng
-  const getStatusBadge = (status?: string) => {
+  // Helper format dot & label trạng thái đơn hàng (Tối giản cao cấp)
+  const getStatusDisplay = (status?: string) => {
     switch (status?.toUpperCase()) {
       case 'PENDING':
         return {
           label: 'Chờ xác nhận',
-          bg: 'bg-amber-50 text-amber-700 border-amber-200',
-          icon: Clock,
+          dotColor: 'bg-amber-500',
+          textColor: 'text-amber-800',
         };
       case 'PROCESSING':
         return {
           label: 'Đang chuẩn bị hàng',
-          bg: 'bg-blue-50 text-blue-700 border-blue-200',
-          icon: RefreshCw,
+          dotColor: 'bg-blue-500',
+          textColor: 'text-blue-800',
         };
       case 'SHIPPING':
         return {
-          label: 'Đang giao hàng',
-          bg: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-          icon: Truck,
+          label: 'Đang vận chuyển',
+          dotColor: 'bg-indigo-500',
+          textColor: 'text-indigo-800',
         };
       case 'DELIVERED':
         return {
           label: 'Giao thành công',
-          bg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-          icon: CheckCircle2,
+          dotColor: 'bg-emerald-500',
+          textColor: 'text-emerald-800',
         };
       case 'CANCELLED':
         return {
           label: 'Đã hủy',
-          bg: 'bg-rose-50 text-rose-700 border-rose-200',
-          icon: AlertCircle,
+          dotColor: 'bg-neutral-400',
+          textColor: 'text-neutral-500',
         };
       default:
         return {
           label: status || 'Đang xử lý',
-          bg: 'bg-neutral-100 text-neutral-700 border-neutral-200',
-          icon: PackageCheck,
+          dotColor: 'bg-neutral-400',
+          textColor: 'text-neutral-700',
         };
     }
   };
 
-  // Helper format tên phương thức thanh toán
   const getPaymentMethodLabel = (method?: string) => {
     switch (method?.toUpperCase()) {
       case 'BANK_TRANSFER':
       case 'VIETQR':
         return 'Chuyển khoản VietQR';
       case 'MOMO':
-        return 'Ví điện tử MoMo';
+        return 'Ví MoMo';
       case 'VNPAY':
-        return 'Cổng VNPAY';
+        return 'VNPAY';
       case 'COD':
       default:
-        return 'Thanh toán khi nhận hàng (COD)';
+        return 'Thanh toán COD';
     }
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50/60 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50/50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        {/* Breadcrumb điều hướng */}
-        <nav className="flex items-center gap-2 text-xs text-neutral-400 mb-6 font-medium">
-          <Link to="/" className="hover:text-rose-600 transition-colors">
+        {/* Breadcrumb tối giản */}
+        <nav className="flex items-center gap-2 text-xs text-neutral-400 mb-8 font-medium">
+          <Link to="/" className="hover:text-neutral-900 transition-colors uppercase tracking-wider text-[11px]">
             Trang chủ
           </Link>
-          <ChevronRight size={14} />
-          <Link to="/profile" className="hover:text-rose-600 transition-colors">
+          <ChevronRight size={12} />
+          <Link to="/profile" className="hover:text-neutral-900 transition-colors uppercase tracking-wider text-[11px]">
             Tài khoản
           </Link>
-          <ChevronRight size={14} />
-          <span className="text-neutral-700">Đơn mua của tôi</span>
+          <ChevronRight size={12} />
+          <span className="text-neutral-900 uppercase tracking-wider text-[11px] font-semibold">Đơn mua</span>
         </nav>
 
-        {/* Tiêu đề & Nút thao tác nhanh */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        {/* Tiêu đề & Hành động */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-neutral-200">
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center gap-2.5">
-              <ShoppingBag className="text-rose-600" size={26} />
-              <span>Đơn Mua Của Tôi</span>
+            <h1 className="text-xl sm:text-2xl font-bold uppercase tracking-wider text-neutral-900">
+              Đơn Mua Của Tôi
             </h1>
             <p className="text-xs text-neutral-500 mt-1">
-              Theo dõi tiến độ vận chuyển và lịch sử mua sắm mỹ phẩm của bạn
+              Theo dõi tình trạng vận chuyển và đơn hàng mỹ phẩm của bạn
             </p>
           </div>
 
@@ -152,24 +141,24 @@ export const MyOrdersPage: React.FC = () => {
               type="button"
               onClick={() => refetch()}
               disabled={isFetching}
-              className="p-2 text-neutral-500 hover:text-rose-600 hover:bg-white rounded-xl border border-neutral-200 transition-all cursor-pointer shadow-2xs"
-              title="Làm mới danh sách"
+              className="p-2 text-neutral-500 hover:text-neutral-900 rounded-sm border border-neutral-300 hover:border-neutral-900 transition-colors cursor-pointer"
+              title="Làm mới"
             >
-              <RefreshCw size={16} className={isFetching ? 'animate-spin text-rose-600' : ''} />
+              <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
             </button>
             <Link
               to="/order-tracking"
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-neutral-50 text-neutral-700 text-xs font-semibold rounded-xl border border-neutral-200 shadow-2xs transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-neutral-800 text-xs uppercase font-bold tracking-wider rounded-sm border border-neutral-300 hover:border-neutral-900 transition-colors"
             >
-              <Search size={14} />
-              <span>Tra cứu theo mã</span>
+              <Search size={13} />
+              <span>Tra cứu mã</span>
             </Link>
           </div>
         </div>
 
-        {/* Bộ lọc Tab chuẩn Shopee */}
-        <div className="bg-white rounded-2xl border border-neutral-200 p-1.5 shadow-2xs mb-6 overflow-x-auto scrollbar-none">
-          <div className="flex items-center min-w-max gap-1">
+        {/* Minimalist Underline Tabs (Chuẩn Zara / Sephora) */}
+        <div className="border-b border-neutral-200 mb-8 overflow-x-auto">
+          <nav className="flex space-x-8 min-w-max">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.key;
               const count =
@@ -184,52 +173,48 @@ export const MyOrdersPage: React.FC = () => {
                   key={tab.key}
                   type="button"
                   onClick={() => setActiveTab(tab.key)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  className={`pb-3.5 px-0.5 text-xs uppercase font-bold tracking-wider border-b-2 transition-colors cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
                     isActive
-                      ? 'bg-rose-600 text-white shadow-xs'
-                      : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                      ? 'border-neutral-900 text-neutral-900'
+                      : 'border-transparent text-neutral-400 hover:text-neutral-700 hover:border-neutral-300'
                   }`}
                 >
                   <span>{tab.label}</span>
                   {count > 0 && (
-                    <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${
-                        isActive
-                          ? 'bg-white/20 text-white'
-                          : 'bg-neutral-100 text-neutral-600'
-                      }`}
-                    >
-                      {count}
+                    <span className="text-[11px] font-normal font-mono text-neutral-400">
+                      ({count})
                     </span>
                   )}
                 </button>
               );
             })}
-          </div>
+          </nav>
         </div>
 
         {/* Loading skeleton */}
         {isLoading && (
           <div className="space-y-4 animate-pulse">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 border border-neutral-200 h-48" />
+              <div key={i} className="bg-white rounded-sm p-6 border border-neutral-200 h-44" />
             ))}
           </div>
         )}
 
         {/* Error state */}
         {isError && (
-          <div className="bg-white rounded-2xl p-8 border border-rose-200 text-center max-w-md mx-auto space-y-4">
-            <AlertCircle size={40} className="mx-auto text-rose-500" />
-            <h3 className="text-base font-bold text-neutral-900">Không thể tải danh sách đơn hàng</h3>
+          <div className="bg-white rounded-sm p-8 border border-neutral-200 text-center max-w-md mx-auto space-y-4">
+            <AlertCircle size={36} className="mx-auto text-rose-600" />
+            <h3 className="text-sm uppercase font-bold tracking-wider text-neutral-900">
+              Không thể tải danh sách đơn hàng
+            </h3>
             <p className="text-xs text-neutral-500">
               {(error as Error)?.message || 'Vui lòng kiểm tra lại kết nối mạng.'}
             </p>
             <button
               onClick={() => refetch()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 text-white text-xs font-semibold rounded-xl hover:bg-rose-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-6 py-2 bg-neutral-900 text-white text-xs uppercase font-bold tracking-wider rounded-sm hover:bg-neutral-800 transition-colors cursor-pointer"
             >
-              <RefreshCw size={14} />
+              <RefreshCw size={13} />
               <span>Thử lại</span>
             </button>
           </div>
@@ -237,34 +222,29 @@ export const MyOrdersPage: React.FC = () => {
 
         {/* Empty state */}
         {!isLoading && !isError && filteredOrders.length === 0 && (
-          <div className="bg-white rounded-3xl p-12 text-center border border-neutral-200 shadow-2xs space-y-4 max-w-lg mx-auto">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center border border-rose-100">
-              <ShoppingBag size={32} />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-neutral-900">Chưa có đơn hàng nào</h3>
-              <p className="text-xs text-neutral-500 mt-1 max-w-xs mx-auto">
-                {activeTab === 'ALL'
-                  ? 'Bạn chưa đặt mua đơn hàng nào. Hãy khám phá ngay các sản phẩm mỹ phẩm cao cấp!'
-                  : `Bạn hiện không có đơn hàng nào ở trạng thái "${TABS.find((t) => t.key === activeTab)?.label}".`}
-              </p>
-            </div>
+          <div className="bg-white rounded-sm p-12 text-center border border-neutral-200 space-y-4 max-w-lg mx-auto">
+            <p className="text-xs uppercase font-bold tracking-widest text-neutral-400">
+              Chưa có đơn hàng
+            </p>
+            <p className="text-xs text-neutral-500 max-w-xs mx-auto">
+              {activeTab === 'ALL'
+                ? 'Bạn chưa có đơn đặt mua nào tại Hoàng Bảo Cosmetics.'
+                : `Không có đơn hàng nào ở trạng thái "${TABS.find((t) => t.key === activeTab)?.label}".`}
+            </p>
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-neutral-900 hover:bg-neutral-800 text-white text-xs uppercase font-bold tracking-widest rounded-sm transition-colors"
             >
-              <ShoppingBag size={14} />
-              <span>Khám phá sản phẩm ngay</span>
+              <span>Xem sản phẩm</span>
             </Link>
           </div>
         )}
 
-        {/* Danh sách thẻ đơn hàng */}
+        {/* Danh sách thẻ đơn hàng (Luxury Minimalist Cards) */}
         {!isLoading && !isError && filteredOrders.length > 0 && (
           <div className="space-y-4">
             {filteredOrders.map((order) => {
-              const badge = getStatusBadge(order.status);
-              const BadgeIcon = badge.icon;
+              const statusInfo = getStatusDisplay(order.status);
               const formattedDate = order.createdAt
                 ? new Date(order.createdAt).toLocaleString('vi-VN', {
                     day: '2-digit',
@@ -286,35 +266,34 @@ export const MyOrdersPage: React.FC = () => {
               return (
                 <div
                   key={order.idOrder || order.orderCode}
-                  className="bg-white rounded-2xl border border-neutral-200 hover:border-neutral-300 transition-all shadow-2xs overflow-hidden"
+                  className="bg-white rounded-sm border border-neutral-200 hover:border-neutral-400 transition-all"
                 >
                   {/* Header thẻ đơn hàng */}
-                  <div className="p-4 sm:p-5 border-b border-neutral-100 flex flex-wrap items-center justify-between gap-3 bg-neutral-50/40">
+                  <div className="p-4 sm:p-5 border-b border-neutral-200 flex flex-wrap items-center justify-between gap-3 bg-neutral-50/50">
                     <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-                      <span className="font-extrabold text-neutral-900 font-mono tracking-tight">
+                      <span className="font-bold font-mono tracking-wider text-neutral-900">
                         #{order.orderCode}
                       </span>
                       <span className="text-neutral-300">•</span>
-                      <span className="text-neutral-500">{formattedDate}</span>
+                      <span className="text-neutral-500 font-mono text-[11px]">{formattedDate}</span>
                       <span className="text-neutral-300">•</span>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-neutral-600">
-                        <CreditCard size={13} className="text-neutral-400" />
+                      <span className="text-[11px] uppercase tracking-wider text-neutral-500 font-medium">
                         {getPaymentMethodLabel(order.paymentMethod)}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       {isUnpaidPending && (
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-xs bg-amber-50 text-amber-700 border border-amber-200">
                           Chờ thanh toán
                         </span>
                       )}
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${badge.bg}`}
-                      >
-                        <BadgeIcon size={13} />
-                        <span>{badge.label}</span>
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`w-2 h-2 rounded-full ${statusInfo.dotColor}`} />
+                        <span className={`text-xs font-bold uppercase tracking-wider ${statusInfo.textColor}`}>
+                          {statusInfo.label}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -326,12 +305,12 @@ export const MyOrdersPage: React.FC = () => {
                         className="py-3 first:pt-0 last:pb-0 flex items-start justify-between gap-4 text-xs"
                       >
                         <div className="space-y-1 flex-1 min-w-0">
-                          <p className="font-bold text-neutral-900 line-clamp-1">
+                          <p className="font-semibold text-neutral-900 line-clamp-1">
                             {item.productName}
                           </p>
                           <div className="flex flex-wrap items-center gap-2 text-neutral-500 text-[11px]">
                             {item.capacity && (
-                              <span className="px-2 py-0.5 bg-neutral-100 rounded text-neutral-700 font-medium">
+                              <span className="text-neutral-600 font-medium">
                                 Dung tích: {item.capacity}
                               </span>
                             )}
@@ -345,10 +324,10 @@ export const MyOrdersPage: React.FC = () => {
                         </div>
 
                         <div className="text-right shrink-0">
-                          <p className="font-extrabold text-neutral-900 font-mono">
+                          <p className="font-bold text-neutral-900 font-mono">
                             {formatCurrency(item.subTotal ?? item.price * item.quantity)}
                           </p>
-                          <p className="text-[11px] text-neutral-400">
+                          <p className="text-[10px] text-neutral-400">
                             {formatCurrency(item.price)} / sp
                           </p>
                         </div>
@@ -357,51 +336,49 @@ export const MyOrdersPage: React.FC = () => {
                   </div>
 
                   {/* Footer thẻ: Địa chỉ, Tổng tiền & Nút hành động */}
-                  <div className="p-4 sm:p-5 bg-neutral-50/60 border-t border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="text-xs text-neutral-600 flex items-start gap-1.5 max-w-md">
-                      <MapPin size={15} className="text-neutral-400 shrink-0 mt-0.5" />
+                  <div className="p-4 sm:p-5 bg-neutral-50/30 border-t border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="text-xs text-neutral-500 max-w-md">
                       <span className="line-clamp-1">
                         Giao đến: <strong className="text-neutral-800">{order.customerName}</strong> ({order.phoneNumber}) - {order.deliveryAddress}
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-between sm:justify-end gap-4">
-                      <div>
-                        <span className="text-xs text-neutral-500 mr-2">Tổng tiền:</span>
-                        <span className="text-base sm:text-lg font-black text-rose-600 font-mono">
+                    <div className="flex flex-wrap items-center justify-between sm:justify-end gap-5">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-[11px] uppercase tracking-wider font-bold text-neutral-400">
+                          Tổng tiền:
+                        </span>
+                        <span className="text-base font-bold text-neutral-900 font-mono">
                           {formatCurrency(order.totalAmount)}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        {/* Nút Thanh toán ngay VietQR cho đơn chuyển khoản chưa trả */}
+                        {/* Nút Quét VietQR cho đơn chuyển khoản chưa trả */}
                         {isUnpaidPending && (
                           <Link
                             to={`/order-success/${order.orderCode}`}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
+                            className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs uppercase font-bold tracking-wider rounded-sm transition-colors"
                           >
-                            <QrCode size={14} />
-                            <span>Quét VietQR ngay</span>
+                            Quét VietQR
                           </Link>
                         )}
 
                         {/* Nút Xem hành trình / chi tiết */}
                         <Link
                           to={`/order-tracking?code=${encodeURIComponent(order.orderCode)}`}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-neutral-100 text-neutral-700 text-xs font-semibold rounded-xl border border-neutral-200 transition-colors shadow-2xs"
+                          className="px-4 py-2 bg-white text-neutral-800 text-xs uppercase font-bold tracking-wider rounded-sm border border-neutral-300 hover:border-neutral-900 transition-colors"
                         >
-                          <span>Xem tiến trình</span>
-                          <ChevronRight size={14} />
+                          Chi tiết đơn
                         </Link>
 
                         {/* Mua lại */}
                         <button
                           type="button"
                           onClick={() => navigate('/products')}
-                          className="p-2 text-neutral-500 hover:text-rose-600 hover:bg-white rounded-xl border border-neutral-200 transition-colors cursor-pointer"
-                          title="Mua lại các sản phẩm này"
+                          className="px-3 py-2 text-neutral-600 hover:text-neutral-900 border border-neutral-300 hover:border-neutral-900 rounded-sm text-xs uppercase font-bold tracking-wider transition-colors cursor-pointer"
                         >
-                          <RotateCcw size={15} />
+                          Mua lại
                         </button>
                       </div>
                     </div>
@@ -412,27 +389,27 @@ export const MyOrdersPage: React.FC = () => {
           </div>
         )}
 
-        {/* Phân trang */}
+        {/* Phân trang tối giản */}
         {pageData && pageData.totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 pt-8">
             <button
               type="button"
               disabled={page === 0}
               onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="px-4 py-2 text-xs font-semibold rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-xs uppercase font-bold tracking-wider rounded-sm border border-neutral-300 bg-white hover:border-neutral-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              Trang trước
+              Trước
             </button>
-            <span className="text-xs font-medium text-neutral-500 px-3">
+            <span className="text-xs font-mono text-neutral-500 px-3">
               Trang {page + 1} / {pageData.totalPages}
             </span>
             <button
               type="button"
               disabled={pageData.last || page + 1 >= pageData.totalPages}
               onClick={() => setPage((p) => p + 1)}
-              className="px-4 py-2 text-xs font-semibold rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-xs uppercase font-bold tracking-wider rounded-sm border border-neutral-300 bg-white hover:border-neutral-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              Trang sau
+              Sau
             </button>
           </div>
         )}
