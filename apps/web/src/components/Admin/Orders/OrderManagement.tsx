@@ -141,7 +141,7 @@ export default function OrderManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedChannel, setSelectedChannel] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [selectedOrderIds] = useState<string[]>([]);
+  const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -203,6 +203,62 @@ export default function OrderManagement() {
           : null
       );
     }
+  };
+
+  // Đối soát hàng loạt các đơn COD đã chọn
+  const handleBatchReconcileCOD = () => {
+    const eligibleOrders = orders.filter(
+      (o) => selectedOrderIds.includes(o.id) && o.codStatus === 'pending_cod_transfer'
+    );
+    if (eligibleOrders.length === 0) {
+      showToast('Các đơn được chọn không ở trạng thái chờ đối soát COD!');
+      return;
+    }
+    const totalMoney = eligibleOrders.reduce((sum, o) => sum + o.total, 0);
+    const updated = orders.map((o) =>
+      selectedOrderIds.includes(o.id) && o.codStatus === 'pending_cod_transfer'
+        ? {
+            ...o,
+            codStatus: 'reconciled' as const,
+            codStatusText: 'Đã đối soát vào ví shop',
+            paymentStatus: 'paid' as const
+          }
+        : o
+    );
+    saveOrders(updated);
+    setSelectedOrderIds([]);
+    showToast(`Đã đối soát thành công ${eligibleOrders.length} đơn hàng (${formatCurrency(totalMoney)})!`);
+  };
+
+  // Hủy đơn hàng khẩn cấp
+  const handleCancelOrder = (orderId: string) => {
+    if (!window.confirm(`Bạn có chắc muốn hủy khẩn cấp đơn hàng ${orderId}?`)) return;
+    const updated = orders.map((o) =>
+      o.id === orderId
+        ? {
+            ...o,
+            status: 'cancelled' as const,
+            statusText: 'Đã hủy khẩn cấp'
+          }
+        : o
+    );
+    saveOrders(updated);
+    showToast(`Đã hủy đơn ${orderId} thành công.`);
+    setSelectedOrder(null);
+  };
+
+  const handleToggleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedOrderIds(filteredOrders.map((o) => o.id));
+    } else {
+      setSelectedOrderIds([]);
+    }
+  };
+
+  const handleToggleSelectOrder = (orderId: string) => {
+    setSelectedOrderIds((prev) =>
+      prev.includes(orderId) ? prev.filter((id) => id !== orderId) : [...prev, orderId]
+    );
   };
 
   const handleExportFile = () => {
@@ -289,6 +345,11 @@ export default function OrderManagement() {
   const pendingCOD = orders
     .filter((o) => o.codStatus === 'pending_cod_transfer')
     .reduce((sum, o) => sum + o.total, 0);
+
+  const selectedPendingOrders = orders.filter(
+    (o) => selectedOrderIds.includes(o.id) && o.codStatus === 'pending_cod_transfer'
+  );
+  const selectedBatchCODTotal = selectedPendingOrders.reduce((sum, o) => sum + o.total, 0);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -409,11 +470,52 @@ export default function OrderManagement() {
         </div>
       </div>
 
+      {/* THANH THAO TÁC HÀNG LOẠT (BATCH ACTIONS CHO ĐỐI SOÁT COD) */}
+      {selectedOrderIds.length > 0 && (
+        <div className="bg-blue-50 border border-blue-200 p-2.5 rounded-xs flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-2 text-blue-900">
+            <span className="font-bold">Đã chọn {selectedOrderIds.length} đơn hàng.</span>
+            {selectedPendingOrders.length > 0 ? (
+              <span className="text-slate-600">
+                Có {selectedPendingOrders.length} đơn chờ đối soát COD: <strong>{formatCurrency(selectedBatchCODTotal)}</strong>
+              </span>
+            ) : (
+              <span className="text-slate-500 italic">Không có đơn nào chờ đối soát COD trong các đơn đã chọn.</span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {selectedPendingOrders.length > 0 && (
+              <button
+                onClick={handleBatchReconcileCOD}
+                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xs cursor-pointer shadow-xs transition-colors"
+              >
+                Đối soát cả lô ({selectedPendingOrders.length} đơn)
+              </button>
+            )}
+            <button
+              onClick={() => setSelectedOrderIds([])}
+              className="px-2.5 py-1 bg-white border border-[#ccc] hover:bg-slate-100 text-slate-700 rounded-xs cursor-pointer"
+            >
+              Bỏ chọn tất cả
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* BẢNG GIÁM SÁT DÒNG ĐƠN & ĐỐI SOÁT */}
       <div className="bg-white border border-[#ccc] overflow-x-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead>
             <tr className="bg-white border-b border-[#ccc] text-[#333]">
+              <th className="py-2 px-2 text-center border-r border-[#eee] w-8">
+                <input
+                  type="checkbox"
+                  checked={filteredOrders.length > 0 && selectedOrderIds.length === filteredOrders.length}
+                  onChange={(e) => handleToggleSelectAll(e.target.checked)}
+                  className="cursor-pointer"
+                  title="Chọn tất cả đơn"
+                />
+              </th>
               <th className="py-2 px-2.5 font-normal border-r border-[#eee]">Mã đơn</th>
               <th className="py-2 px-2.5 font-normal border-r border-[#eee]">Ngày & Kênh</th>
               <th className="py-2 px-2.5 font-normal border-r border-[#eee]">Khách hàng</th>
@@ -431,6 +533,16 @@ export default function OrderManagement() {
               filteredOrders.map((order) => {
                 return (
                   <tr key={order.id} className="hover:bg-[#f9f9f9]">
+                    {/* Checkbox chọn hàng loạt */}
+                    <td className="py-2 px-2 text-center border-r border-[#eee]">
+                      <input
+                        type="checkbox"
+                        checked={selectedOrderIds.includes(order.id)}
+                        onChange={() => handleToggleSelectOrder(order.id)}
+                        className="cursor-pointer"
+                      />
+                    </td>
+
                     {/* Mã đơn */}
                     <td className="py-2 px-2.5 font-mono text-[11px] font-bold text-[#337ab7] border-r border-[#eee] whitespace-nowrap">
                       <button
@@ -551,7 +663,7 @@ export default function OrderManagement() {
               })
             ) : (
               <tr>
-                <td colSpan={9} className="py-8 text-center text-gray-400">
+                <td colSpan={10} className="py-8 text-center text-gray-400">
                   Không tìm thấy đơn hàng nào phù hợp với bộ lọc.
                 </td>
               </tr>
@@ -630,7 +742,15 @@ export default function OrderManagement() {
               </div>
             </div>
 
-            <div className="p-2.5 bg-slate-50 border-t border-[#ddd] flex justify-end">
+            <div className="p-2.5 bg-slate-50 border-t border-[#ddd] flex items-center justify-between">
+              {selectedOrder.status !== 'cancelled' && selectedOrder.status !== 'delivered' ? (
+                <button
+                  onClick={() => handleCancelOrder(selectedOrder.id)}
+                  className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded text-xs cursor-pointer font-medium"
+                >
+                  Hủy đơn khẩn cấp
+                </button>
+              ) : <div />}
               <button
                 onClick={() => setSelectedOrder(null)}
                 className="px-3 py-1 bg-white border border-[#ccc] hover:bg-slate-100 text-xs rounded cursor-pointer"

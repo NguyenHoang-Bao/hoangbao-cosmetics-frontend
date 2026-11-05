@@ -160,13 +160,19 @@ export default function UserManagement() {
                     {u.active ? 'Hoạt động' : 'Đã khóa'}
                   </span>
                 </td>
-                <td className="py-2 px-2.5 text-right">
-                  <button
-                    onClick={() => handleToggleActive(u.id)}
-                    className="text-[#337ab7] hover:underline cursor-pointer"
-                  >
-                    {u.active ? 'Khóa' : 'Mở khóa'}
-                  </button>
+                <td className="py-2 px-2.5 text-right whitespace-nowrap">
+                  {u.role !== 'ADMIN' ? (
+                    <button
+                      onClick={() => handleToggleActive(u.id)}
+                      className={`cursor-pointer font-medium hover:underline text-[11px] ${
+                        u.active ? 'text-rose-600' : 'text-emerald-600'
+                      }`}
+                    >
+                      {u.active ? 'Khóa tài khoản' : 'Mở khóa'}
+                    </button>
+                  ) : (
+                    <span className="text-gray-400 text-[11px] italic">Mặc định</span>
+                  )}
                 </td>
               </tr>
             ))}

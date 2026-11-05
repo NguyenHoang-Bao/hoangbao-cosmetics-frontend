@@ -21,6 +21,7 @@ interface AIIncident {
   createdAt: string;
   status: 'pending' | 'in_progress' | 'resolved';
   assignee: string; // 'Admin' hoặc tên CTV CSKH tại nhà
+  resolutionNote?: string;
 }
 
 interface ProblemProduct {
@@ -113,6 +114,12 @@ export default function AIReportsManagement() {
   const [incidents, setIncidents] = useState<AIIncident[]>(mockIncidents);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [selectedIncident, setSelectedIncident] = useState<AIIncident | null>(null);
+  const [resolutionNote, setResolutionNote] = useState<string>('');
+
+  const handleOpenIncidentModal = (inc: AIIncident) => {
+    setSelectedIncident(inc);
+    setResolutionNote(inc.resolutionNote || '');
+  };
 
   const handleAssignToRemoteStaff = (id: string, staffName: string) => {
     setIncidents((prev) =>
@@ -128,12 +135,16 @@ export default function AIReportsManagement() {
   const handleResolveIncident = (id: string) => {
     setIncidents((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, status: 'resolved' } : item
+        item.id === id
+          ? {
+              ...item,
+              status: 'resolved',
+              resolutionNote: resolutionNote.trim() || 'Đã giải quyết thỏa đáng cho khách hàng'
+            }
+          : item
       )
     );
-    if (selectedIncident?.id === id) {
-      setSelectedIncident((prev) => (prev ? { ...prev, status: 'resolved' } : null));
-    }
+    setSelectedIncident(null);
   };
 
   const filteredIncidents = incidents.filter((item) => {
@@ -282,9 +293,13 @@ export default function AIReportsManagement() {
                   </td>
                   <td className="py-2 px-2.5 border-r border-[#eee] whitespace-nowrap">
                     <p className="font-semibold text-slate-800">{inc.customerName}</p>
-                    <p className="text-[11px] text-gray-500 flex items-center gap-1">
+                    <a
+                      href={`tel:${inc.phone}`}
+                      className="text-[11px] text-blue-600 hover:underline flex items-center gap-1 font-mono"
+                      title="Bấm để gọi điện cho khách"
+                    >
                       <Phone size={10} /> {inc.phone}
-                    </p>
+                    </a>
                   </td>
                   <td className="py-2 px-2.5 border-r border-[#eee] whitespace-nowrap">
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700">
@@ -327,7 +342,7 @@ export default function AIReportsManagement() {
                   </td>
                   <td className="py-2 px-2.5 text-right whitespace-nowrap">
                     <button
-                      onClick={() => setSelectedIncident(inc)}
+                      onClick={() => handleOpenIncidentModal(inc)}
                       className="px-2 py-1 bg-[#337ab7] hover:bg-[#286090] text-white rounded text-[11px] cursor-pointer"
                     >
                       Chi tiết & Phân công
@@ -360,7 +375,10 @@ export default function AIReportsManagement() {
             <div className="p-3.5 space-y-3 max-h-[80vh] overflow-y-auto">
               <div className="bg-slate-50 p-2.5 border border-slate-200 rounded space-y-1">
                 <p>
-                  <strong>Khách hàng:</strong> {selectedIncident.customerName} - <strong>SĐT:</strong> {selectedIncident.phone}
+                  <strong>Khách hàng:</strong> {selectedIncident.customerName} - <strong>SĐT:</strong>{' '}
+                  <a href={`tel:${selectedIncident.phone}`} className="text-blue-600 font-mono underline">
+                    {selectedIncident.phone}
+                  </a>
                 </p>
                 <p>
                   <strong>Nguồn hội thoại:</strong> {selectedIncident.channel} ({selectedIncident.createdAt})
@@ -375,6 +393,20 @@ export default function AIReportsManagement() {
                 <div className="bg-purple-50/60 border border-purple-200 p-2.5 rounded text-purple-950 leading-relaxed text-xs">
                   {selectedIncident.aiSummary}
                 </div>
+              </div>
+
+              {/* Ghi chú giải quyết & bồi thường */}
+              <div className="space-y-1 pt-1">
+                <label className="font-bold block text-slate-800">
+                  Phương án bồi thường / Đền bù thiệt hại (nếu có):
+                </label>
+                <textarea
+                  rows={2}
+                  value={resolutionNote}
+                  onChange={(e) => setResolutionNote(e.target.value)}
+                  placeholder="Ví dụ: Đã gọi khách xin lỗi, gửi đổi chai mới + tặng voucher 50k..."
+                  className="w-full p-2 border border-[#ccc] bg-white text-xs focus:outline-none"
+                />
               </div>
 
               {/* Lựa chọn hành động của Admin */}
@@ -403,7 +435,7 @@ export default function AIReportsManagement() {
                     onClick={() => handleResolveIncident(selectedIncident.id)}
                     className="p-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-center cursor-pointer"
                   >
-                    ✓ Đánh dấu đã giải quyết
+                    ✓ Lưu & Đóng ca khiếu nại
                   </button>
                 </div>
               </div>

@@ -3,7 +3,8 @@ import {
   Boxes,
   Clock,
   CheckCircle,
-  FileCheck
+  FileCheck,
+  ExternalLink
 } from 'lucide-react';
 
 interface InboundReceipt {
@@ -81,10 +82,29 @@ export default function InventoryManagement() {
   const [receipts, setReceipts] = useState<InboundReceipt[]>(mockReceipts);
   const [expiringProducts] = useState<ExpiringProduct[]>(mockExpiringProducts);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [selectedSaleProduct, setSelectedSaleProduct] = useState<ExpiringProduct | null>(null);
+  const [discountPercent, setDiscountPercent] = useState<number>(40);
+  const [saleQuantity, setSaleQuantity] = useState<number>(10);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleOpenSaleModal = (product: ExpiringProduct) => {
+    setSelectedSaleProduct(product);
+    setDiscountPercent(40);
+    setSaleQuantity(product.quantityInStock);
+  };
+
+  const handleConfirmCreateSale = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedSaleProduct) return;
+    const salePrice = Math.round(selectedSaleProduct.sellingPrice * (1 - discountPercent / 100));
+    showToast(
+      `Đã kích hoạt Flash Sale cho "${selectedSaleProduct.productName}" giá ${formatCurrency(salePrice)} (-${discountPercent}%)!`
+    );
+    setSelectedSaleProduct(null);
   };
 
   const handleApproveReceipt = (id: string) => {
@@ -286,7 +306,7 @@ export default function InventoryManagement() {
                   </td>
                   <td className="py-2 px-2.5 text-right whitespace-nowrap">
                     <button
-                      onClick={() => showToast(`Đã tạo chiến dịch Flash Sale giảm 40% cho sản phẩm ${p.productName}`)}
+                      onClick={() => handleOpenSaleModal(p)}
                       className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-medium flex items-center justify-center ml-auto cursor-pointer"
                     >
                       Tạo Flash Sale Xả Kho
@@ -298,6 +318,98 @@ export default function InventoryManagement() {
           </table>
         </div>
       </div>
+
+      {/* MODAL CẤU HÌNH FLASH SALE XẢ KHO */}
+      {selectedSaleProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 font-sans text-xs text-[#333]">
+          <div className="bg-white w-full max-w-md border border-[#999] shadow-xl">
+            <div className="bg-[#f5f5f5] px-3 py-2 border-b border-[#ddd] flex items-center justify-between">
+              <h3 className="font-bold text-xs text-rose-800">
+                Thiết Lập Flash Sale Xả Kho Cận Date
+              </h3>
+              <button
+                onClick={() => setSelectedSaleProduct(null)}
+                className="text-[#888] hover:text-[#000] font-bold text-sm px-1 cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleConfirmCreateSale} className="p-3.5 space-y-3">
+              <div className="bg-slate-50 p-2.5 border border-slate-200 rounded space-y-1">
+                <p className="font-bold text-slate-900">{selectedSaleProduct.productName}</p>
+                <div className="flex justify-between text-[11px] text-gray-600">
+                  <span>Mã lô: <strong>{selectedSaleProduct.batchNumber}</strong></span>
+                  <span className="text-red-600 font-semibold">Hạn dùng: {selectedSaleProduct.expiryDate}</span>
+                </div>
+                <div className="flex justify-between text-[11px] pt-1 border-t border-slate-200">
+                  <span>Giá niêm yết: <del>{formatCurrency(selectedSaleProduct.sellingPrice)}</del></span>
+                  <span>Giá vốn nhập: <strong>{formatCurrency(selectedSaleProduct.costPrice)}</strong></span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Mức giảm giá mong muốn (%):</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min={10}
+                    max={90}
+                    value={discountPercent}
+                    onChange={(e) => setDiscountPercent(Number(e.target.value))}
+                    className="w-24 h-8 px-2 border border-[#ccc] bg-white font-bold text-rose-600"
+                    required
+                  />
+                  <span className="text-[11px] text-gray-500">
+                    $\rightarrow$ Giá sau giảm: <strong className="text-emerald-700 text-xs">
+                      {formatCurrency(Math.round(selectedSaleProduct.sellingPrice * (1 - discountPercent / 100)))}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Số lượng mở bán xả kho (tối đa {selectedSaleProduct.quantityInStock} hộp):</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={selectedSaleProduct.quantityInStock}
+                  value={saleQuantity}
+                  onChange={(e) => setSaleQuantity(Number(e.target.value))}
+                  className="w-full h-8 px-2 border border-[#ccc] bg-white"
+                  required
+                />
+              </div>
+
+              <div className="pt-2 border-t border-[#eee] flex items-center justify-between">
+                <a
+                  href="/sale"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline flex items-center gap-1 text-[11px]"
+                >
+                  <ExternalLink size={12} /> Xem trang Flash Sale
+                </a>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSaleProduct(null)}
+                    className="px-3 py-1.5 bg-white border border-[#ccc] hover:bg-slate-100 cursor-pointer"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded cursor-pointer"
+                  >
+                    Kích hoạt chiến dịch
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
