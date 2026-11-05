@@ -1,5 +1,5 @@
 import { apiClient } from "@hoangbao/api-client";
-import type { ApiResponse } from "@hoangbao/types";
+import type { ApiResponse, PageResponse } from "@hoangbao/types";
 
 export interface CreateOrderItem {
   idVariant: number;
@@ -90,6 +90,19 @@ export const orderApi = {
         : "";
     const response = await apiClient.get<any, ApiResponse<OrderResponse>>(
       `/orders/${encodeURIComponent(orderCode.trim())}${query}`,
+    );
+    return response.data;
+  },
+
+  // Lấy danh sách đơn mua của người dùng đăng nhập hiện tại
+  getMyOrders: async (
+    page = 0,
+    size = 10,
+    sortBy = "createdAt",
+    sortDir = "desc"
+  ): Promise<PageResponse<OrderResponse>> => {
+    const response = await apiClient.get<any, ApiResponse<PageResponse<OrderResponse>>>(
+      `/orders/my-orders?page=${page}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir}`,
     );
     return response.data;
   },

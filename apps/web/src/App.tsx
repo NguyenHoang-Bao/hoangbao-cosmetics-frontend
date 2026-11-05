@@ -18,6 +18,9 @@ import AboutPage from "@/features/about/pages/AboutPage";
 import ContactPage from "@/features/contact/pages/ContactPage";
 import WishlistPage from "@/features/product/pages/WishlistPage";
 import HomePage from "@/features/home/pages/HomePage";
+import { SalePage } from "@/features/flash-sale";
+import { ProfilePage } from "@/features/profile";
+import { MyOrdersPage } from "@/features/order";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
@@ -39,6 +42,9 @@ export const App: React.FC = () => {
             {/* Các route chính có Header & Footer */}
             <Route element={<MainLayout />}>
               <Route index element={<HomePage />} />
+              {/* Trang đại tiệc khuyến mãi Flash Sale */}
+              <Route path="/sale" element={<SalePage />} />
+              <Route path="/flash-sale" element={<SalePage />} />
               {/* Trang danh mục sản phẩm (Product Catalog UI) */}
               <Route path="/products" element={<ProductListPage />} />
               {/* Trang chi tiết sản phẩm */}
@@ -60,22 +66,10 @@ export const App: React.FC = () => {
               <Route element={<ProtectedRoute />}>
                 {/* Trang tra cứu tiến độ đơn hàng (Chỉ cho phép thành viên đã đăng nhập) */}
                 <Route path="/order-tracking" element={<OrderTrackingPage />} />
-                <Route
-                  path="/profile"
-                  element={
-                    <div className="py-20 text-center text-neutral-700 text-sm font-medium">
-                      Trang Thông Tin Cá Nhân
-                    </div>
-                  }
-                />
-                <Route
-                  path="/my-orders"
-                  element={
-                    <div className="py-20 text-center text-neutral-700 text-sm font-medium">
-                      Trang Lịch Sử Đơn Hàng
-                    </div>
-                  }
-                />
+                {/* Trang thông tin tài khoản cá nhân & Sổ địa chỉ & Bảo mật */}
+                <Route path="/profile" element={<ProfilePage />} />
+                {/* Trang lịch sử đơn hàng của tôi */}
+                <Route path="/my-orders" element={<MyOrdersPage />} />
               </Route>
             </Route>
           </Routes>
