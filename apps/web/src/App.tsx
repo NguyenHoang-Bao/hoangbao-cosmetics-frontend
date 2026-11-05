@@ -18,6 +18,7 @@ import AboutPage from "@/features/about/pages/AboutPage";
 import ContactPage from "@/features/contact/pages/ContactPage";
 import WishlistPage from "@/features/product/pages/WishlistPage";
 import HomePage from "@/features/home/pages/HomePage";
+import { SalePage } from "@/features/flash-sale";
 import { ProfilePage } from "@/features/profile";
 import { MyOrdersPage } from "@/features/order";
 import GuestRoute from "@/routes/GuestRoute";
@@ -41,6 +42,9 @@ export const App: React.FC = () => {
             {/* Các route chính có Header & Footer */}
             <Route element={<MainLayout />}>
               <Route index element={<HomePage />} />
+              {/* Trang đại tiệc khuyến mãi Flash Sale */}
+              <Route path="/sale" element={<SalePage />} />
+              <Route path="/flash-sale" element={<SalePage />} />
               {/* Trang danh mục sản phẩm (Product Catalog UI) */}
               <Route path="/products" element={<ProductListPage />} />
               {/* Trang chi tiết sản phẩm */}
