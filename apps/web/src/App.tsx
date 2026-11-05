@@ -21,10 +21,9 @@ import HomePage from "@/features/home/pages/HomePage";
 import { SalePage } from "@/features/flash-sale";
 import { ProfilePage } from "@/features/profile";
 import { MyOrdersPage } from "@/features/order";
-import { AdminLayout, DashboardPage, OrderListPage, ProductAdminPage } from "@/features/admin";
+import { AdminPage } from "@/features/admin";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
-import AdminRoute from "@/routes/AdminRoute";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
 
 export const App: React.FC = () => {
@@ -75,17 +74,8 @@ export const App: React.FC = () => {
               </Route>
             </Route>
 
-            {/* Phân hệ Quản Trị Hệ Thống & Vận Hành Đơn Hàng (Admin Portal) */}
-            <Route element={<AdminRoute />}>
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<DashboardPage />} />
-                <Route path="dashboard" element={<DashboardPage />} />
-                <Route path="orders" element={<OrderListPage />} />
-                <Route path="products" element={<ProductAdminPage />} />
-                <Route path="categories" element={<ProductAdminPage />} />
-                <Route path="warehouse" element={<OrderListPage />} />
-              </Route>
-            </Route>
+            {/* Phân hệ Quản Trị Hệ Thống & Vận Hành Bán Hàng (Admin Portal nguyên bản) */}
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />
