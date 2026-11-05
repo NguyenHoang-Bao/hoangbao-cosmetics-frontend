@@ -54,7 +54,7 @@ const defaultMockOrders: OrderType[] = [
     id: '#ORDER0015',
     date: 'Hôm nay, 14:20:00',
     source: 'AI_ONLINE',
-    channelName: '🤖 AI n8n (Web)',
+    channelName: 'Online (Web)',
     customerName: 'Trần Thị Thanh Thảo',
     phone: '0908123456',
     shippingAddress: '125 Hai Bà Trưng, P. Bến Nghé, Quận 1, TP.HCM',
@@ -76,7 +76,7 @@ const defaultMockOrders: OrderType[] = [
     id: '#ORDER0014',
     date: 'Hôm nay, 11:35:12',
     source: 'POS_STORE',
-    channelName: '🏪 Quầy Thu Ngân POS',
+    channelName: 'Quầy Thu Ngân POS',
     customerName: 'Chị Mai Linh (Tại quầy)',
     phone: '0912987654',
     shippingAddress: 'Mua trực tiếp tại Showroom Tân Phú',
@@ -96,7 +96,7 @@ const defaultMockOrders: OrderType[] = [
     id: '#ORDER0013',
     date: 'Hôm qua, 09:14:22',
     source: 'AI_ONLINE',
-    channelName: '🤖 AI n8n (Facebook)',
+    channelName: 'Online (Facebook)',
     customerName: 'Lê Thu Trang',
     phone: '0918234567',
     shippingAddress: '120 Võ Văn Tần, Phường 6, Quận 3, TP. Hồ Chí Minh',
@@ -117,7 +117,7 @@ const defaultMockOrders: OrderType[] = [
     id: '#ORDER0012',
     date: '25/09/2026',
     source: 'AI_ONLINE',
-    channelName: '🤖 AI n8n (Zalo)',
+    channelName: 'Online (Zalo)',
     customerName: 'Vũ Minh Tuấn',
     phone: '0977665544',
     shippingAddress: 'Số 45 ngõ 12, P. Dịch Vọng, Cầu Giấy, Hà Nội',
@@ -129,7 +129,7 @@ const defaultMockOrders: OrderType[] = [
     carrier: 'Viettel Post',
     trackingNumber: 'VT-458129',
     status: 'returned',
-    statusText: '⚠️ Khách không nghe máy 3 lần (Đang hoàn)',
+    statusText: 'Khách không nhận (Đang hoàn)',
     items: [
       { id: 'item-5', name: 'Kem Dưỡng Ẩm Trắng Da Chiết Xuất Trà Xanh', price: 320000, quantity: 1 }
     ]
@@ -316,7 +316,7 @@ export default function OrderManagement() {
 
         <div className="bg-white p-3 border border-purple-200 bg-purple-50/20 rounded-xs shadow-xs">
           <div className="flex items-center justify-between text-purple-700 text-[11px] font-medium">
-            <span>🤖 Kênh AI n8n tự duyệt</span>
+            <span>Kênh Online tự động</span>
             <Bot size={16} className="text-purple-600" />
           </div>
           <div className="text-base font-bold text-purple-900 mt-1">
@@ -327,7 +327,7 @@ export default function OrderManagement() {
 
         <div className="bg-white p-3 border border-blue-200 bg-blue-50/20 rounded-xs shadow-xs">
           <div className="flex items-center justify-between text-blue-700 text-[11px] font-medium">
-            <span>🏪 Kênh Bán Quầy POS</span>
+            <span>Kênh Bán Quầy POS</span>
             <Store size={16} className="text-blue-600" />
           </div>
           <div className="text-base font-bold text-blue-900 mt-1">
@@ -357,9 +357,9 @@ export default function OrderManagement() {
             className="h-8 px-2 text-xs border border-[#ccc] bg-white font-medium focus:outline-none cursor-pointer"
           >
             <option value="all">Tất cả nguồn (Online + Quầy)</option>
-            <option value="AI_ONLINE">🤖 Kênh AI Tự Duyệt (Web/Zalo/FB)</option>
-            <option value="POS_STORE">🏪 Kênh Quầy POS (Tại cửa hàng)</option>
-            <option value="RETURNED">⚠️ Đơn bị bom / Chuyển hoàn</option>
+            <option value="AI_ONLINE">Kênh Online tự động (Web/Zalo/FB)</option>
+            <option value="POS_STORE">Kênh Quầy POS (Tại cửa hàng)</option>
+            <option value="RETURNED">Đơn chuyển hoàn / Bị hoàn</option>
           </select>
 
           <select

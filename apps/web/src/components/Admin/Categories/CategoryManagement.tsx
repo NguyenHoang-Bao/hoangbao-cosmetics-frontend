@@ -4,7 +4,6 @@ import {
   Edit,
   Trash2,
   Search,
-  Sparkles,
   ExternalLink,
   Tag
 } from 'lucide-react';
@@ -167,8 +166,8 @@ export default function CategoryManagement({
                         <Tag size={12} className="text-[#3c8dbc]" />
                         <span>{category.name}</span>
                         {category.featured && (
-                          <span className="px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded font-semibold text-[10px] flex items-center gap-0.5">
-                            <Sparkles size={9} /> Nổi bật
+                          <span className="px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded font-semibold text-[10px]">
+                            Nổi bật
                           </span>
                         )}
                       </div>

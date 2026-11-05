@@ -7,7 +7,6 @@ import {
   Users,
   ExternalLink,
   LogOut,
-  ChevronRight,
   Minus,
   Plus,
   ShieldCheck,
@@ -146,69 +145,57 @@ export default function AdminSidebar({
                 {/* Quản lý đơn hàng */}
                 <button
                   onClick={() => setActiveTab('orders')}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-left cursor-pointer ${
+                  className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left cursor-pointer ${
                     activeTab === 'orders'
                       ? 'bg-[#1e282c] text-white font-bold border-l-2 border-[#3c8dbc]'
                       : 'text-[#b8c7ce] hover:bg-[#1e282c] hover:text-white'
                   }`}
                   title="Giám Sát Dòng Đơn & Đối Soát COD"
                 >
-                  <div className="flex items-center gap-2">
-                    <ShoppingCart size={13} className="shrink-0" />
-                    {!isCollapsed && <span>Giám Sát & Đối Soát Đơn</span>}
-                  </div>
-                  {!isCollapsed && <ChevronRight size={11} className="text-[#666]" />}
+                  <ShoppingCart size={13} className="shrink-0" />
+                  {!isCollapsed && <span>Giám Sát & Đối Soát Đơn</span>}
                 </button>
 
                 {/* Quản lý sản phẩm & giá vốn */}
                 <button
                   onClick={() => setActiveTab('products')}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-left cursor-pointer ${
+                  className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left cursor-pointer ${
                     activeTab === 'products'
                       ? 'bg-[#1e282c] text-white font-bold border-l-2 border-[#3c8dbc]'
                       : 'text-[#b8c7ce] hover:bg-[#1e282c] hover:text-white'
                   }`}
                   title="Quản Lý Sản Phẩm & Giá"
                 >
-                  <div className="flex items-center gap-2">
-                    <Package size={13} className="shrink-0" />
-                    {!isCollapsed && <span>Sản Phẩm & Bảng Giá</span>}
-                  </div>
-                  {!isCollapsed && <ChevronRight size={11} className="text-[#666]" />}
+                  <Package size={13} className="shrink-0" />
+                  {!isCollapsed && <span>Sản Phẩm & Bảng Giá</span>}
                 </button>
 
                 {/* Quản lý danh mục */}
                 <button
                   onClick={() => setActiveTab('categories')}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-left cursor-pointer ${
+                  className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left cursor-pointer ${
                     activeTab === 'categories'
                       ? 'bg-[#1e282c] text-white font-bold border-l-2 border-[#3c8dbc]'
                       : 'text-[#b8c7ce] hover:bg-[#1e282c] hover:text-white'
                   }`}
                   title="Quản Lý Danh Mục"
                 >
-                  <div className="flex items-center gap-2">
-                    <Tag size={13} className="shrink-0" />
-                    {!isCollapsed && <span>Quản Lý Danh Mục</span>}
-                  </div>
-                  {!isCollapsed && <ChevronRight size={11} className="text-[#666]" />}
+                  <Tag size={13} className="shrink-0" />
+                  {!isCollapsed && <span>Quản Lý Danh Mục</span>}
                 </button>
 
                 {/* Quản lý kho & Duyệt nhập xuất */}
                 <button
                   onClick={() => setActiveTab('inventory')}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 text-left cursor-pointer ${
+                  className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left cursor-pointer ${
                     activeTab === 'inventory'
                       ? 'bg-[#1e282c] text-white font-bold border-l-2 border-[#3c8dbc]'
                       : 'text-[#b8c7ce] hover:bg-[#1e282c] hover:text-white'
                   }`}
                   title="Kho & Duyệt Nhập Xuất"
                 >
-                  <div className="flex items-center gap-2">
-                    <Boxes size={13} className="shrink-0" />
-                    {!isCollapsed && <span>Kho & Nhập Xuất</span>}
-                  </div>
-                  {!isCollapsed && <ChevronRight size={11} className="text-[#666]" />}
+                  <Boxes size={13} className="shrink-0" />
+                  {!isCollapsed && <span>Kho & Nhập Xuất</span>}
                 </button>
               </div>
             )}

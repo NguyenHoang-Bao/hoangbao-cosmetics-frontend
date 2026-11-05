@@ -2,7 +2,8 @@ import {
   TrendingUp,
   Package,
   ShoppingCart,
-  Sparkles,
+  Layers,
+  Activity,
   Clock
 } from 'lucide-react';
 import type { ProductItem, CategoryItem } from '@/services/adminService';
@@ -88,7 +89,7 @@ export default function DashboardOverview({
               {ordersList.length > 0 ? ordersList.length : 28}
             </div>
             <p className="text-[11px] text-amber-600 font-semibold mt-1 flex items-center gap-1">
-              <Clock size={12} /> {pendingOrders.length} đơn chờ duyệt
+              <Clock size={12} /> {pendingOrders.length} đơn đang xử lý
             </p>
           </div>
         </div>
@@ -100,7 +101,7 @@ export default function DashboardOverview({
               Danh mục mỹ phẩm
             </span>
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-              <Sparkles size={20} />
+              <Layers size={20} />
             </div>
           </div>
           <div className="mt-3">
@@ -152,7 +153,7 @@ export default function DashboardOverview({
           <div>
             <div className="flex items-center justify-between border-b border-purple-100 pb-2">
               <span className="font-bold text-xs text-purple-900 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles size={14} className="text-purple-600" />
+                <Activity size={14} className="text-purple-600" />
                 Cảnh Báo Vận Hành & AI Agent
               </span>
               <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded font-bold text-[10px]">Cần chú ý</span>
@@ -261,8 +262,8 @@ export default function DashboardOverview({
                 className="w-full p-3 rounded-xl bg-slate-50 hover:bg-rose-50 hover:border-rose-200 border border-slate-200 text-left transition-all flex items-center justify-between group cursor-pointer"
               >
                 <div>
-                  <p className="text-xs font-bold text-slate-800 group-hover:text-rose-600">Duyệt đơn hàng Online</p>
-                  <p className="text-[11px] text-slate-400">Xem và cập nhật trạng thái đơn khách đặt</p>
+                  <p className="text-xs font-bold text-slate-800 group-hover:text-rose-600">Giám sát đơn hàng Online</p>
+                  <p className="text-[11px] text-slate-400">Xem và đối soát trạng thái đơn khách đặt</p>
                 </div>
                 <ShoppingCart size={16} className="text-slate-400 group-hover:text-rose-600" />
               </button>
@@ -275,7 +276,7 @@ export default function DashboardOverview({
                   <p className="text-xs font-bold text-slate-800 group-hover:text-rose-600">Quản lý cây danh mục</p>
                   <p className="text-[11px] text-slate-400">Phân loại ngành hàng mỹ phẩm, banner</p>
                 </div>
-                <Sparkles size={16} className="text-slate-400 group-hover:text-rose-600" />
+                <Layers size={16} className="text-slate-400 group-hover:text-rose-600" />
               </button>
             </div>
           </div>

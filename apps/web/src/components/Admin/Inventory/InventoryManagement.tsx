@@ -3,8 +3,7 @@ import {
   Boxes,
   Clock,
   CheckCircle,
-  FileCheck,
-  Zap
+  FileCheck
 } from 'lucide-react';
 
 interface InboundReceipt {
@@ -288,10 +287,9 @@ export default function InventoryManagement() {
                   <td className="py-2 px-2.5 text-right whitespace-nowrap">
                     <button
                       onClick={() => showToast(`Đã tạo chiến dịch Flash Sale giảm 40% cho sản phẩm ${p.productName}`)}
-                      className="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-medium flex items-center gap-1 ml-auto cursor-pointer"
+                      className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-medium flex items-center justify-center ml-auto cursor-pointer"
                     >
-                      <Zap size={11} />
-                      <span>Tạo Flash Sale Xả Kho</span>
+                      Tạo Flash Sale Xả Kho
                     </button>
                   </td>
                 </tr>

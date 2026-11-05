@@ -85,7 +85,7 @@ export default function CreateOrderModal({
       id: newOrderId,
       date: `${dateStr} ${timeStr}`,
       source: 'ADMIN_MANUAL',
-      channelName: '👑 Admin Tạo Hộ',
+      channelName: 'Admin Tạo Hộ',
       customerName: customerName.trim(),
       phone: phone.trim(),
       shippingAddress: address.trim(),

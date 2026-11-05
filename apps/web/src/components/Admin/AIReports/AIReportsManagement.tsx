@@ -6,7 +6,7 @@ import {
   Phone,
   ShieldAlert,
   Filter,
-  Sparkles
+  CheckCircle2
 } from 'lucide-react';
 
 interface AIIncident {
@@ -180,7 +180,7 @@ export default function AIReportsManagement() {
               <p className="text-lg font-bold text-emerald-600 mt-0.5">82.4%</p>
               <p className="text-[10px] text-gray-400">142/173 cuộc hội thoại tự động hoàn tất</p>
             </div>
-            <Sparkles className="text-emerald-500" size={24} />
+            <CheckCircle2 className="text-emerald-500" size={24} />
           </div>
 
           <div className="p-2.5 bg-[#fff8e6] border border-[#fde68a] rounded flex items-center justify-between">
@@ -385,19 +385,19 @@ export default function AIReportsManagement() {
                     onClick={() => handleAssignToRemoteStaff(selectedIncident.id, 'Admin (Trực tiếp giải quyết)')}
                     className="p-2 border border-slate-300 hover:bg-slate-100 rounded text-left font-medium cursor-pointer"
                   >
-                    👑 Admin tự giải quyết
+                    Admin tự giải quyết
                   </button>
                   <button
                     onClick={() => handleAssignToRemoteStaff(selectedIncident.id, 'CTV CSKH Nguyễn Mai (Tại nhà)')}
                     className="p-2 border border-blue-200 hover:bg-blue-50 text-blue-800 rounded text-left font-medium cursor-pointer"
                   >
-                    🏠 Giao CTV Nguyễn Mai (Tại nhà)
+                    Giao CTV Nguyễn Mai (Tại nhà)
                   </button>
                   <button
                     onClick={() => handleAssignToRemoteStaff(selectedIncident.id, 'CTV CSKH Lê Trang (Tại nhà)')}
                     className="p-2 border border-blue-200 hover:bg-blue-50 text-blue-800 rounded text-left font-medium cursor-pointer"
                   >
-                    🏠 Giao CTV Lê Trang (Tại nhà)
+                    Giao CTV Lê Trang (Tại nhà)
                   </button>
                   <button
                     onClick={() => handleResolveIncident(selectedIncident.id)}
