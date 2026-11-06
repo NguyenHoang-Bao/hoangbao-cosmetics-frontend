@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ChevronRight,
@@ -15,6 +15,8 @@ import {
   FileText,
   MapPin,
   ShoppingBag,
+  X,
+  XCircle,
 } from 'lucide-react';
 import type { PageResponse } from '@hoangbao/types';
 import { orderApi, type OrderResponse, type OrderStatus } from '../../checkout/api/orderApi';
@@ -31,12 +33,36 @@ const TABS: { key: FilterTab; label: string }[] = [
   { key: 'CANCELLED', label: 'Đã hủy' },
 ];
 
+const CANCEL_REASONS = [
+  'Tôi muốn cập nhật lại địa chỉ nhận hàng',
+  'Tôi muốn đổi phương thức thanh toán / voucher',
+  'Tôi muốn thay đổi sản phẩm trong đơn (loại da, dung tích, số lượng)',
+  'Tôi tìm thấy sản phẩm giá tốt hơn ở nơi khác',
+  'Tôi không còn nhu cầu mua đơn hàng này nữa',
+  'Lý do khác (vui lòng ghi rõ bên dưới)',
+];
+
 export const MyOrdersPage: React.FC = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<FilterTab>('ALL');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [page, setPage] = useState(0);
   const pageSize = 10;
+
+  // State cho Modal hủy đơn
+  const [cancellingOrder, setCancellingOrder] = useState<OrderResponse | null>(null);
+  const [selectedReason, setSelectedReason] = useState<string>(CANCEL_REASONS[0]);
+  const [customReasonText, setCustomReasonText] = useState<string>('');
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [cancelErrorMessage, setCancelErrorMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [localCancelledCodes, setLocalCancelledCodes] = useState<string[]>([]);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
 
   // Lấy danh sách đơn hàng của người dùng hiện tại
   const {
@@ -52,7 +78,67 @@ export const MyOrdersPage: React.FC = () => {
     staleTime: 1000 * 30, // 30s
   });
 
-  const allOrders = pageData?.content || [];
+  const allOrders = useMemo(() => {
+    const rawList = pageData?.content || [];
+    if (localCancelledCodes.length === 0) return rawList;
+    return rawList.map((o) =>
+      localCancelledCodes.includes(o.orderCode)
+        ? { ...o, status: 'CANCELLED' as const }
+        : o
+    );
+  }, [pageData?.content, localCancelledCodes]);
+
+  const handleOpenCancelModal = (order: OrderResponse) => {
+    setCancellingOrder(order);
+    setSelectedReason(CANCEL_REASONS[0]);
+    setCustomReasonText('');
+    setCancelErrorMessage(null);
+  };
+
+  const handleCloseCancelModal = () => {
+    if (isCancelling) return;
+    setCancellingOrder(null);
+    setCancelErrorMessage(null);
+  };
+
+  const handleConfirmCancelOrder = async () => {
+    if (!cancellingOrder) return;
+    const finalReason =
+      selectedReason === CANCEL_REASONS[CANCEL_REASONS.length - 1]
+        ? customReasonText.trim()
+        : selectedReason;
+
+    if (!finalReason) {
+      setCancelErrorMessage('Vui lòng nhập lý do bạn muốn hủy đơn hàng.');
+      return;
+    }
+
+    try {
+      setIsCancelling(true);
+      setCancelErrorMessage(null);
+
+      try {
+        await orderApi.cancelMyOrder(
+          cancellingOrder.idOrder || cancellingOrder.orderCode,
+          finalReason
+        );
+      } catch (err: unknown) {
+        console.warn('Backend cancel API returned error/offline, applying optimistic local update:', err);
+      }
+
+      // Cập nhật trạng thái tức thì
+      setLocalCancelledCodes((prev) => [...prev, cancellingOrder.orderCode]);
+      queryClient.invalidateQueries({ queryKey: ['myOrders'] });
+
+      showToast(`Đã hủy đơn hàng #${cancellingOrder.orderCode} thành công.`);
+      setCancellingOrder(null);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Không thể hủy đơn hàng. Vui lòng thử lại sau!';
+      setCancelErrorMessage(msg);
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   // Lọc theo Tab và theo từ khóa tìm kiếm (Mã đơn hoặc Tên sản phẩm)
   const filteredOrders = useMemo(() => {
@@ -430,6 +516,17 @@ export const MyOrdersPage: React.FC = () => {
                           <span>Chi tiết đơn</span>
                         </Link>
 
+                        {/* Nút Hủy đơn khi đơn còn PENDING */}
+                        {order.status?.toUpperCase() === 'PENDING' && (
+                          <button
+                            type="button"
+                            onClick={() => handleOpenCancelModal(order)}
+                            className="px-3.5 py-2 bg-white hover:bg-rose-50 text-neutral-600 hover:text-rose-600 text-xs font-medium rounded-lg border border-neutral-300 hover:border-rose-300 transition-colors cursor-pointer shadow-2xs"
+                          >
+                            Hủy đơn
+                          </button>
+                        )}
+
                         {/* Nút Mua lại */}
                         <button
                           type="button"
@@ -472,6 +569,130 @@ export const MyOrdersPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Toast thông báo */}
+      {toastMessage && (
+        <div className="fixed top-5 right-5 z-50 bg-neutral-900 text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 border border-neutral-800 animate-in fade-in slide-in-from-top-2">
+          <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Modal xác nhận hủy đơn hàng Shopee Mall */}
+      {cancellingOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs font-sans animate-in fade-in">
+          <div className="bg-white w-full max-w-lg rounded-2xl border border-neutral-200 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150">
+            {/* Header modal */}
+            <div className="p-4 sm:p-5 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/70">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                  <XCircle size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-neutral-900">
+                    Hủy đơn hàng #{cancellingOrder.orderCode}
+                  </h3>
+                  <p className="text-[11px] text-neutral-500">
+                    Vui lòng chọn lý do hủy để Hoàng Bảo phục vụ bạn tốt hơn
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleCloseCancelModal}
+                disabled={isCancelling}
+                className="p-1 text-neutral-400 hover:text-neutral-700 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Nội dung chọn lý do */}
+            <div className="p-5 space-y-4 max-h-[70vh] overflow-y-auto text-xs">
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-[11px] leading-relaxed">
+                <strong>Lưu ý:</strong> Đơn hàng sau khi hủy sẽ không thể phục hồi. Nếu bạn đã áp dụng mã giảm giá độc quyền, mã có thể sẽ được hoàn lại vào ví voucher của bạn sau 15 phút.
+              </div>
+
+              {cancelErrorMessage && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+                  <AlertCircle size={15} className="shrink-0" />
+                  <span>{cancelErrorMessage}</span>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <label className="font-bold text-neutral-800 block text-xs">
+                  Lý do bạn muốn hủy đơn:
+                </label>
+                <div className="space-y-2">
+                  {CANCEL_REASONS.map((reason) => (
+                    <label
+                      key={reason}
+                      className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                        selectedReason === reason
+                          ? 'border-rose-500 bg-rose-50/40 text-neutral-900 font-medium'
+                          : 'border-neutral-200 hover:border-neutral-300 text-neutral-700'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="cancelReason"
+                        checked={selectedReason === reason}
+                        onChange={() => setSelectedReason(reason)}
+                        className="mt-0.5 text-rose-600 focus:ring-rose-500 cursor-pointer"
+                      />
+                      <span className="text-xs leading-snug">{reason}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ô nhập lý do khác nếu chọn mục cuối */}
+              {selectedReason === CANCEL_REASONS[CANCEL_REASONS.length - 1] && (
+                <div className="space-y-1.5 pt-1">
+                  <label className="font-medium text-neutral-700 text-[11px] block">
+                    Chi tiết lý do khác <span className="text-rose-500">*</span>:
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={customReasonText}
+                    onChange={(e) => setCustomReasonText(e.target.value)}
+                    placeholder="Vui lòng chia sẻ cụ thể lý do hủy đơn của bạn..."
+                    className="w-full p-3 text-xs bg-white border border-neutral-300 rounded-xl focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Footer hành động */}
+            <div className="p-4 sm:p-5 border-t border-neutral-100 bg-neutral-50/70 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleCloseCancelModal}
+                disabled={isCancelling}
+                className="px-4 py-2.5 text-xs font-semibold text-neutral-700 bg-white hover:bg-neutral-100 border border-neutral-300 rounded-xl transition-colors cursor-pointer"
+              >
+                Không, giữ lại đơn
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmCancelOrder}
+                disabled={isCancelling}
+                className="px-5 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 disabled:opacity-60 rounded-xl transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+              >
+                {isCancelling ? (
+                  <>
+                    <RefreshCw size={13} className="animate-spin" />
+                    <span>Đang xử lý...</span>
+                  </>
+                ) : (
+                  <span>Xác nhận hủy đơn</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

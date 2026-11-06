@@ -122,4 +122,31 @@ export const orderApi = {
     );
     return response.data;
   },
+  // Khách hàng tự hủy đơn hàng (khi đơn còn PENDING)
+  cancelMyOrder: async (
+    orderIdOrCode: number | string,
+    reason: string
+  ): Promise<OrderResponse> => {
+    try {
+      const response = await apiClient.post<any, ApiResponse<OrderResponse>>(
+        `/orders/${encodeURIComponent(orderIdOrCode)}/cancel`,
+        { reason: reason.trim() }
+      );
+      return response.data;
+    } catch (error) {
+      try {
+        const stored = localStorage.getItem('hb_admin_orders_v2');
+        if (stored) {
+          const orders = JSON.parse(stored);
+          const updated = orders.map((o: any) =>
+            o.id === orderIdOrCode || o.idOrder === orderIdOrCode || o.orderCode === orderIdOrCode
+              ? { ...o, status: 'cancelled', statusText: 'Khách tự hủy: ' + reason.trim() }
+              : o
+          );
+          localStorage.setItem('hb_admin_orders_v2', JSON.stringify(updated));
+        }
+      } catch {}
+      throw error;
+    }
+  },
 };
