@@ -1,0 +1,147 @@
+[
+  {
+    "id": 1,
+    "name": "3CE",
+    "slug": "3ce",
+    "country": "Hàn Quốc",
+    "description": "Thương hiệu mỹ phẩm trang điểm thời thượng hàng đầu Hàn Quốc nổi tiếng với các dòng son kem lì, phấn má và phong cách trẻ trung cá tính.",
+    "logo": "logo-img/3ce/3ce.jpg"
+  },
+  {
+    "id": 2,
+    "name": "CeraVe",
+    "slug": "cerave",
+    "country": "Mỹ",
+    "description": "Thương hiệu dược mỹ phẩm được các bác sĩ da liễu khuyên dùng, nổi bật với công thức chứa 3 loại Ceramide thiết yếu phục hồi hàng rào ẩm tự nhiên của da.",
+    "logo": "logo-img/cerave/cerave.png"
+  },
+  {
+    "id": 3,
+    "name": "Cetaphil",
+    "slug": "cetaphil",
+    "country": "Canada",
+    "description": "Thương hiệu chăm sóc da dịu lành số 1 cho da nhạy cảm và trẻ sơ sinh với các sản phẩm làm sạch không xà phòng và dưỡng ẩm chuyên sâu.",
+    "logo": "logo-img/cetaphil/cetaphil.png"
+  },
+  {
+    "id": 4,
+    "name": "Chanel",
+    "slug": "chanel",
+    "country": "Pháp",
+    "description": "Biểu tượng thời trang và nước hoa xa xỉ bậc nhất thế giới đến từ Paris với các tuyệt tác mùi hương kinh điển như N°5, Coco Noir, Chance.",
+    "logo": "logo-img/chanel/chanel.png"
+  },
+  {
+    "id": 5,
+    "name": "Cocoon",
+    "slug": "cocoon",
+    "country": "Việt Nam",
+    "description": "Thương hiệu mỹ phẩm thuần chay 100% tiên phong tại Việt Nam, khai thác nguồn nông sản thuần khiết như cà phê Đắk Lắk, bí đao, nghệ Hưng Yên và hoa sen.",
+    "logo": "logo-img/cocoon/cocoon.png"
+  },
+  {
+    "id": 6,
+    "name": "Dove",
+    "slug": "dove",
+    "country": "Mỹ",
+    "description": "Thương hiệu chăm sóc tóc và cơ thể nổi tiếng toàn cầu, tôn vinh vẻ đẹp tự nhiên đích thực của người phụ nữ với công thức dưỡng ẩm sâu Nutritive Serum.",
+    "logo": "logo-img/dove/dove.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Innisfree",
+    "slug": "innisfree",
+    "country": "Hàn Quốc",
+    "description": "Thương hiệu mỹ phẩm thiên nhiên đầu tiên của Hàn Quốc với các nguồn nguyên liệu hữu cơ thuần khiết từ hòn đảo ngọc Jeju.",
+    "logo": "logo-img/innisfree/innisfree.jpg"
+  },
+  {
+    "id": 8,
+    "name": "L'Oréal Paris",
+    "slug": "l-oreal-paris",
+    "country": "Pháp",
+    "description": "Tập đoàn mỹ phẩm hàng đầu thế giới với sứ mệnh mang đến vẻ đẹp chuẩn mực, công nghệ trang điểm và dưỡng da tiên tiến cho mọi phụ nữ.",
+    "logo": "logo-img/l-oreal-paris/l-oreal-paris.png"
+  },
+  {
+    "id": 9,
+    "name": "La Roche-Posay",
+    "slug": "la-roche-posay",
+    "country": "Pháp",
+    "description": "Dược mỹ phẩm hàng đầu nước Pháp chuyên gia điều trị các vấn đề về da dầu mụn, da nhạy cảm và phục hồi da tổn thương với nguồn nước khoáng nhiệt trị liệu.",
+    "logo": "logo-img/la-roche-posay/la-roche-posay.png"
+  },
+  {
+    "id": 10,
+    "name": "Laneige",
+    "slug": "laneige",
+    "country": "Hàn Quốc",
+    "description": "Chuyên gia khoa học về nước và độ ẩm da, nổi tiếng với các dòng mặt nạ ngủ, kem dưỡng ẩm Water Bank và tinh chất dưỡng sáng da Radian-C.",
+    "logo": "logo-img/laneige/laneige.webp"
+  },
+  {
+    "id": 11,
+    "name": "MAC",
+    "slug": "mac",
+    "country": "Mỹ",
+    "description": "Thương hiệu trang điểm chuyên nghiệp dẫn đầu xu hướng thế giới, lựa chọn hàng đầu của các chuyên gia trang điểm sàn diễn quốc tế.",
+    "logo": "logo-img/mac/mac.jpg"
+  },
+  {
+    "id": 12,
+    "name": "Maybelline",
+    "slug": "maybelline",
+    "country": "Mỹ",
+    "description": "Thương hiệu trang điểm số 1 thế giới đến từ New York, mang lại các sản phẩm kem nền Fit Me, son kem lì Super Stay chất lượng cao với mức giá đại chúng.",
+    "logo": "logo-img/maybelline/maybelline.png"
+  },
+  {
+    "id": 13,
+    "name": "Nivea",
+    "slug": "nivea",
+    "country": "Đức",
+    "description": "Thương hiệu chăm sóc da hơn 100 năm tuổi của Đức, biểu tượng của sự tin cậy trong dưỡng ẩm cơ thể, kem dưỡng da và khử mùi.",
+    "logo": "logo-img/nivea/nivea.webp"
+  },
+  {
+    "id": 14,
+    "name": "Pantene",
+    "slug": "pantene",
+    "country": "Mỹ",
+    "description": "Chuyên gia chăm sóc tóc hàng đầu với công thức dưỡng chất Pro-Vitamin B5 độc quyền, giúp mái tóc chắc khỏe từ chân tới ngọn.",
+    "logo": "logo-img/pantene/pantene.jpg"
+  },
+  {
+    "id": 15,
+    "name": "Romand",
+    "slug": "romand",
+    "country": "Hàn Quốc",
+    "description": "Thương hiệu son môi Hàn Quốc gây sốt giới trẻ châu Á với các dòng son tint bóng Juicy Lasting Tint căng mọng chuẩn màu kẹo ngọt.",
+    "logo": "logo-img/romand/romand.webp"
+  },
+  {
+    "id": 16,
+    "name": "The Ordinary",
+    "slug": "the-ordinary",
+    "country": "Canada",
+    "description": "Thương hiệu mỹ phẩm tối giản với công thức minh bạch tập trung vào các hoạt chất lâm sàng nguyên chất (Niacinamide, BHA/AHA, Hyaluronic Acid).",
+    "logo": "logo-img/the-ordinary/the-ordinary.png"
+  },
+  {
+    "id": 17,
+    "name": "TRESemmé",
+    "slug": "tresemme",
+    "country": "Mỹ",
+    "description": "Dòng sản phẩm chăm sóc và phục hồi tóc cao cấp chuẩn salon tại nhà, tài trợ chính cho các tuần lễ thời trang New York Fashion Week.",
+    "logo": "logo-img/tresemme/tresemme.png"
+  },
+  {
+    "id": 18,
+    "name": "Vaseline",
+    "slug": "vaseline",
+    "country": "Mỹ",
+    "description": "Chuyên gia phục hồi và dưỡng ẩm cơ thể với công nghệ sáp khoáng tinh khiết Jelly và dòng serum dưỡng thể sáng da Gluta-Hya thế hệ mới.",
+    "logo": "logo-img/vaseline/vaseline.jpg"
+  }
+]
+

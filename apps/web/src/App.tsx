@@ -21,6 +21,7 @@ import HomePage from "@/features/home/pages/HomePage";
 import { SalePage } from "@/features/flash-sale";
 import { ProfilePage } from "@/features/profile";
 import { MyOrdersPage } from "@/features/order";
+import { AdminPage } from "@/features/admin";
 import GuestRoute from "@/routes/GuestRoute";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
@@ -72,6 +73,9 @@ export const App: React.FC = () => {
                 <Route path="/my-orders" element={<MyOrdersPage />} />
               </Route>
             </Route>
+
+            {/* Phân hệ Quản Trị Hệ Thống & Vận Hành Bán Hàng (Admin Portal nguyên bản) */}
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />

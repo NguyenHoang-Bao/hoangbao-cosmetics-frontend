@@ -19,3 +19,10 @@ export interface ProductReviewSummary {
   totalReviews: number;
   reviews: PageResponse<Review>;
 }
+
+export interface CreateReviewPayload {
+  idProduct: number;
+  idOrderDetail: number;
+  ratingPoint: number;
+  content: string;
+}

@@ -1,0 +1,115 @@
+[
+  {
+    "id": 1,
+    "name": "Son Môi",
+    "slug": "son-moi",
+    "description": "Bộ sưu tập son kem lì, son thỏi, son tint bóng căng mọng từ các thương hiệu 3CE, MAC, Maybelline, Romand, Peripera.",
+    "banner": "home-img/son-moi/soi-moi.webp",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "name": "Kem Chống Nắng",
+    "slug": "kem-chong-nang",
+    "description": "Bảo vệ da toàn diện trước tia UVA, UVB và ánh sáng xanh với màng lọc quang phổ rộng từ La Roche-Posay, CeraVe, Cocoon, Innisfree.",
+    "banner": "home-img/kem-chong-nang/kem-chong-nang.webp",
+    "featured": true
+  },
+  {
+    "id": 3,
+    "name": "Sữa Rửa Mặt",
+    "slug": "sua-rua-mat",
+    "description": "Làm sạch sâu bụi bẩn, dầu nhờn với độ pH 5.5 chuẩn dịu êm cho da dầu mụn và da nhạy cảm.",
+    "banner": "home-img/sua-rua-mat/sua-rua-mat.webp",
+    "featured": true
+  },
+  {
+    "id": 4,
+    "name": "Tinh Chất & Serum",
+    "slug": "tinh-chat",
+    "description": "Điều trị chuyên sâu thâm mụn, cấp ẩm phục hồi và chống lão hóa với các hoạt chất vàng Niacinamide, BHA, Hyaluronic Acid, Peptide.",
+    "banner": "home-img/tinh-chat/tinh-chat.webp",
+    "featured": true
+  },
+  {
+    "id": 5,
+    "name": "Kem Dưỡng Ẩm",
+    "slug": "kem-duong",
+    "description": "Khóa ẩm 24h, phục hồi màng bảo vệ da suy yếu và làm dịu kích ứng tức thì với Ceramide, Vitamin B5 và chiết xuất thảo mộc.",
+    "banner": "home-img/kem-duong/kem-duong.webp",
+    "featured": true
+  },
+  {
+    "id": 6,
+    "name": "Nước Tẩy Trang",
+    "slug": "tay-trang",
+    "description": "Công nghệ hạt Micellar hút sạch lớp trang điểm cứng đầu, kem chống nắng và bụi mịn PM 2.5 mà không làm khô căng da.",
+    "banner": "home-img/tay-trang/tay-trang.webp",
+    "featured": true
+  },
+  {
+    "id": 7,
+    "name": "Mặt Nạ Dưỡng Da",
+    "slug": "mat-na",
+    "description": "Thư giãn làn da mỗi ngày với mặt nạ đất sét hút dầu núi lửa, mặt nạ hoa hồng tươi và mặt nạ giấy chiết xuất thiên nhiên.",
+    "banner": "home-img/mat-na/mat-na.webp",
+    "featured": true
+  },
+  {
+    "id": 8,
+    "name": "Tẩy Tế Bào Chết",
+    "slug": "tay-da-chet",
+    "description": "Làm sạch tế bào sừng già cỗi cho mặt, môi và toàn thân với hạt cà phê Đắk Lắk nguyên chất và tẩy da chết hóa học AHA/BHA.",
+    "banner": "home-img/tay-da-chet/tay-da-chet.webp",
+    "featured": false
+  },
+  {
+    "id": 9,
+    "name": "Phấn Nước Cushion",
+    "slug": "cushion",
+    "description": "Tạo lớp nền mỏng mịn ngậm nước, che phủ tự nhiên chuẩn phong cách Glass Skin Hàn Quốc.",
+    "banner": "home-img/cushion/cushion.webp",
+    "featured": false
+  },
+  {
+    "id": 10,
+    "name": "Kem Lót & Kem Nền",
+    "slug": "kem-lot-nen",
+    "description": "Bắt sáng, kiềm dầu, che khuyết điểm hoàn hảo và giữ lớp trang điểm lâu trôi bền bỉ suốt 24H-32H.",
+    "banner": "home-img/kem-lot-nen/kem-lot-nen.webp",
+    "featured": false
+  },
+  {
+    "id": 11,
+    "name": "Phấn Phủ Kiềm Dầu",
+    "slug": "phan-phu",
+    "description": "Hạt phấn khoáng siêu vi hút dầu tức thì, giữ lớp nền khô thoáng và không bị xuống tông cả ngày.",
+    "banner": "home-img/phan-phu/phan-phu.webp",
+    "featured": false
+  },
+  {
+    "id": 12,
+    "name": "Chăm Sóc Vùng Mắt",
+    "slug": "kem-duong-mat",
+    "description": "Đánh bay quầng thâm, giảm sưng bọng mắt mệt mỏi và làm mờ nếp nhăn đuôi mắt với Caffeine và Blue Hyaluronic Acid.",
+    "banner": "home-img/kem-duong-mat/kem-duong-mat.webp",
+    "featured": false
+  },
+  {
+    "id": 13,
+    "name": "Chăm Sóc Cơ Thể",
+    "slug": "cham-soc-co-the",
+    "description": "Dưỡng ẩm, làm sáng da toàn thân và lưu hương nước hoa quyến rũ với sữa tắm, serum dưỡng thể Nivea, Vaseline, Cetaphil.",
+    "banner": "home-img/cham-soc-co-the/cham-soc-co-the.webp",
+    "featured": false
+  },
+  {
+    "id": 14,
+    "name": "Thực Phẩm Chức Năng",
+    "slug": "tpcn",
+    "description": "Bổ sung collagen, vitamin và khoáng chất chăm sóc sức khỏe và nuôi dưỡng vẻ đẹp rạng ngời từ sâu bên trong.",
+    "banner": "home-img/tpcn/tpcn.webp",
+    "featured": false
+  }
+]
+
