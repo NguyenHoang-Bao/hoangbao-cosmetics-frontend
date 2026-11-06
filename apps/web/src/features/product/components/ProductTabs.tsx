@@ -373,14 +373,14 @@ export const ProductTabs: React.FC<ProductTabsProps> = ({
             {/* Banner kêu gọi khách mua hàng đánh giá tích điểm */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-rose-50/60 rounded-2xl border border-rose-100 text-xs">
               <div>
-                <p className="font-bold text-rose-900">Bạn đã mua sản phẩm này tại Hoàng Bảo Cosmetics?</p>
-                <p className="text-neutral-600 mt-0.5">Đánh giá từ mục Đơn mua để xác thực nhận xét và nhận ưu đãi tích điểm!</p>
+                <p className="font-bold text-rose-900">Bạn đã dùng thử sản phẩm này chưa?</p>
+                <p className="text-neutral-600 mt-0.5">Khen hay chê tụi mình đều lắng nghe. Chia sẻ cảm nhận thật từ mục Đơn Mua để nhận điểm thưởng nhé!</p>
               </div>
               <Link
                 to="/my-orders"
                 className="inline-flex items-center justify-center px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs shrink-0"
               >
-                Viết đánh giá từ đơn mua →
+                Viết cảm nhận từ đơn mua →
               </Link>
             </div>
             {totalReviews > 0 ? (

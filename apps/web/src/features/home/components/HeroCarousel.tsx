@@ -21,28 +21,30 @@ interface HeroSlide {
 const heroSlides: HeroSlide[] = [
   {
     image: heroImg1,
-    badge: "Bộ Sưu Tập Mới 2026",
-    title: "NUÔI DƯỠNG\nLÀN DA RẠNG RỠ",
+    badge: "Chính Hãng 100% • Tem Phụ Đầy Đủ",
+    title: "MỸ PHẨM CHÍNH HÃNG\nCHO LÀN DA NGƯỜI VIỆT",
     description:
-      "Khám phá các dòng sản phẩm dưỡng da chuyên sâu mới nhất. Tươi trẻ, thuần khiết và tỏa sáng tự nhiên trong từng khoảnh khắc.",
-    buttonText: "Khám Phá Ngay",
+      "Khỏi lo hàng giả, hàng trôi nổi. Chọn đúng món êm dịu, kiềm dầu và phục hồi cho da trước nắng nóng khói bụi.",
+    buttonText: "Xem Các Món Hot",
     link: "/products",
   },
   {
     image: heroImg2,
-    badge: "Skincare Organic",
-    title: "BÍ QUYẾT\nDA SÁNG MỊN",
-    description: null,
-    buttonText: "Mua Ngay",
+    badge: "Chăm Da Lành Tính",
+    title: "TẠM BIỆT BÍ TẮC\nVÀ MỤN ẨN",
+    description:
+      "Nói không với kem trộn bào mòn. Routine khoa học, nhẹ dịu giúp làn da bạn khỏe khoắn và sáng mịn tự nhiên.",
+    buttonText: "Chọn Routine Hợp Da",
     link: "/products",
   },
   {
     image: heroImg3,
-    badge: "Natural Beauty",
-    title: "VẺ ĐẸP\nTHUẦN KHIẾT",
-    description: null,
-    buttonText: "Xem Sản Phẩm",
-    link: "/products",
+    badge: "Đại Tiệc Khuyến Mãi",
+    title: "DEAL HỜI MỖI NGÀY\nTIẾT KIỆM ĐẾN 50%",
+    description:
+      "Mỹ phẩm chính hãng giá mềm cho học sinh, sinh viên và dân văn phòng. Đóng gói 3 lớp bóng khí an tâm đến tận tay.",
+    buttonText: "Săn Sale Ngay",
+    link: "/sale",
   },
 ];
 

@@ -10,17 +10,17 @@ export const BeautyPhilosophy: React.FC = () => {
           <div className="w-full lg:w-1/2 order-2 lg:order-1">
             <div className="max-w-xl">
               <span className="text-xs font-bold text-rose-600 uppercase tracking-widest mb-4 block">
-                01 / NGUỒN GỐC NGUYÊN BẢN
+                01 / NÓI KHÔNG VỚI HÀNG GIẢ & KEM TRỘN
               </span>
               <h2 className="text-3xl md:text-4xl font-extrabold text-neutral-900 leading-tight mb-6">
-                Từ Thành Phần Thiên Nhiên <br />
-                Đến Vẻ Đẹp Thuần Khiết
+                Chăm Sóc Làn Da Thật, <br />
+                Không Bán Lời Hứa Suông
               </h2>
               <p className="text-neutral-700 text-base sm:text-lg leading-relaxed mb-8">
-                Một làn da khỏe mạnh luôn bắt đầu từ sự lành tính. Những thành phần hữu cơ được tuyển chọn kỹ lưỡng, chiết xuất theo công nghệ hiện đại để giữ lại trọn vẹn dưỡng chất tinh túy nhất từ thiên nhiên.
+                Tụi mình hiểu nỗi sợ lớn nhất khi mua mỹ phẩm online là mua nhầm hàng nhái làm hỏng mặt. Ở Hoàng Bảo, từng chai serum hay thỏi son đều có tem phụ, nguồn gốc minh bạch và cam kết đền tiền gấp đôi nếu phát hiện hàng không chuẩn.
               </p>
               <div className="border-l-4 border-rose-400 bg-rose-50/60 pl-6 py-3.5 pr-4 rounded-r-2xl italic text-neutral-800 text-sm sm:text-base font-medium">
-                "Không paraben, không hương liệu nhân tạo. Nuôi dưỡng làn da rạng rỡ sâu từ bên trong với cam kết 100% an toàn và dịu nhẹ."
+                "Không có phép màu đẹp cấp tốc sau 1 đêm. Tụi mình chỉ có những sản phẩm chuẩn chỉ giúp da bạn khỏe lên từng ngày một cách an tâm nhất."
               </div>
             </div>
           </div>
@@ -61,17 +61,17 @@ export const BeautyPhilosophy: React.FC = () => {
           <div className="w-full lg:w-1/2">
             <div className="max-w-xl lg:pl-10">
               <span className="text-xs font-bold text-rose-600 uppercase tracking-widest mb-4 block">
-                02 / HIỆU QUẢ CHUẨN Y KHOA
+                02 / THẤU HIỂU LÀN DA NGƯỜI VIỆT
               </span>
               <h2 className="text-3xl md:text-4xl font-extrabold text-neutral-900 leading-tight mb-6">
-                Công Nghệ Đột Phá — <br />
-                Phục Hồi Từng Tế Bào
+                Routine Êm Dịu Cho <br />
+                Khí Hậu Nóng Ẩm Khói Bụi
               </h2>
               <p className="text-neutral-700 text-base sm:text-lg leading-relaxed mb-8">
-                Sự kết hợp hoàn hảo giữa thiên nhiên và khoa học liễu da. Các công thức độc quyền được kiểm nghiệm lâm sàng giúp phục hồi hàng rào bảo vệ, cấp ẩm sâu và chống lại các dấu hiệu lão hóa hiệu quả.
+                Thời tiết Việt Nam rất dễ khiến da đổ dầu, bít tắc chân lông và lên mụn. Tụi mình chọn lọc những dòng kem dưỡng, sữa rửa mặt có kết cấu mỏng nhẹ, thấm nhanh, không bết rít để da luôn thông thoáng suốt ngày dài.
               </p>
               <div className="border-l-4 border-rose-400 bg-rose-50/60 pl-6 py-3.5 pr-4 rounded-r-2xl italic text-neutral-800 text-sm sm:text-base font-medium">
-                "Lắng nghe làn da để mang lại giải pháp chăm sóc cá nhân hóa, giúp bạn tự tin tỏa sáng với vẻ đẹp độc bản của chính mình."
+                "Mỗi làn da là một câu chuyện riêng. Đừng ngại nhắn cho tụi mình nếu bạn chưa biết bắt đầu từ đâu, tụi mình luôn sẵn sàng lắng nghe."
               </div>
             </div>
           </div>

@@ -24,10 +24,10 @@ export default function AboutStory() {
             </h2>
             <div className="w-16 h-1 bg-gray-900 mb-6"></div>
             <p className="text-gray-600 leading-loose mb-5 text-lg italic">
-              Khởi nguồn từ niềm đam mê nâng niu làn da Việt giữa thị trường mỹ phẩm phong phú nhưng cũng nhiều âu lo, HOÀNG BẢO COSMETICS ra đời không chỉ là một thương hiệu dược mỹ phẩm, mà là tiếng nói của sự an tâm và minh bạch. Chúng tôi chọn sự tối giản làm ngôn ngữ, chọn chất lượng chuẩn y khoa làm nền tảng để tôn vinh vẻ đẹp nguyên bản.
+              Hoàng Bảo Cosmetics ra đời từ chính trải nghiệm thực tế: tụi mình từng là những người trẻ loay hoay vì mụn, từng hoang mang giữa một thị trường mỹ phẩm vàng thau lẫn lộn và nhiều lần thất vọng vì mua nhầm hàng xách tay kém chất lượng. Tụi mình hiểu cảm giác tự ti mỗi khi soi gương và nỗi bất an khi đặt niềm tin sai chỗ.
             </p>
             <p className="text-gray-600 leading-loose text-lg italic">
-              Dược mỹ phẩm với chúng tôi không phải là những phép màu cấp tốc gây bào mòn, mà là sự tinh tế trong từng đường nét chăm sóc, sự chăm chút trong từng hoạt chất lành tính, để mỗi cá nhân khi đồng hành cùng Hoàng Bảo đều cảm nhận được sự tự do và bản lĩnh.
+              Bởi vậy, Hoàng Bảo chọn một con đường giản dị nhưng kiên định: Chỉ bán hàng chính hãng có tem phụ, có hóa đơn rõ ràng. Tụi mình không bao giờ cổ xúy cho những lời quảng cáo "trắng cấp tốc, hết mụn sau 3 ngày" bào mòn da, mà kiên trì mang đến những giải pháp dưỡng da lành tính, khoa học và bền vững.
             </p>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default function AboutStory() {
             </h2>
             <div className="w-16 h-1 bg-gray-900 mb-6"></div>
             <p className="text-gray-600 leading-loose mb-5 text-lg italic">
-              Mang âm hưởng của phong cách chăm sóc da hiện đại và khoa học, HOÀNG BẢO COSMETICS hướng đến sự sang trọng ngầm (quiet luxury) trong dược mỹ phẩm. Sự phối hợp giữa các hoạt chất vàng da liễu và chiết xuất tự nhiên lành tính tạo nên một chu trình routine không bao giờ lỗi mốt, lành tính và đầy khí chất.
+              Chúng mình không định vị là một cửa hàng xa xỉ khó với, mà muốn trở thành "trạm dừng chân an tâm" của mọi cô gái, chàng trai yêu cái đẹp. Dù bạn là bạn học sinh tiết kiệm từng bữa ăn sáng để mua cây son dưỡng hay là người đi làm cần tìm bộ treatment phục hồi chuyên sâu, bạn đều được phục vụ bằng tất cả sự chân thành.
             </p>
             <p className="text-gray-600 leading-loose text-lg italic">
               Hành trình của chúng tôi là định hình lại chuẩn mực chăm sóc da của người Việt &mdash; nơi sự tối giản gặp gỡ hiệu quả y khoa, nơi mỗi sản phẩm là một tác phẩm nguyên bản.

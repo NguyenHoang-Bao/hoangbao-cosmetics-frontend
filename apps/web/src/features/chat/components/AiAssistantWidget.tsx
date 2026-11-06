@@ -128,7 +128,7 @@ export const AiAssistantWidget: React.FC = () => {
           <button
             type="button"
             onClick={handleToggle}
-            aria-label="Mở trợ lý tư vấn da liễu và sản phẩm shop"
+            aria-label="Nhắn tin tư vấn cùng chuyên viên Hoàng Bảo"
             className="w-13 h-13 rounded-full bg-[#0F1E36] hover:bg-[#162B4D] text-white flex items-center justify-center shadow-2xl border border-white/20 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
           >
             {isOpen ? (
@@ -144,7 +144,7 @@ export const AiAssistantWidget: React.FC = () => {
           {/* Tooltip khi hover (chỉ khi đang đóng) */}
           {!isOpen && (
             <div className="absolute bottom-full right-0 mb-2.5 px-3 py-1.5 rounded-xl bg-[#0F1E36] text-white text-[11px] font-medium whitespace-nowrap shadow-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              Tư vấn da & tìm sản phẩm shop
+              Chưa biết chọn món nào? Nhắn tụi mình tư vấn nha!
               <span className="absolute top-full right-5 -mt-1 border-4 border-transparent border-t-[#0F1E36]"></span>
             </div>
           )}
