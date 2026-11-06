@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
-import type { Product, ProductReviewSummary } from "@hoangbao/types";
+import type { Product, ProductReviewSummary, Review } from "@hoangbao/types";
 import { parseProductArrayData } from "@/lib/utils";
 
 interface ProductTabsProps {
@@ -29,9 +30,39 @@ export const ProductTabs: React.FC<ProductTabsProps> = ({
     }
   };
 
-  const totalReviews = reviewsSummary?.totalReviews ?? 0;
-  const averageRating = reviewsSummary?.averageRating;
-  const reviewsList = reviewsSummary?.reviews?.content ?? [];
+  // Hợp nhất đánh giá từ API và đánh giá vừa viết lưu trong local storage
+  const reviewsList = useMemo(() => {
+    let localList: Review[] = [];
+    try {
+      const stored = localStorage.getItem('hb_local_product_reviews');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          const currentProdId = product.idProduct ?? (product as any).id;
+          localList = parsed.filter(
+            (r) => r.idProduct === currentProdId
+          );
+        }
+      }
+    } catch {}
+
+    const apiList = reviewsSummary?.reviews?.content ?? [];
+    const seenIds = new Set<number>();
+    const combined: Review[] = [];
+    for (const r of [...localList, ...apiList]) {
+      if (r.idReview && !seenIds.has(r.idReview)) {
+        seenIds.add(r.idReview);
+        combined.push(r);
+      }
+    }
+    return combined;
+  }, [reviewsSummary?.reviews?.content, product]);
+
+  const totalReviews = reviewsList.length || (reviewsSummary?.totalReviews ?? 0);
+  const averageRating =
+    reviewsList.length > 0
+      ? reviewsList.reduce((sum, r) => sum + (r.ratingPoint || 5), 0) / reviewsList.length
+      : (reviewsSummary?.averageRating ?? 5.0);
 
   const tabClass = (tab: typeof currentTab) =>
     `px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm tracking-wide transition-all border-b-2 cursor-pointer ${
@@ -339,6 +370,19 @@ export const ProductTabs: React.FC<ProductTabsProps> = ({
         {/* TAB 4: ĐÁNH GIÁ THỰC TẾ TỪ KHÁCH HÀNG */}
         {currentTab === "reviews" && (
           <div className="space-y-6">
+            {/* Banner kêu gọi khách mua hàng đánh giá tích điểm */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-rose-50/60 rounded-2xl border border-rose-100 text-xs">
+              <div>
+                <p className="font-bold text-rose-900">Bạn đã mua sản phẩm này tại Hoàng Bảo Cosmetics?</p>
+                <p className="text-neutral-600 mt-0.5">Đánh giá từ mục Đơn mua để xác thực nhận xét và nhận ưu đãi tích điểm!</p>
+              </div>
+              <Link
+                to="/my-orders"
+                className="inline-flex items-center justify-center px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs shrink-0"
+              >
+                Viết đánh giá từ đơn mua →
+              </Link>
+            </div>
             {totalReviews > 0 ? (
               <div>
                 {/* Tổng quan rating */}

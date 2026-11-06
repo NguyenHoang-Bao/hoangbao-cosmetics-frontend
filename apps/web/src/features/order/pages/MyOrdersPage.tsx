@@ -17,10 +17,12 @@ import {
   ShoppingBag,
   X,
   XCircle,
+  Star,
 } from 'lucide-react';
-import type { PageResponse } from '@hoangbao/types';
-import { orderApi, type OrderResponse, type OrderStatus } from '../../checkout/api/orderApi';
+import type { PageResponse, Review } from '@hoangbao/types';
+import { orderApi, type OrderResponse, type OrderStatus, type OrderItemDetail } from '../../checkout/api/orderApi';
 import { formatCurrency, getProductImageUrl } from '@/lib/utils';
+import { ReviewModal } from '../components/ReviewModal';
 
 type FilterTab = 'ALL' | OrderStatus;
 
@@ -59,9 +61,42 @@ export const MyOrdersPage: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [localCancelledCodes, setLocalCancelledCodes] = useState<string[]>([]);
 
+  // State cho Modal đánh giá sản phẩm đã mua
+  const [reviewingItem, setReviewingItem] = useState<OrderItemDetail | null>(null);
+  const [reviewingOrderCode, setReviewingOrderCode] = useState<string>('');
+  const [reviewedItemIds, setReviewedItemIds] = useState<number[]>([]);
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleOpenReviewModal = (item: OrderItemDetail, orderCode: string) => {
+    setReviewingItem(item);
+    setReviewingOrderCode(orderCode);
+  };
+
+  const handleCloseReviewModal = () => {
+    setReviewingItem(null);
+    setReviewingOrderCode('');
+  };
+
+  const handleSubmitReviewSuccess = (detailId: number, review: Review) => {
+    setReviewedItemIds((prev) => [...prev, detailId]);
+    showToast(`Đã gửi đánh giá cho "${reviewingItem?.productName || 'sản phẩm'}" thành công!`);
+
+    // Lưu vào localStorage để trang chi tiết sản phẩm lập tức cập nhật nhận xét
+    try {
+      const stored = localStorage.getItem('hb_local_product_reviews');
+      const list = stored ? JSON.parse(stored) : [];
+      list.unshift(review);
+      localStorage.setItem('hb_local_product_reviews', JSON.stringify(list));
+    } catch {}
+
+    queryClient.invalidateQueries({ queryKey: ['myOrders'] });
+    if (reviewingItem?.idProduct) {
+      queryClient.invalidateQueries({ queryKey: ['productReviews', reviewingItem.idProduct] });
+    }
   };
 
   // Lấy danh sách đơn hàng của người dùng hiện tại
@@ -457,16 +492,38 @@ export const MyOrdersPage: React.FC = () => {
                           </p>
                         </div>
 
-                        {/* Đơn giá & Thành tiền */}
-                        <div className="text-right shrink-0">
-                          <p className="text-xs sm:text-sm font-bold text-rose-600 font-mono">
-                            {formatCurrency(
-                              item.subTotal ?? item.price * item.quantity
-                            )}
-                          </p>
-                          <p className="text-[11px] text-neutral-400 mt-0.5">
-                            {formatCurrency(item.price)}
-                          </p>
+                        {/* Đơn giá & Thành tiền + Nút Đánh giá nếu đơn DELIVERED */}
+                        <div className="text-right shrink-0 flex flex-col items-end justify-between self-stretch">
+                          <div>
+                            <p className="text-xs sm:text-sm font-bold text-rose-600 font-mono">
+                              {formatCurrency(
+                                item.subTotal ?? item.price * item.quantity
+                              )}
+                            </p>
+                            <p className="text-[11px] text-neutral-400 mt-0.5">
+                              {formatCurrency(item.price)}
+                            </p>
+                          </div>
+
+                          {/* Nút đánh giá khi đơn đã giao thành công */}
+                          {order.status?.toUpperCase() === 'DELIVERED' && (
+                            <div className="mt-2">
+                              {item.isReviewed || (item.idOrderDetail && reviewedItemIds.includes(item.idOrderDetail)) ? (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                  ✓ Đã đánh giá
+                                </span>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenReviewModal(item, order.orderCode)}
+                                  className="inline-flex items-center gap-1 px-3 py-1 bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 text-xs font-semibold rounded-lg border border-rose-300 hover:border-rose-400 transition-colors shadow-2xs cursor-pointer"
+                                >
+                                  <Star size={12} className="fill-rose-500 text-rose-500" />
+                                  <span>Đánh giá</span>
+                                </button>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -693,6 +750,15 @@ export const MyOrdersPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Modal Viết Đánh Giá Sản Phẩm */}
+      <ReviewModal
+        isOpen={Boolean(reviewingItem)}
+        onClose={handleCloseReviewModal}
+        item={reviewingItem}
+        orderCode={reviewingOrderCode}
+        onSubmitSuccess={handleSubmitReviewSuccess}
+      />
     </div>
   );
 };

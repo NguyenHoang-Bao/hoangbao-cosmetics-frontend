@@ -9,6 +9,8 @@ import type {
   Brand,
   ProductFilterParams,
   ProductReviewSummary,
+  Review,
+  CreateReviewPayload,
 } from '@hoangbao/types';
 
 export const productApi = {
@@ -90,6 +92,15 @@ export const productApi = {
     ): Promise<ProductReviewSummary> => {
         const response = await apiClient.get<any, ApiResponse<ProductReviewSummary>>(
             `/reviews/products/${productId}?page=${page}&size=${size}`
+        );
+        return response.data;
+    },
+
+    // Gui danh gia san pham tu don hang da giao thanh cong
+    createReview: async (payload: CreateReviewPayload): Promise<Review> => {
+        const response = await apiClient.post<any, ApiResponse<Review>>(
+            '/reviews',
+            payload
         );
         return response.data;
     },

@@ -19,6 +19,7 @@ export interface CreateOrderPayload {
 export interface OrderItemDetail {
   idOrderDetail?: number;
   idVariant: number;
+  idProduct?: number;
   productName: string;
   sku?: string;
   capacity?: string;
