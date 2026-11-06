@@ -123,7 +123,7 @@ export const AiAssistantWidget: React.FC = () => {
   return (
     <>
       {/* ── 1. NÚT KÍCH HOẠT DẠNG TRÒN TỐI GIẢN (OPTION 1 - XANH NAVY SANG TRỌNG) ── */}
-      <div className="fixed bottom-6 right-6 z-50 select-none">
+      <div className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 select-none">
         <div className="relative group">
           <button
             type="button"
@@ -161,7 +161,7 @@ export const AiAssistantWidget: React.FC = () => {
 
       {/* ── 2. HỘP THOẠI CHAT (DEEP NAVY LUXURY) ── */}
       {isOpen && (
-        <div className="fixed bottom-22 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[410px] h-[530px] sm:h-[580px] bg-white rounded-2xl border border-neutral-200 shadow-2xl flex flex-col overflow-hidden animate-in fade-in duration-200">
+        <div className="fixed bottom-24 md:bottom-22 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[410px] h-[530px] sm:h-[580px] bg-white rounded-2xl border border-neutral-200 shadow-2xl flex flex-col overflow-hidden animate-in fade-in duration-200">
           
           {/* Header Khung Chat: Xanh Navy Quý Phái */}
           <div className="bg-[#0F1E36] text-white px-4 sm:px-5 py-3.5 flex items-center justify-between border-b border-white/10 shrink-0">
