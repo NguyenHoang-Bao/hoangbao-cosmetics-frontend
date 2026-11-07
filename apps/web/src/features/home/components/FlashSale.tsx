@@ -33,7 +33,7 @@ export const FlashSale: React.FC = () => {
 
   // 3. Đồng hồ đếm ngược đồng bộ từ Server (Server-Authoritative Countdown)
   const [remainingSeconds, setRemainingSeconds] = useState<number>(() => {
-    return flashSale?.remainingSeconds ?? 172800; // Mặc định 48h nếu chưa có dữ liệu
+    return (hasFlashSaleItems && typeof flashSale?.remainingSeconds === "number") ? flashSale.remainingSeconds : 0;
   });
 
   useEffect(() => {
@@ -92,6 +92,11 @@ export const FlashSale: React.FC = () => {
 
   const isLoading = isLoadingSale || (!hasFlashSaleItems && isLoadingFallback);
   const fallbackList = fallbackProductsData?.content || [];
+
+  // Nếu hệ thống chưa kích hoạt đợt Flash Sale nào, ẩn hoàn toàn section trên trang chủ
+  if (!isLoadingSale && !hasFlashSaleItems) {
+    return null;
+  }
 
   return (
     <section id="section-flash-sale" className="py-10">

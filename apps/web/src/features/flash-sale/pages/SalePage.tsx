@@ -109,7 +109,7 @@ export const SalePage: React.FC = () => {
 
   // 3. Đồng hồ đếm ngược đồng bộ từ Server (Server-Authoritative Countdown)
   const [remainingSeconds, setRemainingSeconds] = useState<number>(() => {
-    return flashSale?.remainingSeconds ?? 259200; // Mặc định 72 giờ
+    return (hasFlashSaleItems && typeof flashSale?.remainingSeconds === "number") ? flashSale.remainingSeconds : 0;
   });
 
   useEffect(() => {
@@ -282,7 +282,8 @@ export const SalePage: React.FC = () => {
 
   return (
     <main className="bg-rose-50/40 text-neutral-800 min-h-screen relative selection:bg-rose-500 selection:text-white font-sans">
-      {/* ── 1. STICKY COUNTDOWN BAR (Bám sát dưới Header khi cuộn trang) ── */}
+      {/* ── 1. STICKY COUNTDOWN BAR (Chỉ hiển thị khi CÓ ĐỢT SALE THẬT ĐANG DIỄN RA) ── */}
+      {hasFlashSaleItems && Number(remainingSeconds) > 0 && (
       <aside
         aria-label="Thanh đếm ngược sự kiện khuyến mãi"
         className="sticky top-[58px] sm:top-[68px] lg:top-[74px] z-40 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 text-white shadow-md py-2 px-3 sm:px-6 backdrop-blur-md border-b border-rose-300/40"
@@ -330,6 +331,7 @@ export const SalePage: React.FC = () => {
           </div>
         </div>
       </aside>
+      )}
 
       {/* ── 2. HERO BANNER SANG TRỌNG CÓ VIDEO NỀN ── */}
       <section className="relative min-h-[68vh] md:min-h-[78vh] flex items-center justify-center overflow-hidden">
@@ -359,20 +361,41 @@ export const SalePage: React.FC = () => {
             className="justify-center text-pink-100 mb-6 drop-shadow-md"
           />
 
-          <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-rose-500/30 border border-rose-300/50 text-white text-xs sm:text-sm font-bold uppercase tracking-[2px] sm:tracking-[3px] mb-5 backdrop-blur-md animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.5)]">
-            ✨ SIÊU ĐẠI HỘI LÀM ĐẸP CHÍNH HÃNG 2026
-          </div>
+{hasFlashSaleItems ? (
+            <>
+              <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-rose-500/30 border border-rose-300/50 text-white text-xs sm:text-sm font-bold uppercase tracking-[2px] sm:tracking-[3px] mb-5 backdrop-blur-md animate-pulse shadow-[0_0_15px_rgba(244,63,94,0.5)]">
+                ✨ SIÊU ĐẠI HỘI LÀM ĐẸP CHÍNH HÃNG
+              </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white leading-none mb-4 drop-shadow-[0_4px_15px_rgba(190,24,93,0.7)]">
-            MEGA BEAUTY <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-pink-300 via-white to-pink-200 bg-clip-text text-transparent drop-shadow-lg">
-              SALE UP TO 70%
-            </span>
-          </h1>
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white leading-none mb-4 drop-shadow-[0_4px_15px_rgba(190,24,93,0.7)]">
+                MEGA BEAUTY <br className="hidden sm:inline" />
+                <span className="bg-gradient-to-r from-pink-300 via-white to-pink-200 bg-clip-text text-transparent drop-shadow-lg">
+                  SALE UP TO 70%
+                </span>
+              </h1>
 
-          <p className="text-sm sm:text-lg md:text-xl text-rose-50 max-w-2xl mx-auto font-medium leading-relaxed mb-8 sm:mb-10 text-balance drop-shadow-md">
-            Cơn lốc giảm giá nghìn deal sốc cho toàn bộ mỹ phẩm chính hãng, serum chuyên sâu và các dòng dưỡng ẩm phục hồi độc quyền. Đừng bỏ lỡ!
-          </p>
+              <p className="text-sm sm:text-lg md:text-xl text-rose-50 max-w-2xl mx-auto font-medium leading-relaxed mb-8 sm:mb-10 text-balance drop-shadow-md">
+                Cơn lốc giảm giá nghìn deal sốc cho toàn bộ mỹ phẩm chính hãng, serum chuyên sâu và các dòng dưỡng ẩm phục hồi độc quyền. Đừng bỏ lỡ!
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-rose-500/30 border border-rose-300/50 text-white text-xs sm:text-sm font-bold uppercase tracking-[2px] mb-5 backdrop-blur-md">
+                ✨ ĐẠI TIỆC MỸ PHẨM CHÍNH HÃNG
+              </div>
+
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-white leading-tight mb-4 drop-shadow-[0_4px_15px_rgba(190,24,93,0.7)]">
+                CHƯA CÓ ĐỢT FLASH SALE <br className="hidden sm:inline" />
+                <span className="bg-gradient-to-r from-pink-300 via-white to-pink-200 bg-clip-text text-transparent drop-shadow-lg">
+                  ĐANG DIỄN RA
+                </span>
+              </h1>
+
+              <p className="text-sm sm:text-base md:text-lg text-rose-50 max-w-2xl mx-auto font-medium leading-relaxed mb-8 text-balance drop-shadow-md">
+                Các đợt giảm giá chớp nhoáng với deal sốc sẽ được mở vào các khung giờ vàng đặc biệt. Bạn có thể tham khảo các dòng mỹ phẩm chính hãng giá tốt dưới đây nhé!
+              </p>
+            </>
+          )}
 
           {/* Nút hành động nổi bật */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
