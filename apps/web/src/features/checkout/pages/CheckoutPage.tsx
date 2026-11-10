@@ -18,12 +18,15 @@ import { clearCart } from "@/features/cart/store/cartSlice";
 import { formatCurrency, getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { orderApi, type CreateOrderPayload } from "../api/orderApi";
+import { couponApi } from "../api/couponApi";
+import type { Coupon } from "@hoangbao/types";
 import { addressService } from "@/features/profile";
 
-const AVAILABLE_VOUCHERS = [
-  { code: "MEGA30K", discount: 30000, minOrder: 299000, desc: "Giảm 30K cho đơn từ 299K" },
-  { code: "BEAUTY50K", discount: 50000, minOrder: 499000, desc: "Giảm 50K cho đơn từ 499K" },
-  { code: "FREESHIP", discountType: "shipping", minOrder: 199000, desc: "Miễn phí vận chuyển từ 199K" },
+const DEFAULT_COUPONS: Array<{ code: string; discount: number; minOrder: number; desc: string }> = [
+  { code: "WELCOME10", discount: 50000, minOrder: 200000, desc: "Giảm 10% tối đa 50K cho khách mới" },
+  { code: "FREESHIP", discount: 30000, minOrder: 300000, desc: "Miễn phí vận chuyển 30K từ 300K" },
+  { code: "HBCOSMETICS50K", discount: 50000, minOrder: 500000, desc: "Giảm 50K cho đơn từ 500K" },
+  { code: "VIPBEAUTY20", discount: 200000, minOrder: 1000000, desc: "Ưu đãi VIP giảm 20% cho đơn từ 1 triệu" },
 ];
 
 export const CheckoutPage: React.FC = () => {
@@ -48,6 +51,17 @@ export const CheckoutPage: React.FC = () => {
 
   // Voucher
   const [voucherCode, setVoucherCode] = useState("");
+  const [availableCoupons, setAvailableCoupons] = useState<Coupon[]>([]);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    couponApi.getActiveCoupons().then((list) => {
+      if (isMounted && Array.isArray(list) && list.length > 0) {
+        setAvailableCoupons(list);
+      }
+    });
+    return () => { isMounted = false; };
+  }, []);
   const [appliedVoucher, setAppliedVoucher] = useState<{
     code: string;
     discount: number;
@@ -103,29 +117,29 @@ export const CheckoutPage: React.FC = () => {
   const finalTotal = Math.max(0, subtotal + finalShippingFee - voucherDiscount);
 
   // Xử lý áp dụng voucher
-  const handleApplyVoucher = (codeToApply?: string) => {
+  const handleApplyVoucher = async (codeToApply?: string) => {
     const code = (codeToApply || voucherCode).trim().toUpperCase();
+    if (!code) {
+      setVoucherError("Vui lòng nhập mã giảm giá");
+      return;
+    }
     setVoucherError("");
 
-    const found = AVAILABLE_VOUCHERS.find((v) => v.code === code);
-    if (!found) {
-      setVoucherError("Mã giảm giá không hợp lệ hoặc đã hết hạn.");
-      return;
+    try {
+      const res = await couponApi.applyCoupon({
+        code,
+        orderAmount: subtotal,
+      });
+      setAppliedVoucher({
+        code: res.code,
+        discount: res.discountAmount,
+      });
+      setVoucherCode(res.code);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Mã giảm giá không hợp lệ hoặc không đủ điều kiện áp dụng.";
+      setVoucherError(msg);
+      setAppliedVoucher(null);
     }
-
-    if (subtotal < found.minOrder) {
-      setVoucherError(
-        `Đơn hàng chưa đạt mức tối thiểu ${formatCurrency(found.minOrder)} để dùng mã này.`,
-      );
-      return;
-    }
-
-    if (found.discountType === "shipping") {
-      setAppliedVoucher({ code: found.code, discount: rawShippingFee });
-    } else {
-      setAppliedVoucher({ code: found.code, discount: found.discount || 0 });
-    }
-    setVoucherCode(code);
   };
 
   // Xử lý đặt hàng
@@ -166,6 +180,7 @@ export const CheckoutPage: React.FC = () => {
         deliveryAddress: fullDeliveryAddress,
         paymentMethod: paymentMethod,
         note: note.trim() || undefined,
+        couponCode: appliedVoucher ? appliedVoucher.code : undefined,
         items: items.map((item) => ({
           idVariant: item.variantId!,
           quantity: item.quantity,
@@ -608,12 +623,19 @@ export const CheckoutPage: React.FC = () => {
 
                 {/* Gợi ý mã có sẵn */}
                 <div className="flex flex-wrap gap-1.5 mt-2.5">
-                  {AVAILABLE_VOUCHERS.map((v) => (
+                  {(availableCoupons.length > 0
+                    ? availableCoupons.map((c) => ({
+                        code: c.code,
+                        desc: c.description || `Mã ${c.code}`,
+                        minOrder: Number(c.minOrderAmount || 0)
+                      }))
+                    : DEFAULT_COUPONS
+                  ).map((v) => (
                     <button
                       key={v.code}
                       type="button"
                       onClick={() => handleApplyVoucher(v.code)}
-                      className="px-2.5 py-1 text-[10px] font-semibold rounded-md border border-dashed border-rose-300 bg-rose-50 text-rose-700 hover:bg-rose-100 transition-colors"
+                      className="px-2.5 py-1 text-[10px] font-semibold rounded-md border border-dashed border-rose-300 bg-rose-50 text-rose-700 hover:bg-rose-100 transition-colors cursor-pointer"
                       title={v.desc}
                     >
                       {v.code}

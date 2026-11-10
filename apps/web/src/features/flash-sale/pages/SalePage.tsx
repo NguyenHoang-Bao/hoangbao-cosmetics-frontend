@@ -20,6 +20,7 @@ import {
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import heroVideo from "@/assets/video/bannerSale.mp4";
 import { flashSaleApi } from "../api/flashSaleApi";
+import { couponApi } from "@/features/checkout/api/couponApi";
 import { productApi } from "@/features/product/api/productApi";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart, openCart } from "@/features/cart/store/cartSlice";
@@ -89,6 +90,12 @@ export const SalePage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   // 1. Lấy dữ liệu chiến dịch Flash Sale đang diễn ra từ Backend API
+  const { data: activeCoupons = [] } = useQuery({
+    queryKey: ["active-coupons-sale-page"],
+    queryFn: couponApi.getActiveCoupons,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const { data: flashSale, isLoading: isLoadingSale } = useQuery({
     queryKey: ["active-flash-sale-page"],
     queryFn: flashSaleApi.getActiveFlashSale,
@@ -458,7 +465,18 @@ export const SalePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {VOUCHERS.map((voucher) => (
+            {(activeCoupons.length > 0
+              ? activeCoupons.map((c, idx) => ({
+                  code: c.code,
+                  discount: c.discountType === 'PERCENTAGE' ? ("Giảm " + c.discountValue + "%") : ("Giảm " + (Number(c.discountValue)/1000).toFixed(0) + "K"),
+                  minOrder: c.minOrderAmount && Number(c.minOrderAmount) > 0 ? ("Đơn từ " + (Number(c.minOrderAmount)/1000).toFixed(0) + "K") : 'Mọi đơn hàng',
+                  desc: c.description || 'Áp dụng khi thanh toán',
+                  tag: idx === 0 ? 'BÁN CHẠY' : 'ƯU ĐÃI',
+                  tagColor: idx === 0 ? 'bg-rose-400 text-white' : 'bg-pink-500 text-white',
+                  expires: 'Đang áp dụng'
+                }))
+              : VOUCHERS
+            ).map((voucher) => (
               <div
                 key={voucher.code}
                 className="relative bg-gradient-to-br from-white to-rose-50/50 rounded-2xl p-5 border-2 border-rose-100 hover:border-rose-300 shadow-sm hover:shadow-[0_8px_30px_rgba(244,63,94,0.12)] transition-all duration-300 group flex flex-col justify-between overflow-hidden"
