@@ -12,9 +12,21 @@ import type {
   Review,
   CreateReviewPayload,
 } from '@hoangbao/types';
-import localProductsRaw from '@/data/products.json';
-import localCategoriesRaw from '@/data/categories.json';
-import localBrandsRaw from '@/data/brands.json';
+// Lazy Dynamic Loader cho dữ liệu dự phòng (chỉ tải khi server backend gặp sự cố)
+async function getLocalProducts(): Promise<any[]> {
+  const mod = await import('@/data/products.json');
+  return mod.default || mod;
+}
+
+async function getLocalCategories(): Promise<any[]> {
+  const mod = await import('@/data/categories.json');
+  return mod.default || mod;
+}
+
+async function getLocalBrands(): Promise<any[]> {
+  const mod = await import('@/data/brands.json');
+  return mod.default || mod;
+}
 
 // Helper Mapper dữ liệu cục bộ sang đúng Type chuẩn của hệ thống
 function mapLocalToProduct(p: any): Product {
@@ -121,6 +133,7 @@ export const productApi = {
       console.warn('[productApi.getProducts] Fallback sang kho dữ liệu sản phẩm dự phòng:', err);
 
       // CƠ CHẾ CỨU HỘ FALLBACK: Lọc từ 126 sản phẩm chuẩn có sẵn
+      const localProductsRaw = await getLocalProducts();
       let list = (localProductsRaw as any[]).map(mapLocalToProduct);
 
       // 1. Tìm kiếm theo từ khóa
@@ -197,6 +210,7 @@ export const productApi = {
       throw new Error('Invalid product detail format');
     } catch (err) {
       console.warn(`[productApi.getProductById] Fallback sản phẩm #${id} sang local:`, err);
+      const localProductsRaw = await getLocalProducts();
       const matched = (localProductsRaw as any[]).find((p) => Number(p.idProduct || p.id) === Number(id));
       if (matched) {
         return mapLocalToProduct(matched);
@@ -216,6 +230,7 @@ export const productApi = {
       throw new Error('Categories empty');
     } catch (err) {
       console.warn('[productApi.getCategories] Fallback danh mục sang local:', err);
+      const localCategoriesRaw = await getLocalCategories();
       return (localCategoriesRaw as any[]).map(mapLocalToCategory);
     }
   },
@@ -235,6 +250,7 @@ export const productApi = {
       throw new Error('Brands empty');
     } catch (err) {
       console.warn('[productApi.getBrands] Fallback thương hiệu sang local:', err);
+      const localBrandsRaw = await getLocalBrands();
       return (localBrandsRaw as any[]).map(mapLocalToBrand);
     }
   },

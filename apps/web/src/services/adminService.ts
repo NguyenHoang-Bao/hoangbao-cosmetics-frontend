@@ -1,7 +1,5 @@
 import { apiClient } from '@hoangbao/api-client';
 import type { ApiResponse, PageResponse } from '@hoangbao/types';
-import initialProducts from '../data/products.json';
-import initialCategories from '../data/categories.json';
 
 export interface ProductItem {
   id: number | string;
@@ -34,6 +32,39 @@ export interface CategoryItem {
   description: string;
   banner: string;
   featured: boolean;
+}
+
+
+export interface DashboardRevenueChart {
+  period: string;
+  revenue: number;
+  orderCount: number;
+}
+
+export interface DashboardOrderStatusDistribution {
+  status: string;
+  orderCount: number;
+  percentage: number;
+}
+
+export interface DashboardTopSellingProduct {
+  idProduct: number;
+  productName: string;
+  thumbnail: string;
+  categoryName?: string;
+  totalQuantitySold: number;
+  totalRevenue: number;
+}
+
+export interface DashboardLowStockProduct {
+  idVariant?: number;
+  idProduct: number;
+  sku: string;
+  capacity?: string;
+  productName: string;
+  thumbnail?: string;
+  stockQuantity: number;
+  price?: number;
 }
 
 export interface DashboardOverviewData {
@@ -171,27 +202,29 @@ function mapBackendUserToAdminStaffUser(item: any): AdminStaffUser {
 const STORAGE_PRODUCTS_KEY = 'hb_admin_products';
 const STORAGE_CATEGORIES_KEY = 'hb_admin_categories';
 
-// Khởi tạo dữ liệu mẫu nếu chưa có trong LocalStorage làm fallback an toàn
-function getFallbackProducts(): ProductItem[] {
+// Lazy Dynamic Fallback: Chỉ tải dữ liệu mẫu khi hệ thống gặp sự cố
+async function getFallbackProducts(): Promise<ProductItem[]> {
   try {
     const raw = localStorage.getItem(STORAGE_PRODUCTS_KEY);
     if (raw) return JSON.parse(raw);
   } catch (err) {
     console.error('Error loading products from storage', err);
   }
-  const products = initialProducts as unknown as ProductItem[];
+  const mod = await import('../data/products.json');
+  const products = (mod.default || mod) as unknown as ProductItem[];
   localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
   return products;
 }
 
-function getFallbackCategories(): CategoryItem[] {
+async function getFallbackCategories(): Promise<CategoryItem[]> {
   try {
     const raw = localStorage.getItem(STORAGE_CATEGORIES_KEY);
     if (raw) return JSON.parse(raw);
   } catch (err) {
     console.error('Error loading categories from storage', err);
   }
-  const categories = initialCategories as unknown as CategoryItem[];
+  const mod = await import('../data/categories.json');
+  const categories = (mod.default || mod) as unknown as CategoryItem[];
   localStorage.setItem(STORAGE_CATEGORIES_KEY, JSON.stringify(categories));
   return categories;
 }
@@ -338,7 +371,7 @@ export const adminService = {
     } catch (err) {
       console.warn('[adminService.getProducts] Không thể kết nối API Backend, sử dụng kho dự phòng:', err);
     }
-    return getFallbackProducts();
+    return await getFallbackProducts();
   },
 
   // Thêm mới sản phẩm lên Backend
@@ -381,7 +414,7 @@ export const adminService = {
     }
 
     // Fallback nếu API lỗi
-    const products = getFallbackProducts();
+    const products = await getFallbackProducts();
     const newProduct: ProductItem = {
       ...productData,
       id: Date.now(),
@@ -437,7 +470,7 @@ export const adminService = {
     }
 
     // Fallback
-    const products = getFallbackProducts();
+    const products = await getFallbackProducts();
     const index = products.findIndex((p) => String(p.id) === String(id));
     if (index === -1) return null;
 
@@ -461,7 +494,7 @@ export const adminService = {
       console.warn('[adminService.deleteProduct] API thất bại, xóa trên LocalStorage:', err);
     }
 
-    const products = getFallbackProducts();
+    const products = await getFallbackProducts();
     const filtered = products.filter((p) => String(p.id) !== String(id));
     localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(filtered));
     return true;
@@ -479,7 +512,7 @@ export const adminService = {
     } catch (err) {
       console.warn('[adminService.getCategories] Không thể kết nối API Backend, sử dụng kho dự phòng:', err);
     }
-    return getFallbackCategories();
+    return await getFallbackCategories();
   },
 
   // Thêm mới danh mục lên Backend
@@ -498,7 +531,7 @@ export const adminService = {
       console.warn('[adminService.createCategory] API thất bại, lưu tạm vào LocalStorage:', err);
     }
 
-    const categories = getFallbackCategories();
+    const categories = await getFallbackCategories();
     const newCategory: CategoryItem = {
       ...categoryData,
       id: Date.now()
@@ -527,7 +560,7 @@ export const adminService = {
       console.warn('[adminService.updateCategory] API thất bại, lưu tạm vào LocalStorage:', err);
     }
 
-    const categories = getFallbackCategories();
+    const categories = await getFallbackCategories();
     const index = categories.findIndex((c) => String(c.id) === String(id));
     if (index === -1) return null;
 
@@ -547,7 +580,7 @@ export const adminService = {
       console.warn('[adminService.deleteCategory] API thất bại, xóa trên LocalStorage:', err);
     }
 
-    const categories = getFallbackCategories();
+    const categories = await getFallbackCategories();
     const filtered = categories.filter((c) => String(c.id) !== String(id));
     localStorage.setItem(STORAGE_CATEGORIES_KEY, JSON.stringify(filtered));
     return true;
@@ -757,6 +790,66 @@ export const adminService = {
   // Xóa phản hồi
   async deleteFeedback(id: number): Promise<void> {
     await apiClient.delete<any, ApiResponse<void>>(`/feedbacks/admin/${id}`);
+  },
+
+    // Lấy doanh thu theo tháng (Dashboard)
+  async getMonthlyRevenue(year = 0): Promise<DashboardRevenueChart[]> {
+    try {
+      const response = await apiClient.get<any, ApiResponse<DashboardRevenueChart[]>>(
+        `/admin/dashboard/revenue/monthly?year=${year}`
+      );
+      if (response && Array.isArray(response.data)) {
+        return response.data;
+      }
+    } catch (err) {
+      console.warn('[adminService.getMonthlyRevenue] Lỗi tải doanh thu theo tháng:', err);
+    }
+    return [];
+  },
+
+  // Phân bổ trạng thái đơn hàng (Dashboard)
+  async getOrderStatusDistribution(): Promise<DashboardOrderStatusDistribution[]> {
+    try {
+      const response = await apiClient.get<any, ApiResponse<DashboardOrderStatusDistribution[]>>(
+        '/admin/dashboard/order-status'
+      );
+      if (response && Array.isArray(response.data)) {
+        return response.data;
+      }
+    } catch (err) {
+      console.warn('[adminService.getOrderStatusDistribution] Lỗi tải trạng thái đơn:', err);
+    }
+    return [];
+  },
+
+  // Top sản phẩm bán chạy nhất từ Database (Dashboard)
+  async getTopSellingProducts(limit = 5): Promise<DashboardTopSellingProduct[]> {
+    try {
+      const response = await apiClient.get<any, ApiResponse<DashboardTopSellingProduct[]>>(
+        `/admin/dashboard/top-selling?limit=${limit}`
+      );
+      if (response && Array.isArray(response.data)) {
+        return response.data;
+      }
+    } catch (err) {
+      console.warn('[adminService.getTopSellingProducts] Lỗi tải top sản phẩm:', err);
+    }
+    return [];
+  },
+
+  // Danh sách cảnh báo sản phẩm sắp hết hàng (Dashboard & Warehouse)
+  async getLowStockProducts(threshold = 10): Promise<DashboardLowStockProduct[]> {
+    try {
+      const response = await apiClient.get<any, ApiResponse<DashboardLowStockProduct[]>>(
+        `/admin/dashboard/low-stock?threshold=${threshold}`
+      );
+      if (response && Array.isArray(response.data)) {
+        return response.data;
+      }
+    } catch (err) {
+      console.warn('[adminService.getLowStockProducts] Lỗi tải cảnh báo tồn kho:', err);
+    }
+    return [];
   },
 
   createSlug(str: string): string {
