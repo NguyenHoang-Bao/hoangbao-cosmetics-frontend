@@ -13,6 +13,7 @@ export interface CreateOrderPayload {
   deliveryAddress: string;
   paymentMethod: "COD" | "BANK_TRANSFER" | "MOMO" | "VNPAY" | "VIETQR";
   note?: string;
+  couponCode?: string;
   items: CreateOrderItem[];
 }
 
@@ -42,6 +43,8 @@ export interface OrderResponse {
   deliveryAddress: string;
   orderType?: "ONLINE" | "POS";
   totalProductPrice: number;
+  discountAmount?: number;
+  couponCode?: string;
   shippingFee: number;
   totalAmount: number;
   paymentMethod: string;

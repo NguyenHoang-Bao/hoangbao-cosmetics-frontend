@@ -7,3 +7,4 @@ export * from "./review";
 export * from "./favorite";
 export * from "./flashsale";
 export * from "./user";
+export * from "./coupon";
