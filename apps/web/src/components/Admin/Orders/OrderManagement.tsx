@@ -11,6 +11,7 @@ import {
   Plus
 } from 'lucide-react';
 import CreateOrderModal from './CreateOrderModal';
+import { adminService } from '@/services/adminService';
 
 export interface OrderItemType {
   id: string | number;
@@ -23,6 +24,7 @@ export interface OrderItemType {
 
 export interface OrderType {
   id: string;
+  numericId?: number;
   date: string;
   source: 'AI_ONLINE' | 'POS_STORE' | 'ADMIN_MANUAL';
   channelName: string;
@@ -151,7 +153,25 @@ export default function OrderManagement() {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const loadOrders = () => {
+  // Đang tải dữ liệu
+  const [, setIsLoading] = useState(false);
+
+  const loadOrders = async () => {
+    setIsLoading(true);
+    try {
+      const serverOrders = await adminService.getAdminOrders();
+      if (Array.isArray(serverOrders) && serverOrders.length > 0) {
+        setOrders(serverOrders as unknown as OrderType[]);
+        localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(serverOrders));
+        setIsLoading(false);
+        return;
+      }
+    } catch (e) {
+      console.warn('Không thể kết nối API đơn hàng Admin, sử dụng bộ nhớ đệm:', e);
+    } finally {
+      setIsLoading(false);
+    }
+
     try {
       const stored = localStorage.getItem(STORAGE_ORDERS_KEY);
       if (stored) {
@@ -178,7 +198,15 @@ export default function OrderManagement() {
   };
 
   // Đối soát tiền COD bưu điện cho các đơn đã giao
-  const handleReconcileCOD = (orderId: string) => {
+  const handleReconcileCOD = async (orderId: string) => {
+    const targetOrder = orders.find((o) => o.id === orderId);
+    if (targetOrder?.numericId) {
+      try {
+        await adminService.updateOrderStatus(targetOrder.numericId, 'DELIVERED', 'Đã đối soát tiền COD');
+      } catch (err) {
+        console.warn('Lỗi gọi API cập nhật đơn hàng:', err);
+      }
+    }
     const updated = orders.map((o) =>
       o.id === orderId
         ? {
@@ -206,13 +234,22 @@ export default function OrderManagement() {
   };
 
   // Đối soát hàng loạt các đơn COD đã chọn
-  const handleBatchReconcileCOD = () => {
+  const handleBatchReconcileCOD = async () => {
     const eligibleOrders = orders.filter(
       (o) => selectedOrderIds.includes(o.id) && o.codStatus === 'pending_cod_transfer'
     );
     if (eligibleOrders.length === 0) {
       showToast('Các đơn được chọn không ở trạng thái chờ đối soát COD!');
       return;
+    }
+    for (const o of eligibleOrders) {
+      if (o.numericId) {
+        try {
+          await adminService.updateOrderStatus(o.numericId, 'DELIVERED', 'Đối soát COD hàng loạt');
+        } catch (err) {
+          console.warn('Lỗi cập nhật đơn:', o.id, err);
+        }
+      }
     }
     const totalMoney = eligibleOrders.reduce((sum, o) => sum + o.total, 0);
     const updated = orders.map((o) =>
@@ -231,8 +268,16 @@ export default function OrderManagement() {
   };
 
   // Hủy đơn hàng khẩn cấp
-  const handleCancelOrder = (orderId: string) => {
+  const handleCancelOrder = async (orderId: string) => {
     if (!window.confirm(`Bạn có chắc muốn hủy khẩn cấp đơn hàng ${orderId}?`)) return;
+    const targetOrder = orders.find((o) => o.id === orderId);
+    if (targetOrder?.numericId) {
+      try {
+        await adminService.cancelOrder(targetOrder.numericId, 'Quản trị viên hủy khẩn cấp');
+      } catch (err) {
+        console.warn('Lỗi gọi API hủy đơn hàng:', err);
+      }
+    }
     const updated = orders.map((o) =>
       o.id === orderId
         ? {
