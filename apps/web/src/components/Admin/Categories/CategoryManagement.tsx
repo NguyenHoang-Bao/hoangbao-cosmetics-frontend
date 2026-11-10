@@ -70,7 +70,7 @@ export default function CategoryManagement({
     }));
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) {
       setErrors({ name: 'Vui lòng nhập tên danh mục' });
@@ -78,17 +78,17 @@ export default function CategoryManagement({
     }
 
     if (editingCategory) {
-      adminService.updateCategory(editingCategory.id, formData);
+      await adminService.updateCategory(editingCategory.id, formData);
     } else {
-      adminService.createCategory(formData);
+      await adminService.createCategory(formData);
     }
 
     setIsModalOpen(false);
     onRefresh();
   };
 
-  const handleDelete = (id: number | string) => {
-    adminService.deleteCategory(id);
+  const handleDelete = async (id: number | string) => {
+    await adminService.deleteCategory(id);
     setDeleteConfirmId(null);
     onRefresh();
   };

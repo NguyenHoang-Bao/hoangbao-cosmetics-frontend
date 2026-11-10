@@ -106,25 +106,25 @@ export default function ProductManagement({
   };
 
   // Handler lưu sản phẩm
-  const handleSaveProduct = (productData: Omit<ProductItem, 'id'> | ProductItem) => {
+  const handleSaveProduct = async (productData: Omit<ProductItem, 'id'> | ProductItem) => {
     if ('id' in productData && productData.id) {
-      adminService.updateProduct(productData.id, productData);
+      await adminService.updateProduct(productData.id, productData);
     } else {
-      adminService.createProduct(productData);
+      await adminService.createProduct(productData);
     }
     setIsModalOpen(false);
     onRefresh();
   };
 
   // Handler chuyển đổi nhanh trạng thái còn/hết hàng
-  const handleToggleStock = (product: ProductItem) => {
-    adminService.updateProduct(product.id, { inStock: !product.inStock });
+  const handleToggleStock = async (product: ProductItem) => {
+    await adminService.updateProduct(product.id, { inStock: !product.inStock });
     onRefresh();
   };
 
   // Handler xóa sản phẩm
-  const handleDeleteProduct = (id: number | string) => {
-    adminService.deleteProduct(id);
+  const handleDeleteProduct = async (id: number | string) => {
+    await adminService.deleteProduct(id);
     setDeleteConfirmId(null);
     onRefresh();
   };

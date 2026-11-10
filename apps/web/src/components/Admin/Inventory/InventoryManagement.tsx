@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { adminService } from '@/services/adminService';
+import { useState, useEffect } from 'react';
 import {
   Boxes,
   Clock,
@@ -80,6 +81,28 @@ const mockExpiringProducts: ExpiringProduct[] = [
 
 export default function InventoryManagement() {
   const [receipts, setReceipts] = useState<InboundReceipt[]>(mockReceipts);
+
+  useEffect(() => {
+    let isMounted = true;
+    adminService.getImportReceipts().then((serverReceipts) => {
+      if (isMounted && Array.isArray(serverReceipts) && serverReceipts.length > 0) {
+        const mapped: InboundReceipt[] = serverReceipts.map((r: any) => ({
+          id: `PH-NHAP-${r.idReceipt}`,
+          supplierName: r.supplierName || 'Nhà cung cấp',
+          creatorName: r.warehouseManagerName || 'Thủ kho',
+          createdAt: r.importDate ? new Date(r.importDate).toLocaleString('vi-VN') : 'Mới',
+          totalCost: Number(r.totalCost || 0),
+          totalItems: r.items ? r.items.reduce((s: number, it: any) => s + (it.quantity || 0), 0) : 0,
+          status: 'approved',
+          note: r.note || ''
+        }));
+        setReceipts(mapped);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   const [expiringProducts] = useState<ExpiringProduct[]>(mockExpiringProducts);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedSaleProduct, setSelectedSaleProduct] = useState<ExpiringProduct | null>(null);

@@ -37,11 +37,17 @@ export const AdminPage: React.FC = () => {
     setSearchParams({ tab });
   };
 
-  const loadData = () => {
-    const prods = adminService.getProducts();
-    const cats = adminService.getCategories();
-    setProducts(prods);
-    setCategories(cats);
+  const loadData = async () => {
+    try {
+      const [prods, cats] = await Promise.all([
+        adminService.getProducts(),
+        adminService.getCategories()
+      ]);
+      setProducts(prods);
+      setCategories(cats);
+    } catch (err) {
+      console.error('Lỗi tải dữ liệu quản trị:', err);
+    }
   };
 
   useEffect(() => {

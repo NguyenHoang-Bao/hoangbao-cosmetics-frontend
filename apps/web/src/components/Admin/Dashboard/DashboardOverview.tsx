@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   TrendingUp,
   Package,
@@ -6,7 +7,7 @@ import {
   Activity,
   Clock
 } from 'lucide-react';
-import type { ProductItem, CategoryItem } from '@/services/adminService';
+import { adminService, type ProductItem, type CategoryItem, type DashboardOverviewData } from '@/services/adminService';
 import { getImageUrl } from '@/utils/imageHelper';
 
 interface DashboardOverviewProps {
@@ -23,14 +24,30 @@ export default function DashboardOverview({
   const inStockCount = products.filter((p) => p.inStock).length;
   const outOfStockCount = products.length - inStockCount;
 
-  // Lấy đơn hàng từ localStorage
+  const [overview, setOverview] = useState<DashboardOverviewData | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    adminService.getDashboardOverview().then((data) => {
+      if (isMounted && data) {
+        setOverview(data);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Lấy đơn hàng từ localStorage làm dự phòng
   let ordersList: any[] = [];
   try {
     ordersList = JSON.parse(localStorage.getItem('all_placed_orders') || '[]');
   } catch {}
 
-  const totalRevenue = ordersList.reduce((acc, cur) => acc + (cur.total || 0), 0) || 12450000;
-  const pendingOrders = ordersList.filter((o) => o.status === 'pending');
+  const totalRevenue = overview?.totalRevenue ?? (ordersList.reduce((acc, cur) => acc + (cur.total || 0), 0) || 12450000);
+  const totalOrdersCount = overview?.totalOrders ?? (ordersList.length || 24);
+  const pendingOrdersCount = overview?.pendingOrders ?? (ordersList.filter((o) => o.status === 'pending').length || 3);
+  const totalProductsCount = overview?.totalProducts ?? products.length;
 
   return (
     <div className="space-y-6">
@@ -67,7 +84,7 @@ export default function DashboardOverview({
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-black text-slate-800">{products.length}</div>
+            <div className="text-2xl font-black text-slate-800">{totalProductsCount}</div>
             <p className="text-[11px] text-slate-500 mt-1">
               {inStockCount} còn hàng • {outOfStockCount} tạm hết
             </p>
@@ -86,10 +103,10 @@ export default function DashboardOverview({
           </div>
           <div className="mt-3">
             <div className="text-2xl font-black text-slate-800">
-              {ordersList.length > 0 ? ordersList.length : 28}
+              {totalOrdersCount}
             </div>
             <p className="text-[11px] text-amber-600 font-semibold mt-1 flex items-center gap-1">
-              <Clock size={12} /> {pendingOrders.length} đơn đang xử lý
+              <Clock size={12} /> {pendingOrdersCount} đơn đang xử lý
             </p>
           </div>
         </div>
