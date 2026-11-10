@@ -82,6 +82,46 @@ export interface AdminOrder {
   items: AdminOrderItem[];
 }
 
+export interface AdminCouponItem {
+  idCoupon: number;
+  code: string;
+  description?: string;
+  discountType: 'PERCENTAGE' | 'FIXED_AMOUNT';
+  discountValue: number;
+  minOrderAmount?: number;
+  maxDiscountAmount?: number;
+  usageLimit?: number;
+  usedCount?: number;
+  startDate?: string;
+  endDate?: string;
+  isActive: boolean;
+  createdAt?: string;
+}
+
+export interface CreateCouponPayload {
+  code: string;
+  description?: string;
+  discountType: 'PERCENTAGE' | 'FIXED_AMOUNT';
+  discountValue: number;
+  minOrderAmount?: number;
+  maxDiscountAmount?: number;
+  usageLimit?: number;
+  startDate?: string;
+  endDate?: string;
+  isActive?: boolean;
+}
+
+export interface AdminFeedbackItem {
+  idFeedback: number;
+  name: string;
+  email: string;
+  phone?: string;
+  subject?: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
 export interface AdminStaffUser {
   id: number | string;
   username?: string;
@@ -650,6 +690,73 @@ export const adminService = {
   async resetUserPassword(id: number | string, newPassword?: string): Promise<any> {
     const payload = newPassword ? { newPassword } : {};
     return await apiClient.post<any, ApiResponse<any>>(`/admin/users/${id}/reset-password`, payload);
+  },
+
+    // Lấy danh sách mã giảm giá (Admin)
+  async getAdminCoupons(page = 0, size = 50): Promise<AdminCouponItem[]> {
+    try {
+      const response = await apiClient.get<any, ApiResponse<PageResponse<any>>>(
+        `/admin/coupons?page=${page}&size=${size}&sortBy=createdAt&sortDir=desc`
+      );
+      if (response && response.data && Array.isArray(response.data.content)) {
+        return response.data.content;
+      }
+    } catch (err) {
+      console.warn('[adminService.getAdminCoupons] Lỗi tải mã giảm giá:', err);
+    }
+    return [];
+  },
+
+  // Tạo mới mã giảm giá (Admin)
+  async createAdminCoupon(payload: CreateCouponPayload): Promise<AdminCouponItem> {
+    const response = await apiClient.post<any, ApiResponse<AdminCouponItem>>(
+      '/admin/coupons',
+      payload
+    );
+    return response.data;
+  },
+
+  // Bật / tắt trạng thái kích hoạt mã giảm giá
+  async toggleAdminCouponStatus(id: number): Promise<AdminCouponItem> {
+    const response = await apiClient.patch<any, ApiResponse<AdminCouponItem>>(
+      `/admin/coupons/${id}/status`,
+      {}
+    );
+    return response.data;
+  },
+
+  // Xóa mã giảm giá
+  async deleteAdminCoupon(id: number): Promise<void> {
+    await apiClient.delete<any, ApiResponse<void>>(`/admin/coupons/${id}`);
+  },
+
+  // Lấy danh sách phản hồi / liên hệ của khách hàng (Admin)
+  async getAdminFeedbacks(page = 0, size = 50): Promise<AdminFeedbackItem[]> {
+    try {
+      const response = await apiClient.get<any, ApiResponse<PageResponse<any>>>(
+        `/feedbacks/admin?page=${page}&size=${size}&sortBy=createdAt&sortDir=desc`
+      );
+      if (response && response.data && Array.isArray(response.data.content)) {
+        return response.data.content;
+      }
+    } catch (err) {
+      console.warn('[adminService.getAdminFeedbacks] Lỗi tải phản hồi khách hàng:', err);
+    }
+    return [];
+  },
+
+  // Đánh dấu đã đọc phản hồi
+  async markFeedbackAsRead(id: number): Promise<AdminFeedbackItem> {
+    const response = await apiClient.patch<any, ApiResponse<AdminFeedbackItem>>(
+      `/feedbacks/admin/${id}/read`,
+      {}
+    );
+    return response.data;
+  },
+
+  // Xóa phản hồi
+  async deleteFeedback(id: number): Promise<void> {
+    await apiClient.delete<any, ApiResponse<void>>(`/feedbacks/admin/${id}`);
   },
 
   createSlug(str: string): string {

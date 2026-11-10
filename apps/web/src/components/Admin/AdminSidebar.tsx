@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Package,
   Bot,
-  Boxes
+  Boxes,
+  Ticket
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -182,6 +183,21 @@ export default function AdminSidebar({
                 >
                   <Tag size={13} className="shrink-0" />
                   {!isCollapsed && <span>Quản Lý Danh Mục</span>}
+                </button>
+
+                
+                {/* Quản lý mã giảm giá & voucher */}
+                <button
+                  onClick={() => setActiveTab('coupons')}
+                  className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left cursor-pointer ${
+                    activeTab === 'coupons'
+                      ? 'bg-[#1e282c] text-white font-bold border-l-2 border-[#3c8dbc]'
+                      : 'text-[#b8c7ce] hover:bg-[#1e282c] hover:text-white'
+                  }`}
+                  title="Quản Lý Mã Giảm Giá & Voucher"
+                >
+                  <Ticket size={13} className="shrink-0 text-amber-400" />
+                  {!isCollapsed && <span>Mã Giảm Giá & Voucher</span>}
                 </button>
 
                 {/* Quản lý kho & Duyệt nhập xuất */}
