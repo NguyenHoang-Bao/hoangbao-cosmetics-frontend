@@ -82,6 +82,52 @@ export interface AdminOrder {
   items: AdminOrderItem[];
 }
 
+export interface AdminStaffUser {
+  id: number | string;
+  username?: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: 'ADMIN' | 'OFFLINE_STAFF' | 'WAREHOUSE_MANAGER' | 'REMOTE_CSKH' | 'STAFF' | 'ONLINE_STAFF';
+  roleName: string;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface CreateStaffPayload {
+  username?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  password?: string;
+}
+
+function mapBackendUserToAdminStaffUser(item: any): AdminStaffUser {
+  const roleNameMap: Record<string, string> = {
+    ADMIN: 'Quản trị viên cấp cao',
+    STAFF: 'Nhân viên Thu ngân (App POS)',
+    OFFLINE_STAFF: 'Nhân viên Thu ngân (App POS)',
+    WAREHOUSE_MANAGER: 'Quản lý Kho & Đóng gói (App Kho)',
+    ONLINE_STAFF: 'CTV CSKH & Xử lý khiếu nại tại nhà (Nhận ca lỗi từ AI)',
+    REMOTE_CSKH: 'CTV CSKH & Xử lý khiếu nại tại nhà (Nhận ca lỗi từ AI)',
+    CUSTOMER: 'Khách hàng'
+  };
+
+  const role = item.role || 'STAFF';
+  return {
+    id: item.idUser ?? item.id,
+    username: item.username || '',
+    name: item.name || '',
+    email: item.email || '',
+    phone: item.phone || '',
+    role: role,
+    roleName: item.roleName || roleNameMap[role] || role,
+    active: item.active !== false,
+    createdAt: item.createdAt || new Date().toLocaleDateString('vi-VN')
+  };
+}
+
 const STORAGE_PRODUCTS_KEY = 'hb_admin_products';
 const STORAGE_CATEGORIES_KEY = 'hb_admin_categories';
 
@@ -556,6 +602,56 @@ export const adminService = {
   },
 
   // Tạo slug tự động từ tiếng Việt
+    // Lấy danh sách nhân viên & phân quyền từ Backend
+  async getAdminUsers(params?: {
+    role?: string;
+    keyword?: string;
+    page?: number;
+    size?: number;
+  }): Promise<AdminStaffUser[]> {
+    try {
+      const query = new URLSearchParams();
+      if (params?.role) query.set('role', params.role);
+      if (params?.keyword) query.set('keyword', params.keyword);
+      query.set('page', String(params?.page || 0));
+      query.set('size', String(params?.size || 50));
+
+      const response = await apiClient.get<any, ApiResponse<PageResponse<any>>>(
+        `/admin/users?${query.toString()}`
+      );
+      if (response && response.data && Array.isArray(response.data.content)) {
+        return response.data.content.map(mapBackendUserToAdminStaffUser);
+      }
+    } catch (err) {
+      console.warn('[adminService.getAdminUsers] Lỗi tải danh sách người dùng từ server:', err);
+    }
+    return [];
+  },
+
+  // Tạo tài khoản nhân sự mới
+  async createStaffUser(payload: CreateStaffPayload): Promise<AdminStaffUser> {
+    const response = await apiClient.post<any, ApiResponse<any>>('/admin/users', payload);
+    return mapBackendUserToAdminStaffUser(response.data);
+  },
+
+  // Khóa / Mở khóa tài khoản nhân sự
+  async toggleUserStatus(id: number | string): Promise<AdminStaffUser> {
+    const response = await apiClient.patch<any, ApiResponse<any>>(`/admin/users/${id}/status`, {});
+    return mapBackendUserToAdminStaffUser(response.data);
+  },
+
+  // Cập nhật vai trò / phân quyền
+  async updateUserRole(id: number | string, role: string): Promise<AdminStaffUser> {
+    const response = await apiClient.patch<any, ApiResponse<any>>(`/admin/users/${id}/role`, { role });
+    return mapBackendUserToAdminStaffUser(response.data);
+  },
+
+  // Reset mật khẩu cho nhân sự
+  async resetUserPassword(id: number | string, newPassword?: string): Promise<any> {
+    const payload = newPassword ? { newPassword } : {};
+    return await apiClient.post<any, ApiResponse<any>>(`/admin/users/${id}/reset-password`, payload);
+  },
+
   createSlug(str: string): string {
     return str
       .toLowerCase()
