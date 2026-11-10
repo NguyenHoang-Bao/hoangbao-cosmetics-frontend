@@ -9,6 +9,7 @@ import DashboardOverview from '@/components/Admin/Dashboard/DashboardOverview';
 import UserManagement from '@/components/Admin/Users/UserManagement';
 import AIReportsManagement from '@/components/Admin/AIReports/AIReportsManagement';
 import InventoryManagement from '@/components/Admin/Inventory/InventoryManagement';
+import CouponManagement from '@/components/Admin/Coupons/CouponManagement';
 import { adminService, type ProductItem, type CategoryItem } from '@/services/adminService';
 import { Shield, ShieldAlert, LogOut } from 'lucide-react';
 
@@ -228,10 +229,14 @@ export const AdminPage: React.FC = () => {
               />
             )}
 
-            {/* 6. Quản lý kho, duyệt nhập hàng & cảnh báo date */}
+            
+            {/* 6. Quản lý mã giảm giá & voucher */}
+            {activeTab === 'coupons' && <CouponManagement />}
+
+            {/* 7. Quản lý kho, duyệt nhập hàng & cảnh báo date */}
             {activeTab === 'inventory' && <InventoryManagement />}
 
-            {/* 7. Tài khoản & Phân quyền các bên */}
+            {/* 8. Tài khoản & Phân quyền các bên */}
             {activeTab === 'users' && <UserManagement />}
           </div>
         </main>

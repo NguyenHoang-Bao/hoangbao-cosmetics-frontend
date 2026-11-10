@@ -25,6 +25,8 @@ export default function AdminHeader({
         return 'Bán Hàng & Kho > Quản Lý Sản Phẩm & Bảng Giá';
       case 'categories':
         return 'Bán Hàng & Kho > Quản Lý Danh Mục';
+      case 'coupons':
+        return 'Bán Hàng & Kho > Quản Lý Mã Giảm Giá & Voucher';
       case 'inventory':
         return 'Bán Hàng & Kho > Quản Lý Kho & Duyệt Nhập Xuất';
       case 'interface_menu':
